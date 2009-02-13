@@ -20,6 +20,11 @@ class DB
 				next if line.empty?
 				bits = line.split(/\s+/)
 				name = bits.shift
+			
+				# Remove leading silence
+				bits.shift if bits[0][0,1] == "L"
+				
+				next if bits.empty?
 
 				self.nums[name] = []
 				bits.each do |d|
@@ -43,6 +48,7 @@ class DB
 	# Utility methods
 	#
 	
+	# Find the largest pattern shared between two samples
 	def find_sig(num1, num2, opts={})
 		
 		fuzz  = opts[:fuzz] || 100
@@ -53,6 +59,10 @@ class DB
 		if ( not (info1 and info2 and not (info1.empty? or info2.empty?) ) )
 			raise Error, "The database must contain both numbers"
 		end
+
+		# Remove the silence prefix from both samples
+		info1.shift if info1[0][0] == "L"
+		info2.shift if info2[0][0] == "L"
 		
 		min_sig = 2
 		idx     = 0
@@ -107,6 +117,35 @@ class DB
 			:len        => r,
 			:sig        => sig
 		}
+	end
+	
+	def is_carrier?(num)
+		data = self[num]
+		raise Error, "The specified number does not exist: #{num}" if not data
+		tone = []
+		
+		min_len = 10000
+		
+		data.each do |rec|
+			next if rec[0] != "H"
+			next if rec[1] < min_len
+			tone << rec
+		end
+		
+		(tone.empty? or tone.length == 1) ? false : tone
+	end
+
+	def find_carriers
+		carriers = {}
+		self.nums.keys.sort.each do |num|
+			begin
+				res = is_carrier?(num)
+				next if not res
+				carriers[num] = res
+			rescue Error
+			end
+		end
+		carriers
 	end
 
 end
