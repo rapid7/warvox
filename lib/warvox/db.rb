@@ -1,17 +1,16 @@
 module WarVOX
-class DB
+class DB < ::Hash
 		
 	VERSION = '1.0'
 	
 	class Error < ::RuntimeError
 	end
 	
-	attr_accessor :path, :nums, :threshold, :version
+	attr_accessor :path, :threshold, :version
 
 	def initialize(path, threshold=800)
 		self.path      = path
 		self.threshold = threshold
-		self.nums      = {}
 		self.version   = VERSION
 		
 		File.open(path, "r") do |fd|
@@ -26,22 +25,14 @@ class DB
 				
 				next if bits.empty?
 
-				self.nums[name] = []
+				self[name] = []
 				bits.each do |d|
 					s,l,a = d.split(',')
 					next if l.to_i < self.threshold
-					self.nums[name] << [s, l.to_i, a.to_i]
+					self[name] << [s, l.to_i, a.to_i]
 				end
 			end
 		end
-	end
-	
-	def [](num)
-		self.nums[num]
-	end
-	
-	def []=(num,val)
-		self.nums[num] = val
 	end
 	
 	#
@@ -137,7 +128,7 @@ class DB
 
 	def find_carriers
 		carriers = {}
-		self.nums.keys.sort.each do |num|
+		self.keys.sort.each do |num|
 			begin
 				res = is_carrier?(num)
 				next if not res

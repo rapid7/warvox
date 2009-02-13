@@ -15,37 +15,63 @@ require 'warvox'
 # Script
 # 
 
-names = []
-inp = ARGV.shift() || exit
-fd  = File.open(inp, "r")
-fd.each_line do |line|
-	data = line.strip.split(/\s+/)
-	if(data.shift =~ /(\d+)/)
-		if(data.length < 20)
-			puts "[*] Skipping carrier #{$1}..."
-			next
-		end
-		names << $1
-	end
+def usage
+	$stderr.puts "#{$0} [warvox.db] <db-threshold>"
+	exit
 end
 
+threads = 2 
+inp     = ARGV.shift || usage
+thresh  = (ARGV.shift() || 800).to_i
+wdb     = WarVOX::DB.new(inp, thresh)
 
-found = {}
+# Scrub the carriers out of the pool first
+car = wdb.find_carriers
+car.keys.each do |k|
+	wdb.delete(k)
+end
 
-names.each do |n1|
-	puts "[*] Searching for matches to #{n1}"
-	best = 0
-	names.each do |n2|
-		next if found[n2]
-		data = `ruby t.rb #{inp} #{n1} #{n2} 2>/dev/null`
-		next if not data
+groups = 
+{
+	"carriers" => car.keys
+}
+
+oset = wdb.keys.sort
+iset = oset.dup
+
+
+
+while(not oset.empty?)
+
+	k = oset.shift
+	
+	found = []
+	best  = nil
+	next if not iset.include?(k)
+	
+	iset.each do |n|
+		next if k == n
 		
-		data.strip!
-		head,dead = data.split(/\s+/, 2)
-		next if not head
+		begin
+			res = wdb.find_sig(k,n)
+		rescue ::WarVOX::DB::Error
+		end
 		
-		p head
-		
+		next if not res
+		next if res[:len] < 5
+		found << res
 	end
+	
+	next if found.empty?
+	
+	groups[k] = [ ]
+	found.each do |f|
+		groups[k] << [ f[:num2], f[:len] ]
+	end
+
+	$stdout.puts "#{k} " + groups[k].map{|x| "#{x[0]}-#{x[1]}" }.join(" ")
+	$stdout.flush
+	
+	groups[k].unshift(k)
 end
 
