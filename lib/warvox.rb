@@ -3,6 +3,7 @@
 ##
 
 module WarVOX
-
-
 end
+
+require 'warvox/audio'
+require 'warvox/db'

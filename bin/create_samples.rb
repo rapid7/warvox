@@ -15,17 +15,14 @@ require 'warvox'
 # Script
 # 
 
-=begin
-	8,000 samples per second
-	160 samples per block of data
-=end
+def usage
+	$stderr.puts "#{$0} [audio.raw]"
+	exit
+end
 
 cnt = 0
-inp = ARGV.shift || exit
-raw = File.read(inp)
-raw.unpack("v*").each do |s|
-	val = (s > 0x7fff) ? (0x10000 - s) * -1 : s
+raw = WarVOX::Audio::Raw.from_file(ARGV.shift || usage)
+raw.samples.each do |val|
 	puts "#{cnt} #{val}"
 	cnt += 1
 end
-
