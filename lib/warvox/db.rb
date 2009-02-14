@@ -12,7 +12,10 @@ class DB < ::Hash
 		self.path      = path
 		self.threshold = threshold
 		self.version   = VERSION
-		
+		import(path) if path
+	end
+	
+	def import(path)
 		File.open(path, "r") do |fd|
 			fd.each_line do |line|
 				line.strip!
@@ -32,12 +35,53 @@ class DB < ::Hash
 					self[name] << [s, l.to_i, a.to_i]
 				end
 			end
-		end
+		end	
 	end
 	
 	#
 	# Utility methods
 	#
+	
+	# Find a signature within a sample
+	def find_match(pat, sam, opts={})
+	
+		fuzz    = opts[:fuzz]    || 100
+		min_sig = opts[:min_sig] || 2
+		
+		idx     = 0
+		fnd     = nil
+		mat     = nil
+		r       = 0
+
+		while(idx < pat.length-min_sig)
+			sig  = pat[idx,pat.length]
+			idx2 = 0
+
+			while (idx2 < sam.length)
+				c = 0 
+				0.upto(sig.length-1) do |si|
+					break if not sam[idx2+si]
+					break if not ( 
+						sig[si][0] == sam[idx2+si][0] and
+						sam[idx2 + si][1] > sig[si][1]-fuzz and
+						sam[idx2 + si][1] < sig[si][1]+fuzz
+					)
+					c += 1
+				end
+
+				if (c > r)
+					r = c
+					fnd = sig[0, r]
+					mat = sam[idx2, r]
+				end	
+				idx2 += 1
+			end
+			idx += 1
+		end
+		
+		# Return the results
+		[fnd, mat, r]
+	end
 	
 	# Find the largest pattern shared between two samples
 	def find_sig(num1, num2, opts={})
@@ -55,37 +99,7 @@ class DB < ::Hash
 		info1.shift if info1[0][0] == "L"
 		info2.shift if info2[0][0] == "L"
 		
-		min_sig = 2
-		idx     = 0
-		fnd     = nil
-		mat     = nil
-		r       = 0
-
-		while(idx < info1.length-min_sig)
-			sig  = info1[idx,info1.length]
-			idx2 = 0
-
-			while (idx2 < info2.length)
-				c = 0 
-				0.upto(sig.length-1) do |si|
-					break if not info2[idx2+si]
-					break if not ( 
-						sig[si][0] == info2[idx2+si][0] and
-						info2[idx2 + si][1] > sig[si][1]-fuzz and
-						info2[idx2 + si][1] < sig[si][1]+fuzz
-					)
-					c += 1
-				end
-
-				if (c > r)
-					r = c
-					fnd = sig[0, r]
-					mat = info2[idx2, r]
-				end	
-				idx2 += 1
-			end
-			idx += 1
-		end
+		fnd,mat,r = find_match(info1, info2, { :fuzz => fuzz })
 		
 		return nil if not fnd
 		
