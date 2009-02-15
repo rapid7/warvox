@@ -1,6 +1,9 @@
 module WarVOX
 module Audio
 class Raw
+	
+	
+	require 'zlib'
 
 	##
 	# RAW AUDIO - 8khz little-endian 16-bit signed
@@ -25,6 +28,10 @@ class Raw
 		
 		if(not File.readable?(path))
 			raise Error, "The specified audio file does not exist"
+		end
+		
+		if(path =~ /\.gz$/)
+			return self.new(Zlib::GzipReader.open(path).read)
 		end
 	
 		self.new(File.read(path, File.size(path)))
