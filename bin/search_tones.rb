@@ -32,6 +32,7 @@ res.each do |x|
 		f = t[0].round
 		p = t[1].round
 		next if f == 0
+		next if p < min
 		tones[ f ] ||= []
 		tones[ f ] << t
 	end
