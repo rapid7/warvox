@@ -23,23 +23,18 @@ end
 
 raw = WarVOX::Audio::Raw.from_file(ARGV.shift || usage)
 min = (ARGV.shift || 1).to_f
-res = KissFFT.fftr(4096, 8000, 1, raw.samples)
+res = KissFFT.fftr(8192, 8000, 1, raw.samples)
 
 tones = {}
 res.each do |x|
-	mf = 0
-	mp = 0
-	x.each do |o|
-		if(o[1] > mp)
-			mp = o[1]
-			mf = o[0]
-		end
+	rank = x.sort{|a,b| a[1].to_i <=> b[1].to_i }.reverse
+	rank[0..10].each do |t|
+		f = t[0].round
+		p = t[1].round
+		next if f == 0
+		tones[ f ] ||= []
+		tones[ f ] << t
 	end
-	if(mp > min)
-		tones[mf.to_i] ||= []
-		tones[mf.to_i] <<  [mf, mp]
-	end
-	# puts "#{mf.to_i}hz @ #{mp.to_i}"
 end
 
 tones.keys.sort.each do |t|
