@@ -37,7 +37,9 @@ res.each do |x|
 	end
 end
 
+
 tones.keys.sort.each do |t|
+	next if tones[t].length < 2
 	puts "#{t}hz"
 	tones[t].each do |x|
 		puts "\t#{x[0]}hz @ #{x[1]}"
