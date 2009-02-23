@@ -141,7 +141,9 @@ int main(int argc, char **argv) {
 
 	iaxc_set_callerid ("", iax_cid);
 	iaxc_set_formats(IAXC_FORMAT_ULAW | IAXC_FORMAT_ALAW, IAXC_FORMAT_ULAW | IAXC_FORMAT_ALAW);
-	iaxc_set_silence_threshold(silence_threshold);
+	
+	// Causes problems for some asterix servers, not sure why yet
+	// iaxc_set_silence_threshold(silence_threshold);
 
 	iaxc_set_event_callback(iaxc_callback);	
 	iaxc_start_processing_thread();
