@@ -1,5 +1,5 @@
 /*
-	ruby-kissfft: a simple ruby wrapper around the Kiss FFT library
+	ruby-kissfft: a simple ruby module embedding the Kiss FFT library
 	Copyright (C) 2009 H D Moore <hdm[at]metasploit.com>
 	
 	Derived from "psdpng.c" from the KissFFT tools directory
