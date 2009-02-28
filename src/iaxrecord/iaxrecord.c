@@ -18,12 +18,14 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <time.h>
 #include <signal.h>
 
 #include <iaxclient.h>
 
 int initialized = 0;
 int debug       = 0;
+int busy        = 0;
 
 float silence_threshold = 0.0f;
 int call_state  = 0;
@@ -58,7 +60,37 @@ void usage(char **argv) {
 }
  
 int state_event_callback(struct iaxc_ev_call_state call) {
+	if(call.state & IAXC_CALL_STATE_BUSY) busy = 1;
 	call_state = call.state;
+/*
+	fprintf(stdout, "STATE: ");
+	if(call.state & IAXC_CALL_STATE_FREE)
+		fprintf(stdout, "F");
+	
+	if(call.state & IAXC_CALL_STATE_ACTIVE)
+		fprintf(stdout, "A");
+	
+	if(call.state & IAXC_CALL_STATE_OUTGOING)
+		fprintf(stdout, "O");
+	
+	if(call.state & IAXC_CALL_STATE_RINGING)
+		fprintf(stdout, "R");	
+
+	if(call.state & IAXC_CALL_STATE_COMPLETE)
+		fprintf(stdout, "C");	
+
+	if(call.state & IAXC_CALL_STATE_SELECTED)
+		fprintf(stdout, "S");
+	
+	if(call.state & IAXC_CALL_STATE_BUSY)
+		fprintf(stdout, "B");		
+
+	if(call.state & IAXC_CALL_STATE_TRANSFER)
+		fprintf(stdout, "T");		
+			
+	fprintf(stdout, "\n");
+	fflush(stdout);
+*/								
     return 0;
 }
 
@@ -101,8 +133,8 @@ int main(int argc, char **argv) {
 	char *iax_cid;
 	int iax_sec = 20;
 	int call_id = 0;
-	int i;
 	char dest[1024];
+	time_t stime, etime;
 	
 	if(argc < 7) usage(argv);
 	iax_host = argv[1];
@@ -153,18 +185,45 @@ int main(int argc, char **argv) {
 	
 	reg_id  = iaxc_register(iax_user, iax_pass, iax_host);
 	if(debug) fprintf(stderr, " RegID: %d\n", reg_id);
-	
+
 	call_id = iaxc_call(dest);
 	if(debug) fprintf(stderr, "CallID: %d\n", call_id);
 	
+	stime = time(NULL);
+	etime = 0;
+	
 	if(call_id >= 0) {
 		iaxc_select_call(call_id);
-		for(i=0; i< (iax_sec*1000*2); i+= 500) {
+		while( (unsigned int)(time(NULL))-(unsigned int)stime < iax_sec) {
+			if(call_state & IAXC_CALL_STATE_COMPLETE && ! etime) etime = time(NULL);
+			if(call_state & IAXC_CALL_STATE_BUSY) break;
 			if(iaxc_first_free_call() == call_id) break;
-			iaxc_millisleep(500);
+			iaxc_millisleep(250);
 		}
 	}
-
-	fprintf(stdout, "COMPLETED %s BYTES=%d FILE=%s\n", iax_num, call_bytes, iax_out);
+	if(! etime) time(&etime);
+	
+	fprintf(stdout, "COMPLETED %s BYTES=%d FILE=%s BUSY=%d RINGTIME=%d\n", 
+		iax_num, 
+		call_bytes,
+		iax_out,
+		busy,
+		(unsigned int)(etime) - (unsigned int)(stime)
+	);
 	return(0);
 }
+
+/*
+
+Note about ring times vs ring counts: 
+  http://en.wikipedia.org/wiki/Ringtone#Ringing_signal
+	The ringing pattern is known as ring cadence. This only applies to POTS fixed phones, where 
+	the high voltage ring signal is switched on and off to create the ringing pattern. In North
+	America, the standard ring cadence is "2-4", or two seconds of ringing followed by four 
+	seconds of silence. In Australia and the UK, the standard ring cadence is 400 ms on, 200 ms
+	off, 400 ms on, 2000 ms off. These patterns may vary from region to region, and other 
+	patterns are used in different countries around the world.
+
+ring count US = ringtime / 6.0 
+ring count UK = ringtime / 3.0
+*/
