@@ -2,6 +2,8 @@ all: install
 
 install: iaxrecord ruby-kissfft db
 	cp -a src/iaxrecord/iaxrecord bin/
+
+ruby-kissfft-install: ruby-kissfft
 	cp -a src/ruby-kissfft/kissfft.so lib/
 
 iaxrecord:
@@ -17,7 +19,7 @@ db: db_null web/db/production.sqlite3
 db_null:
 	find web/db/ -name 'production.sqlite3' -size 0 | xargs -i rm {}
 
-web/db/production.sqlite3: ruby-kissfft
+web/db/production.sqlite3: ruby-kissfft-install
 	(cd web; RAILS_ENV=production rake db:migrate )
 
 clean:
