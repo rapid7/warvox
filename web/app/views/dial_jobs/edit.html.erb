@@ -1,0 +1,24 @@
+<h1 class='title'>Modify Job</h1>
+
+<% form_for(@dial_job) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :range %><br />
+    <%= f.text_field :range %>
+  </p>
+  <p>
+    <%= f.label :seconds %><br />
+    <%= f.text_field :seconds %>
+  </p>
+  <p>
+    <%= f.label :lines %><br />
+    <%= f.text_field :lines %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @dial_job %> |
+<%= link_to 'Back', dial_jobs_path %>

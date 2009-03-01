@@ -1,0 +1,48 @@
+h2. FusionCharts Free License Agreement
+
+InfoSoft Global grants you a nonexclusive right to use FusionCharts Free, subject to the following terms and conditions:
+
+FusionCharts Free can be used for free if you are a individual/research/commercial user.
+FusionCharts Free can be distributed for free with your free or commercial softwares, irrespective of whether they're open source or closed source.
+You must not sell FusionCharts Free as a component in itself. However, your commercial product can embed FusionCharts Free.
+You must not represent in any way that you're the author of FusionCharts Free.
+ 
+h3. RE-DISTRIBUTION AS A PART OF A PRODUCT/SOFTWARE/APPLICATION
+
+FusionCharts Free is completely free to OEM and distributed with your open or closed source applications. To do so, you just need to:
+Send us an email at support@fusioncharts.com with the following information:
+Your company name & address
+Name and description of your product with which you'll be re-distributing "FusionCharts Free"
+Mention "FusionCharts Free" with relevant link back to www.fusioncharts.com/free in your product or its documentation.
+We would also appreciate a link back from your product website to our website www.fusioncharts.com/free.
+
+h3. AS-IS DISTRIBUTION
+
+InfoSoft Global allows and encourages 3rd parties to distribute and make as many Exact copies as you wish of FusionCharts Free and distribute it by Internet, BBS's, Shareware distribution libraries, CD-ROMs, etc provided that the following terms are satisfied:
+Exact copies of the complete software package, and that it is unmodified and individual package and not as a part of any other application/product/software.
+The Software may not be made available on any site, CD-ROM, or with any package which makes available or contains viruses, virus source code, virus construction programs, or virus creation material
+Nothing may be charged for the software other than a nominal fee for the distribution costs
+You must disclose that this product is copyrighted by InfoSoft Global
+You must not represent in any way that you are selling the software itself
+
+InfoSoft Global would be thankful to be notified of your distribution efforts: support@fusioncharts.com
+
+h3. RESTRICTIONS
+
+You agree not to modify, adapt, translate, reverse engineer, decompile, disassemble or otherwise attempt to discover the source code of the Software.
+ 
+h3. OWNERSHIP & COPYRIGHT
+
+The Software is owned by InfoSoft Global and is protected by international copyright law and treaty provisions. Your license confers no title or ownership in the Software and should not be construed as a sale of any right in the Software. You further acknowledge that title and full ownership rights to the Software will remain the exclusive property of InfoSoft Global and you will not acquire any rights to the Software except as expressly set forth in this license. You agree that any copies of the Software will contain the same proprietary notices which appear on and in the Software.
+ 
+h3. WARRANTY
+
+InfoSoft Global expressly disclaims any warranty for the software. THE SOFTWARE AND ANY RELATED DOCUMENTATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OR MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NONINFRINGEMENT. THE ENTIRE RISK ARISING OUT OF USE OR PERFORMANCE OF THE SOFTWARE REMAINS WITH YOU.
+ 
+h3. INDEMNIFICATION
+
+You hereby imdemnify and hold harmless InfoSoft Global and its affiliates against any loss, liability, damages, costs or expenses suffered or incurred by the Indemnified Parties at any time as a result of any claim, action or proceeding arising out of or relating to your use, operation or damages, costs or expenses which may be suffered or incurred at any time by you as a result of your reliance upon or use of the Software. InfoSoft Global SHALL NOT BE LIABLE FOR DAMAGES OF ANY KIND, INCLUDING GENERAL, DIRECT, SPECIAL, INCIDENTAL AND CONSEQUENTIAL DAMAGES, RESULTING FROM OR ARISING OUT OF THIS AGREEMENT OR YOUR USE OF THE SOFTWARE.
+ 
+h3. TERM AND TERMINATION.
+
+This Agreement shall commence on the Effective Date of installation of software and shall remain in full force and effect until terminated, or through the mutual written consent of the parties (the “Term”).

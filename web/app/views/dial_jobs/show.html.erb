@@ -1,0 +1,39 @@
+<h1 class='title'>Show Job</h1>
+<p>
+  <b>Range:</b>
+  <%=h @dial_job.range %>
+</p>
+
+<p>
+  <b>Seconds:</b>
+  <%=h @dial_job.seconds %>
+</p>
+
+<p>
+  <b>Lines:</b>
+  <%=h @dial_job.lines %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%=h @dial_job.status %>
+</p>
+
+<p>
+  <b>Progress:</b>
+  <%=h @dial_job.progress %>
+</p>
+
+<p>
+  <b>Started at:</b>
+  <%=h @dial_job.started_at %>
+</p>
+
+<p>
+  <b>Completed at:</b>
+  <%=h @dial_job.completed_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_dial_job_path(@dial_job) %> |
+<%= link_to 'Back', dial_jobs_path %>

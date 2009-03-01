@@ -1,0 +1,34 @@
+<h1 class='title'>View Provider</h1>
+<p>
+  <b>Name:</b>
+  <%=h @provider.name %>
+</p>
+
+<p>
+  <b>Host:</b>
+  <%=h @provider.host %>
+</p>
+
+<p>
+  <b>Port:</b>
+  <%=h @provider.port %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%=h @provider.user %>
+</p>
+
+<p>
+  <b>Pass:</b>
+  ********
+</p>
+
+<p>
+  <b>Lines:</b>
+  <%=h @provider.lines %>
+</p>
+
+
+<%= link_to 'Edit', edit_provider_path(@provider) %> |
+<%= link_to 'Back', providers_path %>

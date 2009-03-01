@@ -1,0 +1,37 @@
+<% if @completed_jobs.length > 0 %>
+<h1 class='title'>Completed Jobs</h1>
+
+<table class='table_scaffold' width='100%'>
+  <tr>
+    <th>ID</th>
+    <th>Range</th>
+    <th>Seconds</th>
+    <th>Lines</th>
+    <th>Started</th>
+  </tr>
+
+<% @completed_jobs.sort{|a,b| b.id <=> a.id}.each do |dial_job|  %>
+  <tr>
+    <td><%=h dial_job.id %></td>
+    <td><%=h dial_job.range %></td>
+    <td><%=h dial_job.seconds %></td>
+    <td><%=h dial_job.lines %></td>
+    <td><%=h dial_job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
+    <td><%= link_to 'View', view_dial_result_path(dial_job) %></td>
+	<% if(dial_job.processed) %>
+		<td><%= link_to 'View Analysis', analyze_dial_result_path(dial_job) %></td>
+	<% else %>
+		<td><%= link_to 'Analyze Calls', analyze_dial_result_path(dial_job) %></td>
+	<% end %>
+	<td><%= link_to 'Purge Data', purge_dial_result_path(dial_job), :confirm => "Delete all data for this job?" %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= will_paginate @completed_jobs %>
+
+<% else %>
+
+<h1 class='title'>No Completed Jobs</h1>
+
+<% end %>

@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title><%= @title || "WarVOX" %></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="en-US" />	
+    <%= stylesheet_link_tag 'global' %>
+	<!--[if IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->
+		
+    <%= javascript_include_tag 'custom', 'prototype', 'effects', 'FusionCharts' %>
+  </head>
+  <body>
+  
+<div id="header">
+  <%= render :partial => 'shared/header' %>
+</div> 
+ 
+<div id="content">
+	<div class="box_full">
+	<img src="/images/round_top.png" id="round_top" alt=""/>
+	<div id="main">
+<%= yield %>
+		<br/><br/>
+	
+		<div id="footer">
+		  <%= render :partial => 'shared/footer' %>
+		</div>
+	
+	</div>
+	<img src="/images/round_bot.png" id="round_bot" alt=""/>
+	</div>
+</div>
+
+<br/><br/>
+
+</body>
+</html>

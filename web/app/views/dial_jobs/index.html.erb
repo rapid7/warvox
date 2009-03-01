@@ -1,0 +1,90 @@
+<% if(@submitted_jobs.length > 0) %>
+
+<h1 class='title'>Submitted Jobs</h1>
+
+<table class='table_scaffold' width='100%'>
+  <tr>
+    <th>ID</th>  
+    <th>Range</th>
+    <th>Seconds</th>
+    <th>Lines</th>
+    <th>Submitted Time</th>	
+  </tr>
+
+<% @submitted_jobs.each do |dial_job| %>
+  <tr>
+    <td><%=h dial_job.id %></td>
+    <td><%=h dial_job.range %></td>
+    <td><%=h dial_job.seconds %></td>
+    <td><%=h dial_job.lines %></td>
+    <td><%=h dial_job.created_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
+    <td><%= link_to 'Execute', run_dial_job_path(dial_job), :confirm => 'Launch this job?'%></td>
+    <td><%= link_to 'Modify', edit_dial_job_path(dial_job)%></td>
+    <td><%= link_to 'Delete', dial_job, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+<br />
+<% end %>
+
+<% if(@active_jobs.length > 0) %>
+
+<h1 class='title'>Active Jobs</h1>
+
+<table class='table_scaffold' width='100%'>
+  <tr>
+    <th>ID</th>
+    <th>Range</th>
+    <th>Seconds</th>
+    <th>Lines</th>
+    <th>Status</th>
+    <th>Progress</th>
+    <th>Start Time</th>
+  </tr>
+  
+<% @active_jobs.each do |dial_job| %>
+  <tr class='active_job_row'>
+    <td><%=h dial_job.id %></td>
+	<td><%=h dial_job.range %></td>
+    <td><%=h dial_job.seconds %></td>
+    <td><%=h dial_job.lines %></td>
+    <td><%=h dial_job.status %></td>
+    <td><%=h dial_job.progress %>%</td>
+    <td><%=h dial_job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
+    <td colspan='3'><%= link_to 'Stop', dial_job, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+<br />
+
+<script language="javascript">
+	setTimeout("location.reload(true);", 20000);
+</script>
+
+<% end %>
+
+<% if (@active_jobs.length + @submitted_jobs.length == 0) %>
+<h1 class='title'>No Active or Submitted Jobs</h1>
+<br/>
+
+<% end %>
+<h1 class='title'>Submit a New Job</h1>
+
+<% form_for(@new_job) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :range, 'The target telephone range (123-456-XXXX)' %><br />
+    <%= f.text_field :range %>
+  </p>
+  <p>
+    <%= f.label :seconds, 'Seconds of audio to capture' %><br />
+    <%= f.text_field :seconds, :value => 53 %>
+  </p>
+  <p>
+    <%= f.label :lines, 'Maximum number of outgoing lines' %><br />
+    <%= f.text_field :lines, :value => 10 %>
+  </p>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>

@@ -1,0 +1,108 @@
+h2. EZGraphix
+
+h3. Documentation
+
+"API Documentation (generated with RDoc)":http://ezgraphix.rubyforge.org
+
+h3. Demo
+
+"Online Demo (hosted by HerokuGarden)":http://ezgraphixdemo.herokugarden.com/
+
+h3. Installation Notes
+
+<b>Install the plugin:</b>
+
+<pre>script/plugin install git://github.com/jpemberthy/ezgraphix.git</pre>
+
+<b>Run the tasks:</b> (it will move the necessary files to use the plugin)
+
+<pre>rake ezgraphix:setup    # run from your project's root </pre>
+
+After the installation <b>include the FusionCharts.js</b> in each layout that will render ezgraphix:
+
+<pre><%= javascript_include_tag "FusionCharts" %></pre>
+
+and that's it!.
+
+h3. Usage
+
+<b> In your Controller: </b>
+
+<pre>
+def index
+  @g = Ezgraphix::Graphic.new
+  @g.data = {:ruby => 1, :perl => 2, :smalltalk => 3}
+end
+</pre>
+
+There are 2 ways to <b> pass render options: </b>
+
+<b>1.</b> When the Graphic object is created, you can define it also as: 
+
+<pre>@g = Ezgraphix::Graphic.new(:w => 200, :h => 300, :c_type => 'bar3d', :div_name => 'my_chart_tag_name')</pre>
+
+The defaults are: <pre>{:c_type => 'col3d', :w => 300, :h => 300, :div_name => 'ez_graphic'}</pre>
+At the moment, you can render the following graphics:
+
+<pre>
+Column 2D => :c_type => 'col2d'
+Column 3D => :c_type => 'col3d'
+Bar 2D    => :c_type => 'bar2d'
+Pie 2D	  => :c_type => 'pie2d'
+Pie 3D	  => :c_type => 'pie3d'
+Line	  => :c_type => 'line'
+Doughnut 2D  => :c_type => 'doug2d'
+</pre>
+
+<b>2.</b> Anytime you want, by accessing the render_options attribute.
+
+<pre>@g.render_options(:caption => 'cool languages', :w => 400)  #Merges new options with the last configuration.</pre>
+
+<b> In your view. </b>
+
+Add the following line wherever you want to render the graphic.
+
+<pre><%= render_ezgraphix @g %></pre>
+
+<b> Tests </b>
+
+<pre> rake spec		#run from the plugin's root </pre>
+
+<b> Note.</b>
+
+Full set of render_options are specified in the rdoc, and <b>more chart's support will be included soon!.</b>
+
+h3. EZGraphix
+
+A Ruby gem to generate flash based graphics for rails applications using a free and customizable chart's set.
+
+Copyright (c) 2008 Juan Esteban Pemberthy, released under the MIT License.
+
+EzGraphix uses FusionCharts Free, It's license is specified in the FusionChartsFreeLICENSE file.
+
+Fork and feel free to contribute!
+
+h3. LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2008 Juan Esteban Pemberthy
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

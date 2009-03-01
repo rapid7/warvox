@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  number: 
+  dial_job_id: 
+  provider: 
+  completed: false
+  busy: false
+  seconds: 
+  ringtime: 
+  rawfile: MyString
+
+two:
+  number: 
+  dial_job_id: 
+  provider: 
+  completed: false
+  busy: false
+  seconds: 
+  ringtime: 
+  rawfile: MyString

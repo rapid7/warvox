@@ -1,0 +1,22 @@
+<h1 class='title'>Submit a New Job</h1>
+
+<% form_for(@dial_job) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :range, 'The target telephone range (123-456-XXXX)' %><br />
+    <%= f.text_field :range %>
+  </p>
+  <p>
+    <%= f.label :seconds, 'Seconds of audio to capture' %><br />
+    <%= f.text_field :seconds, :value => 53 %>
+  </p>
+  <p>
+    <%= f.label :lines, 'Maximum number of outgoing lines' %><br />
+    <%= f.text_field :lines, :value => 10 %>
+  </p>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', dial_jobs_path %>
