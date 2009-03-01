@@ -44,6 +44,7 @@ class Analysis < Base
 			next if r.processed
 			next if not r.completed
 			next if r.busy
+			next if not r.rawfile
 			next if not File.exist?(r.rawfile)
 
 			bname = r.rawfile.gsub(/\..*/, '')
