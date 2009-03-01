@@ -57,7 +57,6 @@ class AnalyzeController < ApplicationController
 	end
 	
 	cdata = "File not found"
-	cdata = h(res.inspect)
 	if(cpath and File.readable?(cpath))
 		cdata = File.read(cpath, File.size(cpath))
 	end
