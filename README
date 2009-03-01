@@ -3,7 +3,7 @@ WarVOX Quick Start Guide
 
 1. Install all pre-requisites
 	Ubuntu:
-		$ sudo apt-get install libiaxclient-dev sox lame ruby rubygems libsqlite3-ruby gnuplot
+		$ sudo apt-get install libiaxclient-dev sox lame ruby rake rubygems libsqlite3-ruby gnuplot
 
 2. Build the WarVOX tools and modules
 	$ make install
