@@ -26,6 +26,7 @@
 int initialized = 0;
 int debug       = 0;
 int busy        = 0;
+int fail        = 1;
 
 float silence_threshold = 0.0f;
 int call_state  = 0;
@@ -61,7 +62,9 @@ void usage(char **argv) {
  
 int state_event_callback(struct iaxc_ev_call_state call) {
 	if(call.state & IAXC_CALL_STATE_BUSY) busy = 1;
+	if(call.state & IAXC_CALL_STATE_COMPLETE) fail = 0;
 	call_state = call.state;
+
 /*
 	fprintf(stdout, "STATE: ");
 	if(call.state & IAXC_CALL_STATE_FREE)
@@ -109,6 +112,7 @@ int audio_event_callback( struct iaxc_ev_audio audio) {
 int iaxc_callback(iaxc_event e) {
     switch(e.type) {
 		case IAXC_EVENT_TEXT:
+			// fprintf(stdout, "TEXT: %s\n", e.ev.text.message);
 			return ( debug ? 0 : 1 );
 			break;
         case IAXC_EVENT_STATE:
@@ -200,13 +204,17 @@ int main(int argc, char **argv) {
 			if(iaxc_first_free_call() == call_id) break;
 			iaxc_millisleep(250);
 		}
+	} else {
+		fail = 1;
 	}
+	
 	if(! etime) time(&etime);
 	
-	fprintf(stdout, "COMPLETED %s BYTES=%d FILE=%s BUSY=%d RINGTIME=%d\n", 
+	fprintf(stdout, "COMPLETED %s BYTES=%d FILE=%s FAIL=%d BUSY=%d RINGTIME=%d\n", 
 		iax_num, 
 		call_bytes,
 		iax_out,
+		fail,
 		busy,
 		(unsigned int)(etime) - (unsigned int)(stime)
 	);

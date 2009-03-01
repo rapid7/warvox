@@ -137,7 +137,7 @@ class DB < ::Hash
 			tone << rec
 		end
 		
-		(tone.empty? or tone.length == 1) ? false : tone
+		(tone.empty? or (data.length > 5 and tone.length == 1)) ? false : tone
 	end
 
 	def find_carriers

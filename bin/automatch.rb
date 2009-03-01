@@ -42,6 +42,9 @@ oset = wdb.keys.sort
 iset = oset.dup
 
 
+$stdout.puts car.keys.map{|x| "#{x}-100" }.join(" ") 
+$stdout.flush
+	
 while(not oset.empty?)
 
 	s = Time.now
