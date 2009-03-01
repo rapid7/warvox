@@ -17,7 +17,7 @@ db: db_null web/db/production.sqlite3
 db_null:
 	find web/db/ -name 'production.sqlite3' -size 0 | xargs -i rm {}
 
-web/db/production.sqlite3:
+web/db/production.sqlite3: ruby-kissfft
 	(cd web; RAILS_ENV=production rake db:migrate )
 
 clean:
