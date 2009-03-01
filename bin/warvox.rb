@@ -11,8 +11,14 @@ end
 
 voxroot = File.join(File.dirname(base), '..', 'web')
 Dir.chdir(voxroot)
+require 'getoptlong'
 
 voxserv = File.join('script', 'server')
+
+def usage
+	$stderr.puts "#{$0} [--address IP] [--port PORT] --background"
+	exit(0)
+end
 
 opts    = 
 {
@@ -20,6 +26,26 @@ opts    =
 	'ServerHost' => '127.0.0.1',
 	'Background' => false,
 }
+
+args = GetoptLong.new(
+	["--address", "-a", GetoptLong::REQUIRED_ARGUMENT ],
+	["--port", "-p", GetoptLong::REQUIRED_ARGUMENT ],
+	["--daemon", "-d", GetoptLong::NO_ARGUMENT ],
+	["--help", "-h", GetoptLong::NO_ARGUMENT]
+)
+
+args.each do |opt,arg|
+	case opt
+	when '--address'
+		opts['ServerHost'] = arg
+	when '--port'
+		opts['ServerPort'] = arg
+	when '--daemon'
+		opts['Background'] = true
+	when '--help'
+		usage()
+	end
+end
 
 
 # Clear ARGV
