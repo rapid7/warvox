@@ -1,0 +1,11 @@
+WarVOX is Copyright (C) 2009 Metasploit LLC
+
+WarVOX is free for non-commercial use, please contact us for
+alternative licensing options (hdm[at]metasploit.com).
+
+Some components of WarVOX are derived from OSS projects and are
+under their own license. Notable exceptions to the WarVOX license:
+
+- src/iaxrecord/      (GPL)
+- src/ruby-kissfft/   (BSD)
+- web/vendor/         (Various)
