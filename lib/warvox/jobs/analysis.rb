@@ -7,7 +7,7 @@ class Analysis < Base
 	@@kissfft_loaded = false
 	begin
 		require 'kissfft'
-		@kissfft_loaded = true
+		@@kissfft_loaded = true
 	rescue ::LoadError
 	end
 	
@@ -62,10 +62,15 @@ class Analysis < Base
 			#
 			# Create the signature database
 			# 
-			raw = WarVOX::Audio::Raw.from_file(r.rawfile)
-			fd = File.new("#{bname}.sig", "wb")
-			fd.write raw.to_flow
+			
+			raw  = WarVOX::Audio::Raw.from_file(r.rawfile)
+			flow = raw.to_flow
+			fd   = File.new("#{bname}.sig", "wb")
+			fd.write flow
 			fd.close
+			
+			# Save the signature data
+			r.sig_data = flow
 			
 			#
 			# Create a raw decompressed file
@@ -108,6 +113,9 @@ class Analysis < Base
 				end
 			end
 			
+			# Save the peak frequency
+			r.peak_freq = maxf
+			
 			# Calculate average frequency and peaks over time
 			avg = {}
 			pks = []
@@ -118,17 +126,73 @@ class Analysis < Base
 					avg[ freq[0] ] +=  freq[1]
 				end
 			end
+			
+			# Save the peak frequencies over time
+			r.peak_freq_data = pks.map{|f| "#{f[0]}-#{f[1]}" }.join(" ")
+			
+			# Generate the frequency file
 			avg.keys.sort.each do |k|
 				avg[k] = avg[k] / res.length
 				frefile.write("#{k} #{avg[k]}\n")
 			end
 			frefile.flush
 
-			# XXX: Store all frequency information
-			# maxf   == peak frequency
-			# avg    == averages over whole sample
-			# pks    == peaks over time
-			# tones  == significant frequencies
+			#
+			# XXX: store significant frequencies somewhere (tones)
+			#
+			
+			# Make a guess as to what kind of phone number we found
+			line_type = nil
+			while(not line_type)
+
+				# Look for modems by detecting 2250hz tones
+				f_2250 = 0
+				pks.each{|f| f_2250 += 1 if(f[0] > 2240 and f[0] < 2260) }
+				if(f_2250 > 2)
+					line_type = 'modem'
+					break				
+				end
+				
+				# Look for the 1000hz voicemail BEEP
+				if(r.peak_freq > 990 and r.peak_freq < 1010)
+					line_type = 'voicemail'
+					break
+				end
+
+				# Most faxes have at least two of the following tones
+				f_1625 = f_1660 = f_1825 = f_2100 = false
+				pks.each do |f|
+					# $stderr.puts "#{r.number} #{f.inspect}"
+					f_1625 = true if(f[0] > 1620 and f[0] < 1630)
+					f_1660 = true if(f[0] > 1655 and f[0] < 1665)
+					f_1825 = true if(f[0] > 1820 and f[0] < 1830)
+					f_2100 = true if(f[0] > 2090 and f[0] < 2110)										
+				end
+				if([ f_1625, f_1660, f_1825, f_2100 ].grep(true).length >= 2)
+					line_type = 'fax'
+					break
+				end			
+
+				# Dial tone detection
+				f_440 = false
+				f_350 = false
+				pks.each do |f|
+					f_440 = true if(f[0] > 435 and f[0] < 445)
+					f_345 = true if(f[0] > 345 and f[0] < 355)
+				end
+				if(f_440 and f_350)
+					line_type = 'dialtone'
+					break
+				end
+				
+				# Detect humans based on long pauses
+				
+				# Default to voice
+				line_type = 'voice'
+			end
+
+			# Save the guessed line type
+			r.line_type = line_type
 
 			# Plot samples to a graph
 			plotter = Tempfile.new("gnuplot")

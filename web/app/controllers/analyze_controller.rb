@@ -19,6 +19,25 @@ class AnalyzeController < ApplicationController
 		:per_page => 10,
 		:conditions => [ 'completed = ? and processed = ? and busy = ?', true, true, false ]
 	)
+	
+	@g1 = Ezgraphix::Graphic.new(:c_type => 'pie2d', :div_name => 'calls_pie1')
+	@g1.render_options(:caption => 'Line Types')
+		
+	@g2 = Ezgraphix::Graphic.new(:c_type => 'pie2d', :div_name => 'calls_pie2')
+	@g2.render_options(:caption => 'Ring Time')
+	
+	res_types = {}
+	res_rings = {}
+	
+	@results.each do |r|
+		res_rings[ r.ringtime ] ||= 0
+		res_rings[ r.ringtime ]  += 1
+		res_types[ r.line_type.capitalize.to_sym ] ||= 0
+		res_types[ r.line_type.capitalize.to_sym ]  += 1		
+	end
+	
+	@g1.data = res_types
+	@g2.data = res_rings
   end
 
   # GET /dial_results/1/resource?id=XXX&type=YYY

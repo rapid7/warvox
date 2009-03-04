@@ -2,8 +2,8 @@
 
 <table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
 <tr>
-	<td align='center'> </td>
-	<td align='center'> </td>
+	<td align='center'><%= render_ezgraphix @g1 %></td>
+	<td align='center'><%= render_ezgraphix @g2 %></td>
 </tr>
 </table>
 
@@ -11,11 +11,13 @@
 
 <table class='table_scaffold' width='100%'>
   <tr>
-    <th>ID</th>
+    <th>ID</th>  
+    <th>Number</th>
+    <th>Type</th>
+    <th>Peak Freq</th>
   	<th>Signal</th>
 	<th>Spectrum</th>
-    <th>Number</th>
-    <th>CallerID</th>
+    <th>CID</th>
     <th>Provider</th>
     <th>Call Time</th>
 	<th>Ring Time</th>
@@ -24,15 +26,18 @@
 <%  @results.each do |dial_result| %>
   <tr>
     <td><%=h dial_result.id %></td>
+	<td>
+		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=mp3" target="_new"><%= dial_result.number %></a>
+	</td>
+    <td><%=h dial_result.line_type %></td>	
+    <td><%=h dial_result.peak_freq.to_i %></td>		
   	<td>
 		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=big_sig_dots" rel="lightbox"><img src="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=small_sig" /></a>
 	</td>
 	<td>
 		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=big_freq" rel="lightbox"><img src="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=small_freq" /></a>
 	</td>
-	<td>
-		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=mp3" target="_new"><%= dial_result.number %></a>
-	</td>
+
     <td><%=h dial_result.cid %></td>	
     <td><%=h dial_result.provider.name %></td>
     <td><%=h dial_result.seconds %></td>
