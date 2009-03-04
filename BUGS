@@ -1,0 +1,7 @@
+KNOWN BUGS
+
+ * The ruby-kissfft module segfaults on 64-bit Linux systems
+ 
+ * Stopping WarVOX in mid-scan will leave a hung scan job
+ 
+ 
