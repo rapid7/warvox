@@ -2,11 +2,11 @@ WarVOX Quick Start Guide
 ========================
 
 1. Install all pre-requisites
-	Ubuntu:
-		$ sudo apt-get install libiaxclient-dev sox lame ruby rake rubygems libsqlite3-ruby gnuplot
+	Ubuntu 8.10 or BackTrack 4 (beta+)
+    $ sudo apt-get install libiaxclient-dev sox lame ruby rake rubygems libsqlite3-ruby gnuplot
 
 2. Build the WarVOX tools and modules
-	$ make install
+	$ make
 
 3. Change the admin user/pass in etc/warvox.conf
 
@@ -19,3 +19,7 @@ WarVOX Quick Start Guide
 6. Configure an IAX-capable VoIP provider
 
 7. Create a a new job
+
+8. Analyze the results
+
+9. View the results
