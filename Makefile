@@ -1,5 +1,8 @@
-all: install
+all: test
 
+test: install
+	bin/verify_install.rb
+	
 install: iaxrecord ruby-kissfft db
 	cp -a src/iaxrecord/iaxrecord bin/
 

@@ -6,6 +6,7 @@
   <tr>
     <th>ID</th>
     <th>Range</th>
+	<th>CallerID</th>
     <th>Connected</th>
     <th>Date</th>
   </tr>
@@ -14,6 +15,7 @@
   <tr>
     <td><%=h dial_job.id %></td>
     <td><%=h dial_job.range %></td>
+    <td><%=h dial_job.cid_mask %></td>	
     <td><%=h DialResult.find(:all, :conditions => ['dial_job_id = ? and processed = ?', dial_job.id, true]).length.to_s + "/" + dial_job.dial_results.length.to_s %></td>
     <td><%=h dial_job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
     <td><%= link_to 'View', view_analyze_path(dial_job) %></td>

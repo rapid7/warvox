@@ -6,6 +6,8 @@ class ProvidersController < ApplicationController
   def index
     @providers = Provider.find(:all)
 	@new_provider = Provider.new
+	@new_provider.enabled = true
+	
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @providers }
@@ -27,6 +29,7 @@ class ProvidersController < ApplicationController
   # GET /providers/new.xml
   def new
     @provider = Provider.new
+	@provider.enabled = true
 
     respond_to do |format|
       format.html # new.html.erb
@@ -43,6 +46,7 @@ class ProvidersController < ApplicationController
   # POST /providers.xml
   def create
     @provider = Provider.new(params[:provider])
+	@provider.enabled = true
 
     respond_to do |format|
       if @provider.save

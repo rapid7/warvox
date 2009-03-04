@@ -12,6 +12,7 @@
 <table class='table_scaffold' width='100%'>
   <tr>
     <th>Number</th>
+    <th>CallerID</th>	
     <th>Provider</th>
     <th>Call Time</th>
 	<th>Ring Time</th>
@@ -20,6 +21,7 @@
 <% for dial_result in @dial_data_todo.sort{|a,b| a.number <=> b.number } %>
   <tr>
     <td><%=h dial_result.number %></td>
+    <td><%=h dial_result.cid %></td>
     <td><%=h dial_result.provider.name %></td>
     <td><%=h dial_result.seconds %></td>
     <td><%=h dial_result.ringtime %></td>

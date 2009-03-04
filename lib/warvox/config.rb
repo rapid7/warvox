@@ -62,7 +62,32 @@ module Config
 			}
 		end
 		return nil
-	end	
+	end
+	
+	# This method prevents two installations of WarVOX from using the same
+	# rails session key. The first time this method is called, it generates
+	# a new key and stores it in the rails directory, afterwards this key
+	# will be used every time.
+	def self.load_session_key
+		kfile = File.join(WarVOX::Base, 'web', 'config', 'session.key')
+		if(not File.exists?(kfile))
+			# XXX: assume /dev/urandom exists
+			kdata = File.read('/dev/urandom', 64).unpack("H*")[0]
+
+			# Create the new session key file
+			fd = File.new(kfile, 'w')
+			
+			# Make this file mode 0600
+			File.chmod(0600, kfile)
+			
+			# Write it and close
+			fd.write(kdata)
+			fd.close
+			return kdata
+		end
+		File.read(kfile)
+	end
+		
 
 end
 end

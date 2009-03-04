@@ -15,7 +15,12 @@ class Dialer < Base
 		@seconds = model.seconds
 		@lines   = model.lines		
 		@nums    = shuffle_a(WarVOX::Phone.crack_mask(@range))
-		@cid     = '8005551212' # XXX: Read from job
+		
+		# CallerID modes (SELF or a mask)
+		@cid_self = model.cid_mask == 'SELF'
+		if(not @cid_self)
+			@cid_range = WarVOX::Phone.crack_mask(model.cid_mask)
+		end
 	end
 
 	#
@@ -39,7 +44,7 @@ class Dialer < Base
 	def get_providers
 		res = []
 
-		::Provider.find(:all).each do |prov|
+		::Provider.find_all_by_enabled(true).each do |prov|
 			info = {
 				:name  => prov.name,
 				:id    => prov.id,
@@ -116,6 +121,7 @@ class Dialer < Base
 					fail = 1
 					byte = 0
 					path = ''
+					cid  = @cid_self ? num : @cid_range[ rand(@cid_range.length) ]
 					
 					IO.popen(
 						[
@@ -123,7 +129,7 @@ class Dialer < Base
 							prov[:host],
 							prov[:user],
 							prov[:pass],
-							@cid,
+							cid,
 							out,
 							num,
 							@seconds
@@ -144,6 +150,7 @@ class Dialer < Base
 					
 					res = ::DialResult.new
 					res.number = num
+					res.cid = cid
 					res.dial_job_id = @name
 					res.provider_id = prov[:id]
 					res.completed = (fail == 0) ? true : false

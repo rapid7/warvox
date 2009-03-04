@@ -58,9 +58,12 @@ Rails::Initializer.run do |config|
   # If you change this key, all old sessions will become invalid!
   # Make sure the secret is at least 30 characters and all random, 
   # no regular words or you'll be exposed to dictionary attacks.
+  #
+  # WarVOX generates a new key for each installation
+  # This file is stored under web/config/session.key
   config.action_controller.session = {
     :session_key => '_warvox',
-    :secret      => 'feada588709ac0fd51987c264ad6fba018be0e3a579547b9c9978098a71d4a1a96e630150aa0e26cba058c7f8081827b70586e0eb3cd83e7abf81ce49a13301e'
+    :secret      => WarVOX::Config.load_session_key
   }
 
   # Use the database for sessions instead of the cookie-based default,

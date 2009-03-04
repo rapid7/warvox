@@ -5,16 +5,16 @@
     <title><%= @title || "WarVOX" %></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="Content-Language" content="en-US" />	
-    <%= stylesheet_link_tag 'global' %>
+    <%= stylesheet_link_tag 'global', 'lightbox' %>
 	<!--[if IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->
 		
-    <%= javascript_include_tag 'custom', 'prototype', 'effects', 'FusionCharts' %>
+    <%= javascript_include_tag 'custom', 'prototype', 'effects', 'FusionCharts', 'lightbox' %>
   </head>
   <body>
   
 <div id="header">
   <%= render :partial => 'shared/header' %>
-</div> 
+</div>
  
 <div id="content">
 	<div class="box_full">

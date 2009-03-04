@@ -15,6 +15,10 @@
     <%= f.text_field :lines, :value => 10 %>
   </p>
   <p>
+    <%= f.label :lines, 'The source Caller ID range (555-555-55XX or SELF)' %><br />
+    <%= f.text_field :cid_mask, :value => '000-000-XXXX' %>
+  </p>  
+  <p>
     <%= f.submit "Create" %>
   </p>
 <% end %>

@@ -15,6 +15,7 @@
   	<th>Signal</th>
 	<th>Spectrum</th>
     <th>Number</th>
+    <th>CallerID</th>
     <th>Provider</th>
     <th>Call Time</th>
 	<th>Ring Time</th>
@@ -24,18 +25,15 @@
   <tr>
     <td><%=h dial_result.id %></td>
   	<td>
-		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=big_sig_dots">
-		<img src="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=small_sig" border=0>
-		</a>
+		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=big_sig_dots" rel="lightbox"><img src="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=small_sig" /></a>
 	</td>
 	<td>
-		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=big_freq">
-		<img src="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=small_freq" border=0>
-		</a>
+		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=big_freq" rel="lightbox"><img src="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=small_freq" /></a>
 	</td>
 	<td>
 		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=mp3" target="_new"><%= dial_result.number %></a>
 	</td>
+    <td><%=h dial_result.cid %></td>	
     <td><%=h dial_result.provider.name %></td>
     <td><%=h dial_result.seconds %></td>
     <td><%=h dial_result.ringtime %></td>

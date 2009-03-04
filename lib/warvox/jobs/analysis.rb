@@ -3,7 +3,13 @@ module Jobs
 class Analysis < Base 
 
 	require 'fileutils'
-	require 'kissfft'
+	
+	@@kissfft_loaded = false
+	begin
+		require 'kissfft'
+		@kissfft_loaded = true
+	rescue ::LoadError
+	end
 	
 	def type
 		'analysis'
@@ -11,6 +17,9 @@ class Analysis < Base
 	
 	def initialize(job_id)
 		@name = job_id
+		if(not @@kissfft_loaded)
+			raise RuntimeError, "The KissFFT module is not availabale, analysis failed"
+		end
 	end
 	
 	def get_job

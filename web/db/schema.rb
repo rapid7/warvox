@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090301084459) do
+ActiveRecord::Schema.define(:version => 20090303225838) do
 
   create_table "dial_jobs", :force => true do |t|
     t.string   "range"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20090301084459) do
     t.boolean  "processed"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "cid_mask"
   end
 
   create_table "dial_results", :force => true do |t|
@@ -37,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20090301084459) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "processed_at"
+    t.string   "cid"
   end
 
   create_table "providers", :force => true do |t|
@@ -48,6 +50,7 @@ ActiveRecord::Schema.define(:version => 20090301084459) do
     t.integer  "lines"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "enabled"
   end
 
 end

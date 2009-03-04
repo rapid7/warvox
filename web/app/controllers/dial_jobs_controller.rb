@@ -55,13 +55,24 @@ class DialJobsController < ApplicationController
   # POST /dial_jobs
   # POST /dial_jobs.xml
   def create
-    @dial_job = DialJob.new(params[:dial_job])
+  	
+	@dial_job = DialJob.new(params[:dial_job])
+  
+    if(Provider.find_all_by_enabled(true).length == 0)
+		@dial_job.errors.add("No providers have been configured or enabled, this job ")
+		respond_to do |format|
+			format.html { render :action => "new" }
+			format.xml  { render :xml => @dial_job.errors, :status => :unprocessable_entity }
+		end
+		return
+	end
 
 	@dial_job.status       = 'submitted'
 	@dial_job.progress     = 0
 	@dial_job.started_at   = nil
 	@dial_job.completed_at = nil
 	@dial_job.range.gsub!(/[^0-9X]/, '')
+	@dial_job.cid_mask.gsub!(/[^0-9X]/, '') if @dial_job.cid_mask != "SELF"
 
     respond_to do |format|
       if @dial_job.save
