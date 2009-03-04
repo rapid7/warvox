@@ -14,28 +14,35 @@
     <th>ID</th>  
     <th>Number</th>
     <th>Type</th>
-    <th>Peak Freq</th>
   	<th>Signal</th>
 	<th>Spectrum</th>
     <th>CID</th>
     <th>Provider</th>
-    <th>Call Time</th>
-	<th>Ring Time</th>
+    <th>Time</th>
+	<th>Ring</th>
   </tr>
 
 <%  @results.each do |dial_result| %>
   <tr>
     <td><%=h dial_result.id %></td>
 	<td>
-		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=mp3" target="_new"><%= dial_result.number %></a>
+		<b><%= dial_result.number %></b><br/>
+		<object
+			type="application/x-shockwave-flash"
+			data="/images/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id)%>/<%= dial_result.id %>/mp3" 
+			width="20"
+			height="17"
+			>
+			<param name="movie" value="/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id)%>/<%= dial_result.id %>/mp3"></param>
+			<param name="wmode" value="transparent"></param>
+		</object> 	
 	</td>
-    <td><%=h dial_result.line_type %></td>	
-    <td><%=h dial_result.peak_freq.to_i %></td>		
+    <td><%=h dial_result.line_type.upcase %></td>	
   	<td>
-		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=big_sig_dots" rel="lightbox"><img src="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=small_sig" /></a>
+		<a href="<%=resource_analyze_path(@job_id)%>/<%= dial_result.id %>/big_sig_dots" rel="lightbox"><img src="<%=resource_analyze_path(@job_id)%>/<%= dial_result.id %>/small_sig" /></a>
 	</td>
 	<td>
-		<a href="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=big_freq" rel="lightbox"><img src="<%=resource_analyze_path(@job_id)%>?result_id=<%= dial_result.id %>&type=small_freq" /></a>
+		<a href="<%=resource_analyze_path(@job_id)%>/<%= dial_result.id %>/big_freq" rel="lightbox"><img src="<%=resource_analyze_path(@job_id)%>/<%= dial_result.id %>/small_freq" /></a>
 	</td>
 
     <td><%=h dial_result.cid %></td>	

@@ -2,14 +2,15 @@ class HomeController < ApplicationController
 	layout 'warvox'
 	
 	def index
-		begin
-			@kissfft_loaded = false
-			require 'kissfft'
-			@kissfft_loaded = true
-		rescue
-		end
+
 	end
 	
 	def about
+		begin
+			@has_kissfft = "MISSING"
+			require 'kissfft'
+			@has_kissfft = $LOADED_FEATURES.grep(/kissfft/)[0]
+		rescue ::LoadError
+		end	
 	end
 end

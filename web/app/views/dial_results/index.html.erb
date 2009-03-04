@@ -5,9 +5,8 @@
   <tr>
     <th>ID</th>
     <th>Range</th>
-    <th>CallerID</th>
-    <th>Seconds</th>
-    <th>Lines</th>
+    <th>CID</th>
+    <th>Time</th>
     <th>Started</th>
   </tr>
 
@@ -17,7 +16,6 @@
     <td><%=h dial_job.range %></td>
     <td><%=h dial_job.cid_mask %></td>	
     <td><%=h dial_job.seconds %></td>
-    <td><%=h dial_job.lines %></td>
     <td><%=h dial_job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
     <td><%= link_to 'View', view_dial_result_path(dial_job) %></td>
 	<% if(dial_job.processed) %>
@@ -25,7 +23,7 @@
 	<% else %>
 		<td><%= link_to 'Analyze Calls', analyze_dial_result_path(dial_job) %></td>
 	<% end %>
-	<td><%= link_to 'Purge Data', purge_dial_result_path(dial_job), :confirm => "Delete all data for this job?" %></td>
+	<td><%= link_to 'Purge', purge_dial_result_path(dial_job), :confirm => "Delete all data for this job?" %></td>
   </tr>
 <% end %>
 </table>
