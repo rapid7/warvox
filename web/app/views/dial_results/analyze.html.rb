@@ -15,7 +15,7 @@
 </table>
 
 <script language="javascript">
-	setTimeout("location.reload(true);", 5000);
+	setTimeout("location.reload(true);", 10000);
 </script>
 
 <% else %>

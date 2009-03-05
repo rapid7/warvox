@@ -36,9 +36,8 @@ class DialJobsController < ApplicationController
 	  flash[:notice] = 'Job is already running or completed'
 	  return
 	end
-	
-	dialer = WarVOX::Jobs::Dialer.new(@dial_job.id)
-	WarVOX::JobManager.schedule(dialer)
+
+	WarVOX::JobManager.schedule(::WarVOX::Jobs::Dialer, @dial_job.id)
 	redirect_to :action => 'index'
   end
   
