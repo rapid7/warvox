@@ -38,6 +38,32 @@ class DialResultsController < ApplicationController
   	@job_id = params[:id]
 	@job    = DialJob.find(@job_id)
 
+	@dial_data_total = DialResult.find_all_by_dial_job_id(
+		@job_id,
+		:conditions => [ 'completed = ? and busy = ?', true, false ]
+	).length
+	
+	@dial_data_done_set = DialResult.find_all_by_dial_job_id(
+		@job_id,
+		:conditions => [ 'processed = ?', true]
+	)
+	@dial_data_done = @dial_data_done_set.length
+
+	@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
+	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines')
+	
+	@g2 = Ezgraphix::Graphic.new(:c_type => 'pie2d', :div_name => 'calls_pie2')
+	@g2.render_options(:caption => 'Analysis Progress')
+			
+	res_types = {}
+	@dial_data_done_set.each do |r|
+		res_types[ r.line_type.capitalize.to_sym ] ||= 0
+		res_types[ r.line_type.capitalize.to_sym ]  += 1		
+	end
+	
+	@g1.data = res_types
+	@g2.data = {:Remaining => @dial_data_total-@dial_data_done, :Complete => @dial_data_done}		
+	
 	@dial_data_todo = DialResult.paginate_all_by_dial_job_id(
 		@job_id,
 		:page => params[:page], 
@@ -52,8 +78,7 @@ class DialResultsController < ApplicationController
 	end
 	
 	if(@dial_data_todo.length > 0)
-        analyzer = WarVOX::Jobs::Analysis.new(@job_id)
-        WarVOX::JobManager.schedule(analyzer)	
+        WarVOX::JobManager.schedule(::WarVOX::Jobs::Analysis, @job_id)
 	end
   end
 

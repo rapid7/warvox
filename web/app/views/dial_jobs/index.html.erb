@@ -77,7 +77,7 @@
 <% form_for(@new_job) do |f| %>
   <%= f.error_messages %>
   <p>
-    <%= f.label :range, 'The target telephone range (123-456-XXXX)' %><br />
+    <%= f.label :range, 'The target telephone range (1-123-456-XXXX)' %><br />
     <%= f.text_field :range %>
   </p>
   <p>
@@ -89,8 +89,8 @@
     <%= f.text_field :lines, :value => 10 %>
   </p>
   <p>
-    <%= f.label :lines, 'The source Caller ID range (555-555-55XX)' %><br />
-    <%= f.text_field :cid_mask, :value => '000-000-XXXX' %>
+    <%= f.label :lines, 'The source Caller ID range (1-555-555-55XX)' %><br />
+    <%= f.text_field :cid_mask, :value => '1-123-456-XXXX' %>
   </p>  
   <p>
     <%= f.submit "Create" %>

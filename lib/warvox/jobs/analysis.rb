@@ -231,8 +231,10 @@ class Analysis < Base
 			system("gnuplot #{plotter.path}")
 			File.unlink(plotter.path)
 			File.unlink(datfile.path)
+			File.unlink(frefile.path)
 			plotter.close
 			datfile.close
+			frefile.path
 
 			# Generate a MP3 audio file
 			system("sox -s -w -r 8000 -t raw -c 1 #{rawfile.path} #{bname}.wav")
@@ -240,13 +242,13 @@ class Analysis < Base
 			File.unlink("#{bname}.wav")
 			File.unlink(rawfile.path)
 			rawfile.close
-			
-			# XXX: Dump the frequencies
-			
+
 			# Save the changes
 			r.processed = true
 			r.processed_at = Time.now
-			r.save
+			db_save(r)
+			
+			clear_zombies()		
 		end
 	end
 

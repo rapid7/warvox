@@ -3,44 +3,41 @@ class JobQueue
 	attr_accessor :active_job, :active_thread, :queue, :queue_thread
 
 	def initialize
+		@mutex = Mutex.new	
 		@queue = []
 		@queue_thread = Thread.new{ manage_queue }
+		
 		super
 	end
 	
-	# XXX synchronize
-	def deschedule(job_id)
-
-		if(@active_job and @active_job.name == job_id)
-			@active_thread.kill
-			@active_job = @active_thread = nil
+	def scheduled?(klass, job_id)
+		@mutex.synchronize do
+			[@active_job, *(@queue)].each do |c|
+				next if not c
+				return true if (c.class == klass and c.name == job_id)
+			end
 		end
-		
-		res = []
-		@queue.each do |j|
-			res << j if j.name == job_id
-		end
-		
-		if(res.length > 0)
-			res.each {|j| @queue.delete(j) }
-		end
+		false
 	end
 	
-	def schedule(job)
-		@queue.push(job)
+	def schedule(klass, job_id)
+		return false if scheduled?(klass, job_id)
+		@queue.push(klass.new(job_id))
 	end
 	
 	def manage_queue
 		begin
 		while(true)
-			if(@active_job and @active_job.status == 'completed')
-				@active_job    = nil
-				@active_thread = nil
-			end
-			
-			if(not @active_job and @queue.length > 0)
-				@active_job    = @queue.shift
-				@active_thread = Thread.new { @active_job.start }
+			@mutex.synchronize do
+				if(@active_job and @active_job.status == 'completed')
+					@active_job    = nil
+					@active_thread = nil
+				end
+
+				if(not @active_job and @queue.length > 0)
+					@active_job    = @queue.shift
+					@active_thread = Thread.new { @active_job.start }
+				end
 			end
 
 			Kernel.select(nil, nil, nil, 1)

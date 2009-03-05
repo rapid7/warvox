@@ -79,8 +79,7 @@ class DialJobsController < ApplicationController
         flash[:notice] = 'Job was successfully created.'
         
         # Launch it	
-        dialer = WarVOX::Jobs::Dialer.new(@dial_job.id)
-        WarVOX::JobManager.schedule(dialer)
+        WarVOX::JobManager.schedule(::WarVOX::Jobs::Dialer, @dial_job.id)
 	
         format.html { redirect_to(@dial_job) }
         format.xml  { render :xml => @dial_job, :status => :created, :location => @dial_job }

@@ -20,8 +20,8 @@ class AnalyzeController < ApplicationController
 		:conditions => [ 'completed = ? and processed = ? and busy = ?', true, true, false ]
 	)
 	
-	@g1 = Ezgraphix::Graphic.new(:c_type => 'pie2d', :div_name => 'calls_pie1')
-	@g1.render_options(:caption => 'Line Types')
+	@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
+	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines')
 		
 	@g2 = Ezgraphix::Graphic.new(:c_type => 'pie2d', :div_name => 'calls_pie2')
 	@g2.render_options(:caption => 'Ring Time')

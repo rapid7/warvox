@@ -6,16 +6,16 @@ class DialJob < ActiveRecord::Base
 	validates_numericality_of :seconds, :less_than => 301, :greater_than => 0
 
 	def validate
-		if(range.gsub(/[^0-9X]/, '').length != 10)
-			errors.add(:range, "The range must be exactly 10 characters long and made up of 0-9 and X as the mask.")
+		if(range.gsub(/[^0-9X]/, '').empty?)
+			errors.add(:range, "The range must be at least 1 character long and made up of 0-9 and X as the mask.")
 		end
 		
 		if(range.scan(/X/).length > 5)
 			errors.add(:range, "The range must contain no more than 5 mask digits.")
 		end
 		
-		if(cid_mask != "SELF" and cid_mask.gsub(/[^0-9X]/, '').length != 10)
-			errors.add(:range, "The Caller ID must be exactly 10 characters long and made up of 0-9 and X as the mask.")
+		if(cid_mask != "SELF" and cid_mask.gsub(/[^0-9X]/, '').empty?)
+			errors.add(:range, "The Caller ID must be at least 1 character long and made up of 0-9 and X as the mask.")
 		end
 			
 		if(cid_mask != "SELF" and cid_mask.scan(/X/).length > 5)

@@ -1,39 +1,22 @@
 <% if @dial_data_todo.length > 0 %>
 
-<h1 class='title'>Processing <%= @dial_data_todo.length %> Calls...</h1>
+<h1 class='title'>
+	Analyzing Calls ( completed <%= @dial_data_done %> of <%= @dial_data_total %>
+	- <%= @dial_data_total-@dial_data_done %> left )...
+</h1>
 
 <table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
 <tr>
-	<td align='center'> </td>
-	<td align='center'> </td>
+<% if @dial_data_done > 0 %>
+	<td align='center'><%= render_ezgraphix @g1 %></td>
+	<td align='center'><%= render_ezgraphix @g2 %></td>
+<% end %>
 </tr>
 </table>
 
-<table class='table_scaffold' width='100%'>
-  <tr>
-    <th>Number</th>
-    <th>CallerID</th>	
-    <th>Provider</th>
-    <th>Call Time</th>
-	<th>Ring Time</th>
-  </tr>
-
-<% for dial_result in @dial_data_todo.sort{|a,b| a.number <=> b.number } %>
-  <tr>
-    <td><%=h dial_result.number %></td>
-    <td><%=h dial_result.cid %></td>
-    <td><%=h dial_result.provider.name %></td>
-    <td><%=h dial_result.seconds %></td>
-    <td><%=h dial_result.ringtime %></td>
-  </tr>
-<% end %>
-</table>
-
 <script language="javascript">
-	setTimeout("location.reload(true);", 3000);
+	setTimeout("location.reload(true);", 5000);
 </script>
-
-<%= will_paginate @dial_data_todo %>
 
 <% else %>
 

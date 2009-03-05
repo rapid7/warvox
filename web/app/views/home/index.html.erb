@@ -16,7 +16,7 @@ In order to make phone calls, WarVOX needs to be configured with one or more ser
 <p>Once one or more service providers have been configured, click the <a href="/dial_jobs/">Jobs</a> link. This will present a form that asks for the phone number range to dial, the number of seconds of audio to capture, and the maximum number of outgoing lines to use for this job.
 </p>
 
-<p>The phone number range is specified by entering the full 10-digit phone number, with numbers replaced by X's where an entire range should be dialed. For example, the value 512-555-XXXX will make 10,000 calls, one to each number within the 512-555 exchange. In contrast, the value 512-555-555X will only make 10 calls, covering 5550 to 5559. Only 5 digits of the phone number range can be masked.
+<p>The phone number range is specified by entering the phone number (including country code), with numbers replaced by X's where an entire range should be dialed. For example, the value 1-512-555-XXXX will make 10,000 calls, one to each number within the 512-555 exchange. In contrast, the value 1-512-555-555X will only make 10 calls, covering 5550 to 5559. Only 5 digits of the phone number range can be masked.
 </p>
 
 <p>
@@ -27,7 +27,7 @@ The seconds field indicates the number of seconds to spend on each call, includi
 The outgoing line count is limited by the number of providers available and the number of lines available at each provider. If you are dialing a range with a limited number of inbound lines, the outgoing line count should be set to a small value, otherwise leave this value at the maximum number of available lines to complete jobs as quickly as possible. Each concurrent outbound call requires approximately 80kbits/s of downstream bandwidth.
 </p>
 
-<p>The Caller ID is specified by entering the full 10-digit phone number, with numbers replaced by X's where parts of the number should be chosen randomly. This field also accepts the special value of "SELF", which will cause all calls to be made with the Caller ID set to the destination number (useful for testing poorly implemented voice mail security).
+<p>The Caller ID is specified by entering the phone number (including country code), with numbers replaced by X's where parts of the number should be chosen randomly. This field also accepts the special value of "SELF", which will cause all calls to be made with the Caller ID set to the destination number (useful for testing poorly implemented voice mail security).
 </p>
 
 <p>

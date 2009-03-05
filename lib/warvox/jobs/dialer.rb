@@ -70,7 +70,7 @@ class Dialer < Base
 		model = get_job
 		model.status = 'active'
 		model.started_at = Time.now
-		model.save
+		db_save(model)
 		
 		start_dialing()
 		
@@ -86,7 +86,7 @@ class Dialer < Base
 		model = get_job
 		model.status = 'completed'
 		model.completed_at = Time.now
-		model.save
+		db_save(model)
 	end
 	
 	def start_dialing
@@ -177,32 +177,18 @@ class Dialer < Base
 			end
 			# END SPAWN THREADS
 			tasks.map{|t| t.join if t}
-			
-			# Save data to the database
-			begin
-			
-				# Iterate through the results
-				@calls.each do |r|
-					tries = 0
-					begin
-						r.save
-					rescue ::Exception => e
-						$stderr.puts "ERROR: #{r.inspect} #{e.class} #{e}"
-						tries += 1
-						Kernel.select(nil, nil, nil, 0.25 * (rand(8)+1))
-						retry if tries < 5
-					end
-				end
-				
-				# Update the progress bar
-				model = get_job
-				model.progress = ((@nums_total - @nums.length) / @nums_total.to_f) * 100
-				model.save
 
-			rescue ::SQLite3::BusyException => e
-				$stderr.puts "ERROR: Database lock hit trying to save, retrying"
-				retry
+			# Iterate through the results
+			@calls.each do |r|
+				db_save(r)
 			end
+
+			# Update the progress bar
+			model = get_job
+			model.progress = ((@nums_total - @nums.length) / @nums_total.to_f) * 100
+			db_save(model)
+			
+			clear_zombies()
 		end
 		
 		# ALL DONE
