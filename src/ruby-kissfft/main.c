@@ -157,6 +157,7 @@ rbkiss_s_fftr(VALUE class, VALUE r_nfft, VALUE r_rate, VALUE r_buckets, VALUE r_
 	free(tbuf);
 	free(fbuf);
 	free(mag2buf);
+	free(vals);
 	return(res);		
 }
 
