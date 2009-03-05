@@ -17,19 +17,31 @@ class KissFFT::UnitTest < Test::Unit::TestCase
 		puts "KissFFT version: #{KissFFT.version}"
 	end		
 	def test_fftr
-		data = ( [*(1..100)] * 1000).flatten
+		data = File.read('sample.data').unpack('s*')
 		
-		r = KissFFT.fftr(8192, 8000, 1, data)
-		r.each do |x|
-			mf = 0
-			mp = 0
-			x.each do |o|
-				if(o[1] > mp)
-					mp = o[1]
-					mf = o[0]
-				end
+		min = 1
+		res = KissFFT.fftr(8192, 8000, 1, data)
+
+		tones = {}
+		res.each do |x|
+			rank = x.sort{|a,b| a[1].to_i <=> b[1].to_i }.reverse
+			rank[0..10].each do |t|
+				f = t[0].round
+				p = t[1].round
+				next if f == 0
+				next if p < min
+				tones[ f ] ||= []
+				tones[ f ] << t
 			end
-			puts "#{mf} @ #{mp}"
 		end
+
+		tones.keys.sort.each do |t|
+			next if tones[t].length < 2
+			puts "#{t}hz"
+			tones[t].each do |x|
+				puts "\t#{x[0]}hz @ #{x[1]}"
+			end
+		end
+
 	end					
 end

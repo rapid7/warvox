@@ -42,9 +42,7 @@ rbkiss_s_fftr(VALUE class, VALUE r_nfft, VALUE r_rate, VALUE r_buckets, VALUE r_
 	int n;
 	int sidx;
 	int avgctr=0;
-	int remove_dc=0;
 	int nrows=0;
-	float * vals=NULL;
 	int stereo=0;
 
 	int nfft;
@@ -91,9 +89,9 @@ rbkiss_s_fftr(VALUE class, VALUE r_nfft, VALUE r_rate, VALUE r_buckets, VALUE r_
 	nfreqs=nfft/2+1;
 
 	CHECKNULL( cfg=kiss_fftr_alloc(nfft,0,0,0) );
-	CHECKNULL( tbuf=(kiss_fft_scalar*)malloc(sizeof(kiss_fft_scalar)*nfft ) );
-	CHECKNULL( fbuf=(kiss_fft_cpx*)malloc(sizeof(kiss_fft_cpx)*nfreqs ) );
-	CHECKNULL( mag2buf=(float*)malloc(sizeof(float)*nfreqs ) );	
+	CHECKNULL( tbuf=(kiss_fft_scalar*)malloc(sizeof(kiss_fft_scalar)*(nfft + 2) ) );
+	CHECKNULL( fbuf=(kiss_fft_cpx*)malloc(sizeof(kiss_fft_cpx)*(nfft + 2)) );
+	CHECKNULL( mag2buf=(float*)malloc(sizeof(float)*(nfft + 2) ));	
 
 	memset(mag2buf,0,sizeof(mag2buf)*nfreqs);
 
@@ -115,13 +113,6 @@ rbkiss_s_fftr(VALUE class, VALUE r_nfft, VALUE r_rate, VALUE r_buckets, VALUE r_
 			}
 		}
 
-		// Handle DC
-		if (remove_dc) {
-			float avg = 0;
-			for (i=0;i<nfft;++i)  avg += tbuf[i];
-			avg /= nfft;
-			for (i=0;i<nfft;++i)  tbuf[i] -= (kiss_fft_scalar)avg;
-		}	
 
 		/* do FFT */
 		kiss_fftr(cfg,tbuf,fbuf);
@@ -131,19 +122,17 @@ rbkiss_s_fftr(VALUE class, VALUE r_nfft, VALUE r_rate, VALUE r_buckets, VALUE r_
 		}
 
 		if (++avgctr == navg) {
+			float eps = 1;
 			avgctr=0;
 			++nrows;
-			vals = (float*)realloc(vals,sizeof(float)*nrows*nfreqs);
-			float eps = 1;
 
-			set = rb_ary_new();
 			// RESULTS
+			set = rb_ary_new();
 			for (i=0;i<nfreqs;++i) {
-				vals[(nrows - 1) * nfreqs + i] = 10 * log10( mag2buf[i] / navg + eps );
-
+				float pwr = 10 * log10( mag2buf[i] / navg + eps );
 				tmp = rb_ary_new();
 				rb_ary_push(tmp, rb_float_new( (float)i * ( ( (float)rate / 2) / (float)nfreqs) ));
-				rb_ary_push(tmp, rb_float_new( vals[(nrows - 1) * nfreqs + i] ));
+				rb_ary_push(tmp, rb_float_new( pwr));
 				rb_ary_push(set, tmp);
 			}
 			rb_ary_push(res, set);
@@ -152,10 +141,8 @@ rbkiss_s_fftr(VALUE class, VALUE r_nfft, VALUE r_rate, VALUE r_buckets, VALUE r_
 		inp_idx += nfft;
 	}
 
-	cleanup:
-	if(vals) free(vals);
 	free(cfg);
-	free(tbuf);
+	free(tbuf);	
 	free(fbuf);
 	free(mag2buf);
 	return(res);		
