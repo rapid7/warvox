@@ -19,6 +19,11 @@ class AnalyzeController < ApplicationController
 		:per_page => 10,
 		:conditions => [ 'completed = ? and processed = ? and busy = ?', true, true, false ]
 	)
+
+	@results_all = DialResult.find_all_by_dial_job_id(
+		@job_id,
+		:conditions => [ 'completed = ? and processed = ? and busy = ?', true, true, false ]
+	)
 	
 	@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
 	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines')
@@ -29,7 +34,7 @@ class AnalyzeController < ApplicationController
 	res_types = {}
 	res_rings = {}
 	
-	@results.each do |r|
+	@results_all.each do |r|
 		res_rings[ r.ringtime ] ||= 0
 		res_rings[ r.ringtime ]  += 1
 		res_types[ r.line_type.capitalize.to_sym ] ||= 0
