@@ -2,8 +2,10 @@ module WarVOX
 class JobQueue
 	attr_accessor :active_job, :active_thread, :queue, :queue_thread
 
+	require "thread"
+	
 	def initialize
-		@mutex = Mutex.new	
+		@mutex = ::Mutex.new	
 		@queue = []
 		@queue_thread = Thread.new{ manage_queue }
 		
