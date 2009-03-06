@@ -6,8 +6,8 @@
     <th>ID</th>
     <th>Range</th>
     <th>CID</th>
+    <th>Answered</th>	
     <th>Time</th>
-    <th>Started</th>
   </tr>
 
 <% @completed_jobs.sort{|a,b| b.id <=> a.id}.each do |dial_job|  %>
@@ -15,7 +15,11 @@
     <td><%=h dial_job.id %></td>
     <td><%=h dial_job.range %></td>
     <td><%=h dial_job.cid_mask %></td>	
-    <td><%=h dial_job.seconds %></td>
+    <td><%=h (
+		DialResult.count(:conditions => ['dial_job_id = ? and completed = ?', dial_job.id, true]).to_s + 
+		"/" + 
+		DialResult.count(:conditions => ['dial_job_id = ?', dial_job.id]).to_s 
+	)%></td>
     <td><%=h dial_job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
     <td><%= link_to 'View', view_dial_result_path(dial_job) %></td>
 	<% if(dial_job.processed) %>

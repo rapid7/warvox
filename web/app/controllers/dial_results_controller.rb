@@ -20,12 +20,8 @@ class DialResultsController < ApplicationController
 
   # GET /dial_results/1/reanalyze
   def reanalyze
-  	DialResult.find_all_by_dial_job_id(params[:id]).each do |r|
-		r.processed    = false
-		r.processed_at = 0
-		r.save
-	end
-	j = DialJob.find_by_id(params[:id])
+  	DialResult.update_all(['processed = ?', false], ['dial_job_id = ?', params[:id]])
+	j = DialJob.find(params[:id])
 	j.processed = false
 	j.save
 	
@@ -38,32 +34,34 @@ class DialResultsController < ApplicationController
   	@job_id = params[:id]
 	@job    = DialJob.find(@job_id)
 
-	@dial_data_total = DialResult.find_all_by_dial_job_id(
-		@job_id,
-		:conditions => [ 'completed = ? and busy = ?', true, false ]
-	).length
+	if(@job.processed)
+		redirect_to :controller => 'analyze', :action => 'view', :id => @job_id
+		return
+	end
 	
-	@dial_data_done_set = DialResult.find_all_by_dial_job_id(
-		@job_id,
-		:conditions => [ 'processed = ?', true]
+	@dial_data_total = DialResult.count(
+		:conditions => [ 'dial_job_id = ? and completed = ?', @job_id, true ]
 	)
-	@dial_data_done = @dial_data_done_set.length
+	
+	@dial_data_done = DialResult.count(
+		:conditions => [ 'dial_job_id = ? and processed = ?', @job_id, true ]
+	)
 
 	@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
-	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines')
+	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines', :w => 700, :h => 300)
 	
-	@g2 = Ezgraphix::Graphic.new(:c_type => 'pie2d', :div_name => 'calls_pie2')
-	@g2.render_options(:caption => 'Analysis Progress')
-			
+	ltypes = DialResult.find( :all, :select => 'DISTINCT line_type' ).map{|r| r.line_type}
 	res_types = {}
-	@dial_data_done_set.each do |r|
-		res_types[ r.line_type.capitalize.to_sym ] ||= 0
-		res_types[ r.line_type.capitalize.to_sym ]  += 1		
+
+	ltypes.each do |k|
+		next if not k
+		res_types[k.capitalize.to_sym] = DialResult.count(
+			:conditions => ['dial_job_id = ? and line_type = ?', @job_id, k]
+		)
 	end
 	
 	@g1.data = res_types
-	@g2.data = {:Remaining => @dial_data_total-@dial_data_done, :Complete => @dial_data_done}		
-	
+
 	@dial_data_todo = DialResult.paginate_all_by_dial_job_id(
 		@job_id,
 		:page => params[:page], 
@@ -71,11 +69,6 @@ class DialResultsController < ApplicationController
 		:per_page => 50,
 		:conditions => [ 'completed = ? and processed = ? and busy = ?', true, false, false ]
 	)
-
-	if(@job.processed)
-		redirect_to :controller => 'analyze', :action => 'view', :id => @job_id
-		return
-	end
 	
 	if(@dial_data_todo.length > 0)
         WarVOX::JobManager.schedule(::WarVOX::Jobs::Analysis, @job_id)
@@ -93,38 +86,15 @@ class DialResultsController < ApplicationController
 	)		
 	
 	if(@dial_results)
-		@g1 = Ezgraphix::Graphic.new(:c_type => 'pie2d', :div_name => 'calls_pie1')
-		@g1.render_options(:caption => 'Call Results')
-		
-		@g2 = Ezgraphix::Graphic.new(:c_type => 'pie2d', :div_name => 'calls_pie2')
-		@g2.render_options(:caption => 'Call Length')
-		
-		res = {
-			:Timeout  => 0,
-			:Busy     => 0,
-			:Answered => 0
+		@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
+		@g1.render_options(:caption => 'Call Results', :w => 700, :h => 300)
+
+		@g1.data = {
+			:Timeout  => DialResult.count(:conditions =>['dial_job_id = ? and completed = ?', params[:id], false]),
+			:Busy     => DialResult.count(:conditions =>['dial_job_id = ? and busy = ?', params[:id], true]),
+			:Answered => DialResult.count(:conditions =>['dial_job_id = ? and completed = ?', params[:id], true]),
 		}
-		sec = {}
-		
-		@dial_results.each do |r|		
-			sec[r.seconds] ||= 0
-			sec[r.seconds]  += 1
-			
-			if(not r.completed)
-				res[:Timeout] += 1
-				next
-			end
-			if(r.busy)
-				res[:Busy] += 1
-				next
-			end
-			res[:Answered] += 1
-		end
-		
-		@g1.data = res
-		@g2.data = sec
 	end
-	
 
     respond_to do |format|
       format.html # index.html.erb

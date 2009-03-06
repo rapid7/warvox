@@ -20,29 +20,21 @@ class AnalyzeController < ApplicationController
 		:conditions => [ 'completed = ? and processed = ? and busy = ?', true, true, false ]
 	)
 
-	@results_all = DialResult.find_all_by_dial_job_id(
-		@job_id,
-		:conditions => [ 'completed = ? and processed = ? and busy = ?', true, true, false ]
-	)
-	
+
 	@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
-	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines')
-		
-	@g2 = Ezgraphix::Graphic.new(:c_type => 'pie2d', :div_name => 'calls_pie2')
-	@g2.render_options(:caption => 'Ring Time')
-	
+	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines', :w => 700, :h => 300)
+
+	ltypes = DialResult.find( :all, :select => 'DISTINCT line_type' ).map{|r| r.line_type}
 	res_types = {}
-	res_rings = {}
-	
-	@results_all.each do |r|
-		res_rings[ r.ringtime ] ||= 0
-		res_rings[ r.ringtime ]  += 1
-		res_types[ r.line_type.capitalize.to_sym ] ||= 0
-		res_types[ r.line_type.capitalize.to_sym ]  += 1		
+
+	ltypes.each do |k|
+		next if not k
+		res_types[k.capitalize.to_sym] = DialResult.count(
+			:conditions => ['dial_job_id = ? and line_type = ?', @job_id, k]
+		)
 	end
 	
 	@g1.data = res_types
-	@g2.data = res_rings
   end
 
   # GET /dial_results/1/resource?id=XXX&type=YYY
@@ -50,7 +42,7 @@ class AnalyzeController < ApplicationController
   	ctype = 'text/html'
 	cpath = nil
 	
-	res = DialResult.find_by_id(params[:result_id])
+	res = DialResult.find(params[:result_id])
 	if(res and res.processed and res.rawfile)
 		case params[:type]
 		when 'big_sig'

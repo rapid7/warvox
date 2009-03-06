@@ -28,7 +28,7 @@ team can be reached by email at warvox[at]metasploit.com.
 	<td valign="top" align="right" class="header_item">
 		Providers:
 	</td>
-	<td><%= Provider.find(:all).length %></td>
+	<td><%= Provider.count %></td>
 </tr>
 
 
@@ -36,21 +36,21 @@ team can be reached by email at warvox[at]metasploit.com.
 	<td valign="top" align="right" class="header_item">
 		Active Jobs:
 	</td>
-	<td><%= DialJob.find_all_by_status('active').length %></td>
+	<td><%= DialJob.count(:conditions => ['status = ?', 'active']) %></td>
 </tr>
 
 <tr>
 	<td valign="top" align="right" class="header_item">
 		Total Jobs:
 	</td>
-	<td><%= DialJob.find(:all).length %></td>
+	<td><%= DialJob.count %></td>
 </tr>
 
 <tr>
 	<td valign="top" align="right" class="header_item">
 		Results:
 	</td>
-	<td><%= DialResult.find(:all).length %></td>
+	<td><%= DialResult.count %></td>
 </tr>
 </table>
 
