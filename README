@@ -5,6 +5,9 @@ WarVOX Quick Start Guide
 	Ubuntu 8.10 or BackTrack 4 (beta+)
     $ sudo apt-get install libiaxclient-dev sox lame ruby rake rubygems libsqlite3-ruby gnuplot
 
+	For better performance, install the 'mongrel' gem
+	$ gem install mongrel 
+   
 2. Build the WarVOX tools and modules
 	$ make
 
