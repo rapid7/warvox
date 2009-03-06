@@ -16,17 +16,18 @@ class Base
 	end
 	
 	def db_save(obj)
-		max_tries = 10
+		max_tries = 100
 		cur_tries = 0
 		begin
 			obj.save
 		rescue ::SQLite3::BusyException => e
 			cur_tries += 1
 			if(cur_tries > max_tries)
+				$stderr.puts "ERROR: Database is still locked after #{cur_tries} attempts"
 				raise e
 				return
 			end
-			Kernel.select(nil, nil, nil, 0.25)
+			Kernel.select(nil, nil, nil, rand(10) * 0.25  )
 			retry
 		end	
 	end

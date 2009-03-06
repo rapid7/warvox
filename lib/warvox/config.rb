@@ -38,7 +38,15 @@ module Config
 		return nil if not info['data_path']
 		File.expand_path(info['data_path'].gsub('%BASE%', WarVOX::Base))
 	end
-	
+
+	def self.analysis_threads
+		info = YAML.load_file(WarVOX::Conf)
+		return 1 if not info
+		return 1 if not info['analysis_threads']
+		[ info['analysis_threads'].to_i, 1 ].max
+	end
+
+
 	# This method searches the PATH environment variable for
 	# a fully qualified path to the supplied file name.
 	# Stolen from Rex

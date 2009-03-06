@@ -3,6 +3,9 @@ module Jobs
 class Analysis < Base 
 
 	require 'fileutils'
+	require 'tempfile'
+	require 'yaml'
+	require 'open3'
 	
 	@@kissfft_loaded = false
 	begin
@@ -49,33 +52,76 @@ class Analysis < Base
 	
 	def start_processing
 		todo = ::DialResult.find_all_by_dial_job_id(@name)
+		jobs = []
 		todo.each do |r|
 			next if r.processed
 			next if not r.completed
 			next if r.busy		
-			analyze_call(r)
+			jobs << r
+		end
+		
+		max_threads = WarVOX::Config.analysis_threads
+		
+		while(not jobs.empty?)
+			threads = []
+			output  = []
+			1.upto(max_threads) do 
+				j = jobs.shift || break		
+				output  << j
+				threads << Thread.new { run_analyze_call(j) }
+			end
+
+			# Wait for the threads to complete
+			threads.each {|t| t.join}
+			
+			# Save the results to the database
+			output.each  {|r| db_save(r) if r.processed }
 		end
 	end
 	
-	def analyze_call(r)
+	def run_analyze_call(r)
+		$stderr.puts "DEBUG: Processing audio for #{r.number}..."
+	
+		bin = File.join(WarVOX::Base, 'bin', 'analyze_result.rb')
+		pfd = IO.popen("#{bin} '#{r.rawfile}'")
+		out = YAML.load(pfd.read)
+		pfd.close
+		
+		return if not out
 
-		return if not r.rawfile
-		return if not File.exist?(r.rawfile)
+		out.each_key do |k|
+			setter = "#{k.to_s}="
+			if(r.respond_to?(setter))
+				r.send(setter, out[k])
+			end
+		end
+		
+		r.processed_at = Time.now
+		r.processed    = true	
+		true
+	end
+	
+	# Takes the raw file path as an argument, returns a hash
+	def analyze_call(input)
 
-		bname = r.rawfile.gsub(/\..*/, '')
-		num   = r.number
+		return if not input
+		return if not File.exist?(input)
+
+		bname = input.gsub(/\..*/, '')
+		num   = File.basename(bname)
+		res   = {}
 
 		#
 		# Create the signature database
 		#
-		raw  = WarVOX::Audio::Raw.from_file(r.rawfile)
+		raw  = WarVOX::Audio::Raw.from_file(input)
 		flow = raw.to_flow
 		fd   = File.new("#{bname}.sig", "wb")
 		fd.write "#{num} #{flow}\n"
 		fd.close
 
 		# Save the signature data
-		r.sig_data = flow
+		res[:sig_data] = flow
 
 		#
 		# Create a raw decompressed file
@@ -96,13 +142,13 @@ class Analysis < Base
 		frefile = Tempfile.new("frefile")
 
 		# Perform a DFT on the samples
-		res = KissFFT.fftr(8192, 8000, 1, raw.samples)
+		fft = KissFFT.fftr(8192, 8000, 1, raw.samples)
 
 		# Calculate the peak frequencies for the sample
 		maxf = 0
 		maxp = 0
 		tones = {}
-		res.each do |x|
+		fft.each do |x|
 			rank = x.sort{|a,b| a[1].to_i <=> b[1].to_i }.reverse
 			rank[0..10].each do |t|
 				f = t[0].round
@@ -119,12 +165,12 @@ class Analysis < Base
 		end
 
 		# Save the peak frequency
-		r.peak_freq = maxf
+		res[:peak_freq] = maxf
 
 		# Calculate average frequency and peaks over time
 		avg = {}
 		pks = []
-		res.each do |slot|
+		fft.each do |slot|
 			pks << slot.sort{|a,b| a[1] <=> b[1] }.reverse[0]
 			slot.each do |freq|
 				avg[ freq[0] ] ||= 0
@@ -133,11 +179,11 @@ class Analysis < Base
 		end
 
 		# Save the peak frequencies over time
-		r.peak_freq_data = pks.map{|f| "#{f[0]}-#{f[1]}" }.join(" ")
+		res[:peak_freq_data] = pks.map{|f| "#{f[0]}-#{f[1]}" }.join(" ")
 
 		# Generate the frequency file
 		avg.keys.sort.each do |k|
-			avg[k] = avg[k] / res.length
+			avg[k] = avg[k] / fft.length
 			frefile.write("#{k} #{avg[k]}\n")
 		end
 		frefile.flush
@@ -165,7 +211,7 @@ class Analysis < Base
 			end
 
 			# Look for the 1000hz voicemail BEEP
-			if(r.peak_freq > 990 and r.peak_freq < 1010)
+			if(res[:peak_freq] > 990 and res[:peak_freq] < 1010)
 				line_type = 'voicemail'
 				break
 			end
@@ -203,7 +249,7 @@ class Analysis < Base
 		end
 
 		# Save the guessed line type
-		r.line_type = line_type
+		res[:line_type] = line_type
 
 		# Plot samples to a graph
 		plotter = Tempfile.new("gnuplot")
@@ -254,19 +300,14 @@ class Analysis < Base
 		File.unlink(rawfile.path)
 		rawfile.close
 
-		# Save the changes
-		r.processed = true
-		r.processed_at = Time.now
-		db_save(r)
-
 		clear_zombies()
+
+		res
 	end
 end
 
 
 class CallAnalysis < Analysis
-
-	require 'fileutils'
 	
 	@@kissfft_loaded = false
 	begin
@@ -282,7 +323,7 @@ class CallAnalysis < Analysis
 	def initialize(result_id)
 		@name = result_id
 		if(not @@kissfft_loaded)
-			raise RuntimeError, "The KissFFT module is not availabale, analysis failed"
+			raise RuntimeError, "The KissFFT module is not available, analysis failed"
 		end
 	end
 	
