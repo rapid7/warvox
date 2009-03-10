@@ -37,7 +37,7 @@ if(not sox_path)
 end
 
 sox_data = `#{sox_path} --help 2>&1`
-if(sox_data !~ /SUPPORTED FILE FORMATS.*raw/)
+if(sox_data !~ /raw/)
 	puts "[*] ERROR: The 'sox' binary does not have support for RAW audio"
 	exit
 end
