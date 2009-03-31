@@ -78,7 +78,7 @@
   <%= f.error_messages %>
   <p>
     <%= f.label :range, 'The target telephone range (1-123-456-XXXX)' %><br />
-    <%= f.text_field :range %>
+    <%= f.text_area :range, :size => "35x5" %>
   </p>
   <p>
     <%= f.label :seconds, 'Seconds of audio to capture' %><br />

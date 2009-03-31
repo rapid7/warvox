@@ -90,7 +90,7 @@ class Dialer < Base
 	end
 	
 	def start_dialing
-		dest = File.join(WarVOX::Config.data_path, "#{@name}-#{@range}")
+		dest = File.join(WarVOX::Config.data_path, "#{@name}")
 		FileUtils.mkdir_p(dest)
 	
 		@nums_total = @nums.length

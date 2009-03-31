@@ -6,7 +6,7 @@ class DialJob < ActiveRecord::Base
 	validates_numericality_of :seconds, :less_than => 301, :greater_than => 0
 
 	def validate
-		if(range.gsub(/[^0-9X]/, '').empty?)
+		if(range.gsub(/[^0-9X,\n]/, '').empty?)
 			errors.add(:range, "The range must be at least 1 character long and made up of 0-9 and X as the mask.")
 		end
 		

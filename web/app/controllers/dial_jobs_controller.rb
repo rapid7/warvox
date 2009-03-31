@@ -70,7 +70,7 @@ class DialJobsController < ApplicationController
 	@dial_job.progress     = 0
 	@dial_job.started_at   = nil
 	@dial_job.completed_at = nil
-	@dial_job.range.gsub!(/[^0-9X]/, '')
+	@dial_job.range.gsub!(/[^0-9X,\n]/, '')
 	@dial_job.cid_mask.gsub!(/[^0-9X]/, '') if @dial_job.cid_mask != "SELF"
 
     respond_to do |format|
