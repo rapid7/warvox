@@ -294,7 +294,7 @@ class Analysis < Base
 		frefile.path
 
 		# Generate a MP3 audio file
-		system("sox -s -w -r 8000 -t raw -c 1 #{rawfile.path} #{bname}.wav")
+		system("sox -s -2 -r 8000 -t raw -c 1 #{rawfile.path} #{bname}.wav")
 		system("lame #{bname}.wav #{bname}.mp3 >/dev/null 2>&1")
 		File.unlink("#{bname}.wav")
 		File.unlink(rawfile.path)

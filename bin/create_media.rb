@@ -76,7 +76,7 @@ dir.entries.sort.each do |ent|
 	datfile.close
 		
 	# Generate a MP3 audio file
-	system("sox -s -w -r 8000 -t raw -c 1 #{rawfile.path} #{dst}/#{num}.wav")
+	system("sox -s -2 -r 8000 -t raw -c 1 #{rawfile.path} #{dst}/#{num}.wav")
 	system("lame #{dst}/#{num}.wav #{dst}/#{num}.mp3 >/dev/null 2>&1")
 	File.unlink("#{dst}/#{num}.wav")
 	File.unlink(rawfile.path)
