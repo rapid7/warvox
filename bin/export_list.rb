@@ -46,6 +46,7 @@ end
 begin
 	job = DialJob.find(job.to_i)
 	job.dial_results.sort{|a,b| a.number.to_i <=> b.number.to_i}.each do |r|
+		next if not r.number
 		if(not typ or typ.downcase == (r.line_type||"").downcase)
 			puts "#{r.number}\t#{r.line_type}\tbusy=#{r.busy}\tring=#{r.ringtime}"
 		end
