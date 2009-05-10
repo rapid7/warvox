@@ -1,11 +1,54 @@
-WarVOX is Copyright (C) 2009 Metasploit LLC
+Copyright (c) 2009, Metasploit LLC
+All rights reserved.
 
-WarVOX is free for non-commercial use, please contact us for
-alternative licensing options (hdm[at]metasploit.com).
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
 
-Some components of WarVOX are derived from OSS projects and are
-under their own license. Notable exceptions to the WarVOX license:
+    * Redistributions of source code must retain the above copyright notice, 
+	  this list of conditions and the following disclaimer.
 
-- src/iaxrecord/      (GPL)
-- src/ruby-kissfft/   (BSD)
-- web/vendor/         (Various)
+    * Redistributions in binary form must reproduce the above copyright notice,
+	  this list of conditions and the following disclaimer in the documentation
+	  and/or other materials provided with the distribution.
+
+    * Neither the name of Metasploit LLC nor the names of its contributors 
+	  may be used to endorse or promote products derived from this software 
+	  without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+================================================================================
+
+WarVOX is provided under the BSD license above.
+
+The copyright on this package is held by Metasploit LLC.
+
+This copyright and license does not apply to the following components:
+ - The ruby on rails vendor libraries under web/vendor/ (Ruby license)
+ - The kissfft library embedded into src/ruby-kissfft/ (BSD)
+ - The iaxrecord tool based on libiax under src/iaxrecord (GPL)
+
+The latest version of this software is available from http://warvox.org/
+
+Bug tracking and development information can be found at:
+ http://trac.metasploit.com/ (component: warvox)
+
+Questions and suggestions can be sent to:
+ warvox[at]metasploit.com
+ 
+The warvox mailing list is the place to discuss features and ask for help. 
+To subscribe, visit the following web page:
+ https://mail.metasploit.com/mailman/listinfo/warvox
+
+The archives are available from:
+ https://mail.metasploit.com/pipermail/warvox
+
