@@ -45,7 +45,33 @@ module Config
 		return 1 if not info['analysis_threads']
 		[ info['analysis_threads'].to_i, 1 ].max
 	end
+	
+	def self.blacklist_path
+		info = YAML.load_file(WarVOX::Conf)
+		return nil if not info
+		return nil if not info['blacklist']
+		File.expand_path(info['blacklist'].gsub('%BASE%', WarVOX::Base))
+	end
 
+	def self.blacklist_load
+		path = blacklist_path
+		return if not path
+		data = File.read(path, File.size(path))
+		sigs = []
+		
+		File.open(path, 'r') do |fd|
+			lno = 0
+			fd.each_line do |line|
+				lno += 1
+				next if line =~ /^#/
+				next if line =~ /^\s+$/
+				line.strip!
+				sigs << [lno, line]
+			end
+			sigs
+		end
+		
+	end
 
 	# This method searches the PATH environment variable for
 	# a fully qualified path to the supplied file name.

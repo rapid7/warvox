@@ -4,10 +4,9 @@
 <h1 class='title'>About WarVOX</h1>
 
 <b>WarVOX</b> is a product of <a href="http://metasploit.com">Metasploit LLC</a> and is provided as 
-free software under a 
-<a href="http://creativecommons.org/licenses/by-nc/3.0/">non-commercial</a> license. WarVOX is 
-intended for legal security assessment, asset inventory, and research purposes only. The latest version
-of WarVOX can be found at <a href="http://warvox.org/">http://warvox.org/</a>. The WarVOX development
+free software under the BSD license. WarVOX is intended for legal security assessment, asset inventory,
+and research purposes only. The latest version of WarVOX can be found at
+<a href="http://warvox.org/">http://warvox.org/</a>. The WarVOX development
 team can be reached by email at warvox[at]metasploit.com.
 
 </td><td valign='top' align='center'>
@@ -129,5 +128,15 @@ team can be reached by email at warvox[at]metasploit.com.
 </tr>
 </table>
 
+<br/><br/>
+
+<h1 class='title'>Dial Exclusions (Blacklist)</h1>
+<table id="warvox_blacklist" cellspacing="0" width='100%'>
+<tr>
+	<td valign="top" align="left" class="header_item" width='200'>
+		<pre><%=h File.read(WarVOX::Config.blacklist_path) %></pre>
+	</td>
+</tr>
+</table>
 
 </td></tr></table>

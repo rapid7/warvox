@@ -1,0 +1,11 @@
+#
+# Fill this with a list of regular expressions to match all
+# dialed numbers against. No number matching an entry in this
+# file should ever be dialed.
+#
+
+# Never dial just zero
+^0$
+
+# Skip all of the [X]11 numbers, such as 911, 411, and 111
+^[0-9]11$

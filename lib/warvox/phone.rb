@@ -6,6 +6,16 @@ class Phone
 		res = {}
 		masks.each do |mask|
 			mask = mask.strip
+			
+			if(mask.index(':'))
+				next if mask.index('X')
+				rbeg,rend = mask.split(':').map{|c| c.gsub(/[^\d]/, '').to_i }
+				rbeg.upto(rend) do |n|
+					res[n.to_s] = {}
+				end
+				next
+			end
+			
 			incdigits = 0
 			mask.each_char do |c|
 				incdigits += 1 if c =~ /^[X#]$/i
@@ -27,9 +37,6 @@ class Phone
 			end
 	
 		end
-                res.each { |key, value|
-                        print "DEBUG: key=",key," -> ",value,"\n"
-                }
 
 		return res.keys.sort
 	end

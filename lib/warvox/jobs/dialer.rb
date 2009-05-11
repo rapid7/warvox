@@ -93,6 +93,18 @@ class Dialer < Base
 		dest = File.join(WarVOX::Config.data_path, "#{@name}")
 		FileUtils.mkdir_p(dest)
 	
+		# Scrub all numbers matching the blacklist
+		list = WarVOX::Config.blacklist_load
+		list.each do |b|
+			lno,reg = b
+			@nums.each do |num|
+				if(num =~ /#{reg}/)
+					$stderr.puts "DEBUG: Skipping #{num} due to blacklist (line: #{lno})"
+					@nums.delete(num)
+				end
+			end
+		end
+	
 		@nums_total = @nums.length
 		while(@nums.length > 0)
 			@calls    = []

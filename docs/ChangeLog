@@ -1,4 +1,12 @@
+2009-05-10  H D Moore  <hdm[at]metasploit.com>
+ 
+ * release of version 1.0.1
+ * switched to the BSD license for WarVOX
+ * swapped the sox -w flag to -2 (deprecated)
+ * added support for multiple dial masks for a single job
+ * added support for number exclusions (blacklists)
+ * added support for file input for a dial range
+ 
 2009-03-05  H D Moore  <hdm[at]metasploit.com>
 
  * initial public release of version 1.0.0
-
