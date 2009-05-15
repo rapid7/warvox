@@ -6,6 +6,8 @@
  * added support for multiple dial masks for a single job
  * added support for number exclusions (blacklists)
  * added support for file input for a dial range
+ * fixed a hang with pulse audio on some systems
+ * added getopt parser to iaxrecord.c
  
 2009-03-05  H D Moore  <hdm[at]metasploit.com>
 
