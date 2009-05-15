@@ -138,12 +138,19 @@ class Dialer < Base
 					IO.popen(
 						[
 							WarVOX::Config.tool_path('iaxrecord'),
+							"-s",
 							prov[:host],
+							"-u",
 							prov[:user],
+							"-p",
 							prov[:pass],
+							"-c",
 							cid,
+							"-o",
 							out,
+							"-n",
 							num,
+							"-l",
 							@seconds
 						].map{|i| 
 							"'" + i.to_s.gsub("'",'') +"'" 

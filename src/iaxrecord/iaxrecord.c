@@ -44,6 +44,7 @@ void cleanup(void) {
 	}
 	if ( initialized ) {
 		iaxc_stop_processing_thread();
+		iaxc_shutdown();		
 		initialized = 0;
 	}
 }
@@ -266,6 +267,8 @@ int main(int argc, char **argv) {
 		busy,
 		(unsigned int)(etime) - (unsigned int)(stime)
 	);
+
+	iaxc_dump_all_calls();
 	return(0);
 }
 
