@@ -25,6 +25,7 @@
 
 int initialized = 0;
 int debug       = 0;
+int audio       = 0;
 int busy        = 0;
 int fail        = 1;
 
@@ -42,8 +43,7 @@ void cleanup(void) {
 		reg_id = 0;
 	}
 	if ( initialized ) {
-		iaxc_stop_processing_thread();		
-		iaxc_shutdown();
+		iaxc_stop_processing_thread();
 		initialized = 0;
 	}
 }
@@ -56,7 +56,7 @@ void signal_handler(int signum) {
 }
 
 void usage(char **argv) {
-	fprintf(stdout, "Usage: %s [server] [user] [pass] [cid] [output] [number] <seconds>\n", argv[0]);
+	fprintf(stdout, "Usage: %s -s [server] -u [user] -p <pass> -o [output] -n [number] -c <callerid> -l <seconds> [-D]\n", argv[0]);
 	exit(1);
 }
  
@@ -64,36 +64,37 @@ int state_event_callback(struct iaxc_ev_call_state call) {
 	if(call.state & IAXC_CALL_STATE_BUSY) busy = 1;
 	if(call.state & IAXC_CALL_STATE_COMPLETE) fail = 0;
 	call_state = call.state;
-
 /*
-	fprintf(stdout, "STATE: ");
-	if(call.state & IAXC_CALL_STATE_FREE)
-		fprintf(stdout, "F");
+	if(debug) {
+		fprintf(stdout, "STATE: ");
+		if(call.state & IAXC_CALL_STATE_FREE)
+			fprintf(stdout, "F");
+		
+		if(call.state & IAXC_CALL_STATE_ACTIVE)
+			fprintf(stdout, "A");
+		
+		if(call.state & IAXC_CALL_STATE_OUTGOING)
+			fprintf(stdout, "O");
+		
+		if(call.state & IAXC_CALL_STATE_RINGING)
+			fprintf(stdout, "R");	
 	
-	if(call.state & IAXC_CALL_STATE_ACTIVE)
-		fprintf(stdout, "A");
+		if(call.state & IAXC_CALL_STATE_COMPLETE)
+			fprintf(stdout, "C");	
 	
-	if(call.state & IAXC_CALL_STATE_OUTGOING)
-		fprintf(stdout, "O");
+		if(call.state & IAXC_CALL_STATE_SELECTED)
+			fprintf(stdout, "S");
+		
+		if(call.state & IAXC_CALL_STATE_BUSY)
+			fprintf(stdout, "B");		
 	
-	if(call.state & IAXC_CALL_STATE_RINGING)
-		fprintf(stdout, "R");	
-
-	if(call.state & IAXC_CALL_STATE_COMPLETE)
-		fprintf(stdout, "C");	
-
-	if(call.state & IAXC_CALL_STATE_SELECTED)
-		fprintf(stdout, "S");
-	
-	if(call.state & IAXC_CALL_STATE_BUSY)
-		fprintf(stdout, "B");		
-
-	if(call.state & IAXC_CALL_STATE_TRANSFER)
-		fprintf(stdout, "T");		
-			
-	fprintf(stdout, "\n");
-	fflush(stdout);
-*/								
+		if(call.state & IAXC_CALL_STATE_TRANSFER)
+			fprintf(stdout, "T");		
+				
+		fprintf(stdout, "\n");
+		fflush(stdout);
+	}
+*/
     return 0;
 }
 
@@ -130,25 +131,60 @@ int iaxc_callback(iaxc_event e) {
 		
 int main(int argc, char **argv) {
 
-	char *iax_host;
-	char *iax_user;
-	char *iax_pass;
-	char *iax_num;
-	char *iax_cid;
+	char *iax_host = NULL;
+	char *iax_user = NULL;
+	char *iax_pass = "";
+	char *iax_num = NULL;
+	char *iax_cid = "15555555555";
+	char *iax_name = "";
 	int iax_sec = 20;
 	int call_id = 0;
 	char dest[1024];
 	time_t stime, etime;
 	
-	if(argc < 7) usage(argv);
-	iax_host = argv[1];
-	iax_user = argv[2];
-	iax_pass = argv[3];
-	iax_cid  = argv[4];
-	iax_out  = argv[5];
-	iax_num  = argv[6];
+	int c;
+	extern char *optarg;
+	extern int optind, optopt;
+
+	while ((c = getopt(argc, argv, ":hs:u:p:c:o:n:l:N:DA")) != -1) {
+		switch(c) {
+			case 'h':
+				usage(argv);
+				break;
+			case 's':
+				iax_host = optarg;
+				break;
+			case 'u':
+				iax_user = optarg;
+				break;
+			case 'p':
+				iax_pass = optarg;
+				break;
+			case 'c':
+				iax_cid = optarg;
+				break;
+			case 'o':
+				iax_out = optarg;
+				break;
+			case 'n':
+				iax_num = optarg;
+				break;
+			case 'l':
+				iax_sec = atoi(optarg);
+				break;
+			case 'N':
+				iax_name = optarg;
+				break;
+			case 'D':
+				debug = 1;
+				break;
+			case 'A':
+				audio = 1;
+				break;			
+		}
+	}
 	
-	if(argc > 7) iax_sec = atoi(argv[7]);
+	if(! (iax_host && iax_user && iax_num && iax_out)) usage(argv);
 
 	snprintf(dest, sizeof(dest), "%s:%s@%s/%s", iax_user, iax_pass, iax_host, iax_num);
 	iaxc_set_video_prefs(IAXC_VIDEO_PREF_CAPTURE_DISABLE | IAXC_VIDEO_PREF_SEND_DISABLE);
@@ -167,35 +203,45 @@ int main(int argc, char **argv) {
 	/* install signal handler to catch CRTL-Cs */
 	signal(SIGINT, signal_handler);
 	signal(SIGTERM, signal_handler);
-			
+	
+	/* forcible disable pulse audio if the audio flag is not set (-A) */
+	if(! audio) setenv("PULSE_SERVER", "0.0.0.0", 1);
+	
+	if(debug) fprintf(stderr, ">> INITIALIZING\n");
 	if ( iaxc_initialize(1) ) {
 		fprintf(stdout, "error: Could not initialize iaxclient!\n");
 		exit(0);
 	}
 	
 	initialized = 1;
-
-	iaxc_set_callerid ("", iax_cid);
+	if(debug) fprintf(stderr, ">> INITIALIZED\n");
+	
+	iaxc_set_audio_output(audio ? 0 : 1);
+	iaxc_set_callerid (iax_name, iax_cid);
 	iaxc_set_formats(IAXC_FORMAT_ULAW | IAXC_FORMAT_ALAW, IAXC_FORMAT_ULAW | IAXC_FORMAT_ALAW);
 	
 	// Causes problems for some asterix servers, not sure why yet
 	// iaxc_set_silence_threshold(silence_threshold);
 
+	if(debug) fprintf(stderr, ">> STARTING PROCESSING THREAD\n");
 	iaxc_set_event_callback(iaxc_callback);	
 	iaxc_start_processing_thread();
-	iaxc_set_audio_output(debug ? 0 : 1);
-	
-	iaxc_set_audio_prefs(IAXC_AUDIO_PREF_RECV_REMOTE_RAW);
-	
-	reg_id  = iaxc_register(iax_user, iax_pass, iax_host);
-	if(debug) fprintf(stderr, " RegID: %d\n", reg_id);
+	if(debug) fprintf(stderr, ">> STARTED PROCESSING THREAD\n");
 
+	iaxc_set_audio_prefs(IAXC_AUDIO_PREF_RECV_REMOTE_RAW);
+
+	if(debug) fprintf(stderr, ">> REGISTERING\n")	;
+	reg_id  = iaxc_register(iax_user, iax_pass, iax_host);
+	if(debug) fprintf(stderr, ">> REGISTERED: %d\n", reg_id);
+
+	if(debug) fprintf(stderr, ">> CALLING\n");
 	call_id = iaxc_call(dest);
-	if(debug) fprintf(stderr, "CallID: %d\n", call_id);
+	if(debug) fprintf(stderr, ">> CALLED: %d\n", call_id);
 	
 	stime = time(NULL);
 	etime = 0;
 	
+	if(debug) fprintf(stderr, ">> WAITING\n");	
 	if(call_id >= 0) {
 		iaxc_select_call(call_id);
 		while( (unsigned int)(time(NULL))-(unsigned int)stime < iax_sec) {
@@ -207,6 +253,8 @@ int main(int argc, char **argv) {
 	} else {
 		fail = 1;
 	}
+	
+	if(debug) fprintf(stderr, ">> DONE\n");
 	
 	if(! etime) time(&etime);
 	
