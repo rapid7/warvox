@@ -28,6 +28,7 @@ int debug       = 0;
 int audio       = 0;
 int busy        = 0;
 int fail        = 1;
+int done        = 0;
 
 float silence_threshold = 0.0f;
 int call_state  = 0;
@@ -37,22 +38,9 @@ int call_bytes  = 0;
 char *iax_out;
 int reg_id;
 
-void cleanup(void) {
-	if ( reg_id ) {
-		iaxc_unregister(reg_id);
-		reg_id = 0;
-	}
-	if ( initialized ) {
-		iaxc_stop_processing_thread();
-		iaxc_shutdown();		
-		initialized = 0;
-	}
-}
-
 void signal_handler(int signum) {
 	if ( signum == SIGTERM || signum == SIGINT ) {
-		cleanup();
-		exit(0);
+		done = 1;
 	}
 }
 
@@ -185,6 +173,12 @@ int main(int argc, char **argv) {
 		}
 	}
 	
+	
+/* 
+  Version 2.2.x of iaxclient has a new function called iaxc_set_test_mode(1), which disables 
+  audio processing for us. This will not be backported to 2.0.x however...
+*/
+	
 	if(! (iax_host && iax_user && iax_num && iax_out)) usage(argv);
 
 	snprintf(dest, sizeof(dest), "%s:%s@%s/%s", iax_user, iax_pass, iax_host, iax_num);
@@ -197,9 +191,6 @@ int main(int argc, char **argv) {
 	}
 	
 	fprintf(stdout, "STARTED %s BYTES=%d FILE=%s\n", iax_num, call_bytes, iax_out);
-		
-	/* activate the exit handler */
-	atexit(cleanup);
 
 	/* install signal handler to catch CRTL-Cs */
 	signal(SIGINT, signal_handler);
@@ -245,7 +236,8 @@ int main(int argc, char **argv) {
 	if(debug) fprintf(stderr, ">> WAITING\n");	
 	if(call_id >= 0) {
 		iaxc_select_call(call_id);
-		while( (unsigned int)(time(NULL))-(unsigned int)stime < iax_sec) {
+		while((unsigned int)(time(NULL))-(unsigned int)stime < iax_sec) {
+			if(done) break;
 			if(call_state & IAXC_CALL_STATE_COMPLETE && ! etime) etime = time(NULL);
 			if(call_state & IAXC_CALL_STATE_BUSY) break;
 			if(iaxc_first_free_call() == call_id) break;
@@ -268,7 +260,11 @@ int main(int argc, char **argv) {
 		(unsigned int)(etime) - (unsigned int)(stime)
 	);
 
-	iaxc_dump_all_calls();
+
+	iaxc_dump_call();
+	iaxc_millisleep(500);
+	iaxc_stop_processing_thread();
+	iaxc_shutdown();
 	return(0);
 }
 
