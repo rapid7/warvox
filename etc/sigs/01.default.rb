@@ -28,46 +28,49 @@ end
 
 
 #
-# Look for modems by detecting a peak 2250hz tone
+# Summarize detection of a whole bunch of frequencies (used below)
 #
 f_2250 = 0
-pks.each{|f| f_2250 += 1 if(f[0] > 2240 and f[0] < 2260) }
-if(f_2250 > 2)
+f_440  = f_350  = 0
+f_1625 = f_1660 = f_1825 = f_2100 = f_1100 = 0
+f_600  = f_1855 = 0
+
+pkz.each do |fb|
+	fb.each do |f|
+		f_2250 += 0.1 if(f[0] > 2240 and f[0] < 2260)
+		f_440  += 0.1 if(f[0] > 437 and f[0] < 444)	
+		f_350  += 0.1 if(f[0] > 345 and f[0] < 355)	
+		f_1625 += 0.1 if(f[0] > 1620 and f[0] < 1630)
+		f_1660 += 0.1 if(f[0] > 1655 and f[0] < 1665)
+		f_1825 += 0.1 if(f[0] > 1820 and f[0] < 1830)
+		f_1855 += 0.1 if(f[0] > 1850 and f[0] < 1860)
+		f_2100 += 0.1 if(f[0] > 2090 and f[0] < 2110)
+		f_1100 += 0.1 if(f[0] > 1090 and f[0] < 1110)
+		f_600  += 0.1 if(f[0] > 595 and  f[0] < 605)									
+	end
+end
+
+#
+# Look for modems by detecting a 2250hz tone
+#
+if(f_2250 > 0.2)
 	line_type = 'modem'
 	break				
 end
 
-
 #
-# Most faxes have at least two of the following tones
-# This can false positive if the modem signature above
-# is removed.
+# Look for faxes by checking for a handful of tones (min two)
 #
-f_1625 = f_1660 = f_1825 = f_2100 = false
-pks.each do |f|
-	f_1625 = true if(f[0] > 1620 and f[0] < 1630)
-	f_1660 = true if(f[0] > 1655 and f[0] < 1665)
-	f_1825 = true if(f[0] > 1820 and f[0] < 1830)
-	f_2100 = true if(f[0] > 2090 and f[0] < 2110)										
-end
-if([ f_1625, f_1660, f_1825, f_2100 ].grep(true).length >= 2)
+fax_sum = 0
+[ f_1625, f_1660, f_1825, f_2100, f_600, f_1855, f_1100].map{|x| fax_sum += [x,1.0].min }
+if(fax_sum >= 2.0)
 	line_type = 'fax'
 	break
 end
 
-
 #
-# Dial tone detection (more precise to use pkz over pks)
-# Look for a combination of 440hz + 350hz signals
+# Dial tone detection (440hz + 350hz)
 #
-f_440 = 0
-f_350 = 0
-pkz.each do |fb|
-	fb.each do |f|
-		f_440  += 0.1 if (f[0] > 437 and f[0] < 444)	
-		f_350  += 0.1 if (f[0] > 345 and f[0] < 355)
-	end
-end
 if(f_440 > 1.0 and f_350 > 1.0)
 	line_type = 'dialtone'
 	break
