@@ -73,6 +73,29 @@ module Config
 		
 	end
 
+	def self.signatures_path
+		info = YAML.load_file(WarVOX::Conf)
+		return nil if not info
+		return nil if not info['signatures']
+		File.expand_path(info['signatures'].gsub('%BASE%', WarVOX::Base))
+	end
+	
+	def self.signatures_load
+		path = signatures_path
+		sigs = []
+		return sigs if not path
+
+		Dir.new(path).entries.sort{ |a,b| 
+			a.to_i <=> b.to_i 
+		}.map{ |ent| 
+			File.join(path, ent) 
+		}.each do |ent|
+			sigs << ent if File.file?(ent)
+		end
+		
+		sigs
+	end
+	
 	# This method searches the PATH environment variable for
 	# a fully qualified path to the supplied file name.
 	# Stolen from Rex

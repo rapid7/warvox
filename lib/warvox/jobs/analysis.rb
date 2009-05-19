@@ -170,8 +170,10 @@ class Analysis < Base
 		# Calculate average frequency and peaks over time
 		avg = {}
 		pks = []
+		pkz = []
 		fft.each do |slot|
 			pks << slot.sort{|a,b| a[1] <=> b[1] }.reverse[0]
+			pkz << slot.sort{|a,b| a[1] <=> b[1] }.reverse[0..9]
 			slot.each do |freq|
 				avg[ freq[0] ] ||= 0
 				avg[ freq[0] ] +=  freq[1]
@@ -188,64 +190,20 @@ class Analysis < Base
 		end
 		frefile.flush
 
-		#
-		# XXX: store significant frequencies somewhere (tones)
-		#
-
 		# Make a guess as to what kind of phone number we found
 		line_type = nil
-		while(not line_type)
 
-			# Look for silence
-			if(flow.split(/\s+/).grep(/^H,/).length == 0)
-				line_type = 'silence'
-				break
+		WarVOX::Config.signatures_load.each do |sigfile|
+			begin
+				str = File.read(sigfile, File.size(sigfile))
+				while(true)
+					eval(str, binding)
+					break
+				end
+			rescue ::Exception => e
+				$stderr.puts "DEBUG: Caught exception in #{sigfile}: #{e} #{e.backtrace}"
 			end
-
-			# Look for modems by detecting 2250hz tones
-			f_2250 = 0
-			pks.each{|f| f_2250 += 1 if(f[0] > 2240 and f[0] < 2260) }
-			if(f_2250 > 2)
-				line_type = 'modem'
-				break				
-			end
-
-			# Look for the 1000hz voicemail BEEP
-			if(res[:peak_freq] > 990 and res[:peak_freq] < 1010)
-				line_type = 'voicemail'
-				break
-			end
-
-			# Most faxes have at least two of the following tones
-			f_1625 = f_1660 = f_1825 = f_2100 = false
-			pks.each do |f|
-				# $stderr.puts "#{r.number} #{f.inspect}"
-				f_1625 = true if(f[0] > 1620 and f[0] < 1630)
-				f_1660 = true if(f[0] > 1655 and f[0] < 1665)
-				f_1825 = true if(f[0] > 1820 and f[0] < 1830)
-				f_2100 = true if(f[0] > 2090 and f[0] < 2110)										
-			end
-			if([ f_1625, f_1660, f_1825, f_2100 ].grep(true).length >= 2)
-				line_type = 'fax'
-				break
-			end			
-
-			# Dial tone detection
-			f_440 = false
-			f_350 = false
-			pks.each do |f|
-				f_440 = true if(f[0] > 435 and f[0] < 445)
-				f_345 = true if(f[0] > 345 and f[0] < 355)
-			end
-			if(f_440 and f_350)
-				line_type = 'dialtone'
-				break
-			end
-
-			# Detect humans based on long pauses
-
-			# Default to voice
-			line_type = 'voice'
+			break if line_type
 		end
 
 		# Save the guessed line type
