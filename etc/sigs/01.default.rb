@@ -53,7 +53,7 @@ end
 #
 # Look for modems by detecting a 2250hz tone
 #
-if(f_2250 > 0.2)
+if(f_2250 > 1.0)
 	line_type = 'modem'
 	break				
 end
