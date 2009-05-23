@@ -10,24 +10,28 @@ while File.symlink?(base)
 end
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
 require 'warvox'
+require 'yaml'
 
 #
 # Script
 # 
 
 def usage
-	$stderr.puts "#{$0} [warvox.db] [num1] [num2] <fuzz-factor> <db-threshold>"
-	exit
+	$stderr.puts "#{$0} [raw-file] <skip-count> <length-count>"
+	exit(1)
 end
 
-inp     = ARGV.shift() || usage
-num1    = ARGV.shift() || usage
-num2    = ARGV.shift() || usage
-fuzz    = (ARGV.shift() || 100).to_i
-thresh  = (ARGV.shift() || 800).to_i
+inp = ARGV.shift() || usage()
+skp = (ARGV.shift() || 0).to_i
+len = (ARGV.shift() || 0).to_i
 
-info1 = []
-info2 = []
+raw = WarVOX::Audio::Raw.from_file(inp)
+raw.samples = (raw.samples[skp, raw.samples.length]||[]) if skp > 0
+raw.samples = (raw.samples[0, len]||[]) if len > 0
 
-wdb   = WarVOX::DB.new(inp, thresh)
-puts wdb.find_sig(num1, num2, { :fuzz => fuzz }).inspect
+if(raw.samples.length == 0)
+	$stderr.puts "Error: the sample length is too short to create a signature"
+	exit(1)
+end
+
+$stdout.puts raw.to_freq.inspect.gsub(/\s+/,'')

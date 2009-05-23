@@ -50,7 +50,7 @@ class DialResultsController < ApplicationController
 	@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
 	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines', :w => 700, :h => 300)
 	
-	ltypes = DialResult.find( :all, :select => 'DISTINCT line_type' ).map{|r| r.line_type}
+	ltypes = DialResult.find( :all, :select => 'DISTINCT line_type', :conditions => ["dial_job_id = ?", @job_id] ).map{|r| r.line_type}
 	res_types = {}
 
 	ltypes.each do |k|

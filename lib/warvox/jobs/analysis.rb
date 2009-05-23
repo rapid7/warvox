@@ -14,6 +14,24 @@ class Analysis < Base
 	rescue ::LoadError
 	end
 	
+	class SignalProcessor
+		attr_accessor :line_type
+		attr_accessor :signatures
+		attr_accessor :data
+		
+		def initialize
+			@signatures = []
+			@data = {}
+		end
+		
+		def proc(str)
+			while(true);
+				eval(str)
+				break
+			end
+		end
+	end
+	
 	def type
 		'analysis'
 	end
@@ -113,9 +131,11 @@ class Analysis < Base
 
 		#
 		# Create the signature database
-		#
+		#		
 		raw  = WarVOX::Audio::Raw.from_file(input)
-		flow = raw.to_flow
+		fft  = KissFFT.fftr(8192, 8000, 1, raw.samples)		
+		freq = WarVOX::Audio::Raw.fft_to_freq_sig(fft, 20)
+		flow = freq.inspect.gsub(/\s+/, '')
 		fd   = File.new("#{bname}.sig", "wb")
 		fd.write "#{num} #{flow}\n"
 		fd.close
@@ -140,9 +160,6 @@ class Analysis < Base
 
 		# Data files for spectrum plotting
 		frefile = Tempfile.new("frefile")
-
-		# Perform a DFT on the samples
-		fft = KissFFT.fftr(8192, 8000, 1, raw.samples)
 
 		# Calculate the peak frequencies for the sample
 		maxf = 0
@@ -174,9 +191,9 @@ class Analysis < Base
 		fft.each do |slot|
 			pks << slot.sort{|a,b| a[1] <=> b[1] }.reverse[0]
 			pkz << slot.sort{|a,b| a[1] <=> b[1] }.reverse[0..9]
-			slot.each do |freq|
-				avg[ freq[0] ] ||= 0
-				avg[ freq[0] ] +=  freq[1]
+			slot.each do |f|
+				avg[ f[0] ] ||= 0
+				avg[ f[0] ] +=  f[1]
 			end
 		end
 
@@ -190,25 +207,49 @@ class Analysis < Base
 		end
 		frefile.flush
 
-		# Make a guess as to what kind of phone number we found
-		line_type = nil
+		# Count significant frequencies across the sample
+		fcnt = {}
+		0.step(4000, 5) {|f| fcnt[f] = 0 }
+		pkz.each do |fb|
+			fb.each do |f|
+				fdx = ((f[0] / 5.0).round * 5.0).to_i
+				fcnt[fdx]  += 0.1
+			end
+		end
+		
+		#
+		# Signature processing
+		#
+		
+		sproc = SignalProcessor.new
+		sproc.data =
+		{
+			:raw  => raw,
+			:freq => freq,
+			:fcnt => fcnt,
+			:fft  => fft,
+			:pks  => pks,
+			:pkz  => pkz,
+			:maxf => maxf,
+			:maxp => maxp
+		}
 
 		WarVOX::Config.signatures_load.each do |sigfile|
 			begin
 				str = File.read(sigfile, File.size(sigfile))
-				while(true)
-					eval(str, binding)
-					break
-				end
+				sproc.proc(str)
 			rescue ::Exception => e
 				$stderr.puts "DEBUG: Caught exception in #{sigfile}: #{e} #{e.backtrace}"
 			end
-			break if line_type
+			break if sproc.line_type
 		end
 
 		# Save the guessed line type
-		res[:line_type] = line_type
+		res[:line_type] = sproc.line_type
 
+		# Save any matched signatures
+		res[:signatures] = sproc.signatures.map{|s| "#{s[0]}:#{s[1]}:#{s[2]}" }.join("\n")
+		
 		# Plot samples to a graph
 		plotter = Tempfile.new("gnuplot")
 

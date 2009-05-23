@@ -2,7 +2,13 @@ module WarVOX
 module Audio
 class Raw
 	
-	
+	@@kissfft_loaded = false
+	begin
+		require 'kissfft'
+		@@kissfft_loaded = true
+	rescue ::LoadError
+	end
+		
 	require 'zlib'
 
 	##
@@ -129,6 +135,101 @@ class Raw
 		
 		# Return the results
 		return sig
+	end
+
+	def to_freq(opts={})
+
+		if(not @@kissfft_loaded)
+			raise RuntimeError, "The KissFFT module is not availabale, raw.to_freq() failed"
+		end	
+		
+		freq_cnt = opts[:frequency_count] || 20
+		
+		# Perform a DFT on the samples
+		ffts = KissFFT.fftr(8192, 8000, 1, self.samples)
+
+		self.class.fft_to_freq_sig(ffts, freq_cnt)
+	end
+	
+	def self.fft_to_freq_sig(ffts, freq_cnt)
+		sig = []
+		ffts.each do |s|
+			res = []
+			maxp = 0
+			maxf = 0
+			s.each do |f|
+				if( f[1] > maxp )
+					maxf,maxp = f
+				end
+				
+				if(maxf > 0 and f[1] < maxp and (maxf + 4.5 < f[0]))
+					res << [maxf, maxp]
+					maxf,maxp = [0,0]
+				end
+			end
+			
+			sig << res.sort{ |a,b|                              # sort by signal strength
+				a[1] <=> b[1] 
+			}.reverse[0,freq_cnt].sort { |a,b|                 # take the top 20 and sort by frequency
+				a[0] <=> b[0]                                   
+			}.map {|a| [a[0].round, a[1].round ] }              # round to whole numbers
+		end
+		
+		sig	
+	end
+	
+	# Find pattern inside of sample
+	def self.compare_freq_sig(pat, zam, opts)	
+		
+		fuzz_f = opts[:fuzz_f] || 7
+		fuzz_p = opts[:fuzz_p] || 10
+		final  = []
+		
+		0.upto(zam.length - 1) do |si|
+			res = []		
+			sam = zam[si, zam.length]
+	
+			0.upto(pat.length - 1) do |pi|
+				diff = []
+				next if not pat[pi]
+				next if pat[pi].length == 0
+				pat[pi].each do |x|
+					next if not sam[pi]
+					next if sam[pi].length == 0
+					sam[pi].each do |y|
+						if(
+							(x[0] - fuzz_f) < y[0] and
+							(x[0] + fuzz_f) > y[0] and
+							(x[1] - fuzz_p) < y[1] and
+							(x[1] + fuzz_p) > y[1]
+						)
+							diff << x
+							break
+						end
+					end
+				end
+				res << diff
+			end
+			next if res.length == 0
+
+			prev = 0
+			rsum = 0
+			ridx = 0
+			res.each_index do |xi|
+				len = res[xi].length
+				if(xi == 0)
+					rsum += (len < 2) ? -40 : +20
+				else
+					rsum += 20 if(prev > 11 and len > 11)
+					rsum += len
+				end
+				prev = len
+			end
+			
+			final << [ (rsum / res.length.to_f), res.map {|x| x.length}]
+		end
+		
+		final
 	end
 
 end

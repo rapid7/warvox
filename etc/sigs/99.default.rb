@@ -4,7 +4,7 @@
 
 #
 # Fall back to 'voice' if nothing else has been matched
-# This should be last signature file processed 
+# This should be the last signature file processed 
 #
 
-line_type = 'voice'
+@line_type = 'voice'

@@ -3,13 +3,6 @@
 #
 
 #
-# Variables:
-#	pks  = peak frequencies
-#	ppz  = top 10 frequencies per sample
-#	flow = flow signature
-#
-
-#
 # These signatures are used first and catch the majority of common
 # systems. If you want to force a different type of detection, add
 # your signatures to a file starting with "00." and place it in
@@ -19,42 +12,66 @@
 
 
 #
-# Look for silence by checking for any significant noise
+# Initialize some local variables out of data
 #
-if(flow.split(/\s+/).grep(/^H,/).length == 0)
-	line_type = 'silence'
+freq = data[:freq]
+fcnt = data[:fcnt]
+maxf = data[:maxf]
+
+#
+# Look for silence by checking the frequency signature
+#
+if(freq.map{|f| f.length}.inject(:+) == 0)
+	@line_type = 'silence'
 	break
 end
 
-
 #
-# Summarize detection of a whole bunch of frequencies (used below)
+# Look for silence by checking for a strong frequency in each sample
 #
-f_2250 = 0
-f_440  = f_350  = 0
-f_1625 = f_1660 = f_1825 = f_2100 = f_1100 = 0
-f_600  = f_1855 = 0
-
-pkz.each do |fb|
-	fb.each do |f|
-		f_2250 += 0.1 if(f[0] > 2240 and f[0] < 2260)
-		f_440  += 0.1 if(f[0] > 437 and f[0] < 444)	
-		f_350  += 0.1 if(f[0] > 345 and f[0] < 355)	
-		f_1625 += 0.1 if(f[0] > 1620 and f[0] < 1630)
-		f_1660 += 0.1 if(f[0] > 1655 and f[0] < 1665)
-		f_1825 += 0.1 if(f[0] > 1820 and f[0] < 1830)
-		f_1855 += 0.1 if(f[0] > 1850 and f[0] < 1860)
-		f_2100 += 0.1 if(f[0] > 2090 and f[0] < 2110)
-		f_1100 += 0.1 if(f[0] > 1090 and f[0] < 1110)
-		f_600  += 0.1 if(f[0] > 595 and  f[0] < 605)									
+scnt = 0
+ecnt = 0
+freq.each do |fsec|
+	scnt += 1
+	if(fsec.length == 0)
+		ecnt += 1
+		next
 	end
+	sump = 0
+	fsec.map {|x| sump += x[1] }
+	savg = sump / fsec.length
+	ecnt += 1 if (savg < 100)
+end
+if(ecnt == scnt)
+	@line_type = 'silence'
+	break
+end
+
+# Store these into data for use later on
+data[:scnt] = scnt
+data[:ecnt] = ecnt
+
+#
+# Look for modems by detecting a 2100hz answer + 2250hz tone
+#
+if( (fcnt[2100] > 1.0 or fcnt[2230] > 1.0) and fcnt[2250] > 0.5)
+	@line_type = 'modem'
+	break				
 end
 
 #
-# Look for modems by detecting a 2250hz tone
+# Look for modems by detecting a peak frequency of 2250hz
 #
-if(f_2250 > 1.0)
-	line_type = 'modem'
+if(fcnt[2100] > 1.0 and (maxf > 2245.0 and maxf < 2255.0))
+	@line_type = 'modem'
+	break				
+end
+
+#
+# Look for modems by detecting a peak frequency of 3000hz
+#
+if(fcnt[2100] > 1.0 and (maxf > 2995.0 and maxf < 3005.0))
+	@line_type = 'modem'
 	break				
 end
 
@@ -62,17 +79,22 @@ end
 # Look for faxes by checking for a handful of tones (min two)
 #
 fax_sum = 0
-[ f_1625, f_1660, f_1825, f_2100, f_600, f_1855, f_1100].map{|x| fax_sum += [x,1.0].min }
+[ 
+	fcnt[1625], fcnt[1660], fcnt[1825], fcnt[2100], 
+	fcnt[600],  fcnt[1855], fcnt[1100], fcnt[2250],
+	fcnt[2230], fcnt[2220], fcnt[1800], fcnt[2095],
+	fcnt[2105]
+].map{|x| fax_sum += [x,1.0].min }
 if(fax_sum >= 2.0)
-	line_type = 'fax'
+	@line_type = 'fax'
 	break
 end
 
 #
 # Dial tone detection (440hz + 350hz)
 #
-if(f_440 > 1.0 and f_350 > 1.0)
-	line_type = 'dialtone'
+if(fcnt[440] > 1.0 and fcnt[350] > 1.0)
+	@line_type = 'dialtone'
 	break
 end
 
@@ -83,10 +105,8 @@ end
 # this signature can fail. For non-US numbers, the beep
 # is often a different frequency entirely.
 #
-f_1000 = 0
-pks.each{|f| f_1000 += 1 if(f[0] > 990 and f[0] < 1010) }
-if(f_1000 > 0)
-	line_type = 'voicemail'
+if(fcnt[1000] >= 1.0)
+	@line_type = 'voicemail'
 	break				
 end
 
