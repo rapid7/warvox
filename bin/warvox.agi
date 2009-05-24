@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+#
+# This script can be used to redial an existing job through Asterix.
+# To use this script, add an entry to extensions.conf:
+#
+# exten => _777.,1,agi,warvox.agi|/warvox/data/20
+#
+
+base = ARGV.shift
+conf = {}
+while(line = $stdin.gets)
+	line = line.strip
+	break if line == ""
+	if(line =~ /^agi_([^:]+):\s(.*)/)
+		conf[$1] = $2
+	end
+end
+
+targ = conf['extension'].sub(/^777/, '')
+
+$stdout.puts "EXEC MP3Player #{File.join(base,"#{targ}.mp3")}"
+$stdout.flush
+$stdin.gets

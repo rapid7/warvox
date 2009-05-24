@@ -294,7 +294,10 @@ class Analysis < Base
 
 		# Generate a MP3 audio file
 		system("sox -s -2 -r 8000 -t raw -c 1 #{rawfile.path} #{bname}.wav")
-		system("lame #{bname}.wav #{bname}.mp3 >/dev/null 2>&1")
+		
+		# Default samples at 8k, bump it to 32k to get better quality
+		system("lame -b 32 #{bname}.wav #{bname}.mp3 >/dev/null 2>&1")
+		
 		File.unlink("#{bname}.wav")
 		File.unlink(rawfile.path)
 		rawfile.close
