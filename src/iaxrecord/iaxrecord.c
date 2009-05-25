@@ -29,7 +29,6 @@ int audio       = 0;
 int busy        = 0;
 int fail        = 1;
 int done        = 0;
-int ansd        = 0;
 
 float silence_threshold = 0.0f;
 int call_state  = 0;
@@ -91,20 +90,11 @@ int state_event_callback(struct iaxc_ev_call_state call) {
 
 int audio_event_callback( struct iaxc_ev_audio audio) {
 
-	/* We have been recording rings, dump the file and reopen */
-	if(call_trace != -1 && !fail && !ansd) {
-		close(call_trace);
-		unlink(iax_out);
-		call_trace = -1;
-		call_bytes  = 0;
-		ansd = 1;
-	}
-	
-	if(call_trace == -1) {
+	if(call_trace == -1 && !fail) {
 		call_trace = open(iax_out, O_CREAT|O_TRUNC|O_WRONLY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
 	}
-
-	if(call_trace != -1){
+		
+	if(call_trace != -1) {
 		if(debug) printf("audio data: format=%d encoded=%d size=%d state=%d\n", audio.format, audio.encoded, audio.size, call_state);
 		write(call_trace, audio.data, audio.size);
 		call_bytes += audio.size;
@@ -263,8 +253,6 @@ int main(int argc, char **argv) {
 	if(debug) fprintf(stderr, ">> DONE\n");
 	
 	if(! etime) time(&etime);
-	
-	if(call_bytes > 0 && fail == 1) fail = 0;
 	
 	fprintf(stdout, "COMPLETED %s BYTES=%d FILE=%s FAIL=%d BUSY=%d RINGTIME=%d\n", 
 		iax_num, 
