@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090522202032) do
+ActiveRecord::Schema.define(:version => 20090526031826) do
 
   create_table "dial_jobs", :force => true do |t|
     t.string   "range"
@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(:version => 20090522202032) do
     t.string   "line_type"
     t.string   "notes"
     t.string   "signatures"
+    t.string   "dtmf"
+    t.string   "mf"
   end
 
   create_table "providers", :force => true do |t|

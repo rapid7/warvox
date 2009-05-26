@@ -284,7 +284,7 @@ class Analysis < Base
 		plotter.puts("plot \"#{frefile.path}\" using 1:2 notitle with lines")						
 		plotter.flush
 
-		system("gnuplot #{plotter.path}")
+		system("#{WarVOX::Config.tool_path('gnuplot')} #{plotter.path}")
 		File.unlink(plotter.path)
 		File.unlink(datfile.path)
 		File.unlink(frefile.path)
@@ -292,11 +292,32 @@ class Analysis < Base
 		datfile.close
 		frefile.path
 
+
+		# Detect DTMF and MF tones
+		dtmf = ''
+		mf   = ''
+		pfd = IO.popen("#{WarVOX::Config.tool_path('dtmf2num')} -r 8000 1 16 #{rawfile.path} 2>/dev/null")
+		pfd.each_line do |line|
+			line = line.strip
+			if(line.strip =~ /^- MF numbers:\s+(.*)/)
+				next if $1 == 'none'
+				mf = $1
+			end
+			if(line.strip =~ /^- DTMF numbers:\s+(.*)/)
+				next if $1 == 'none'
+				dtmf = $1
+			end			
+		end
+		pfd.close
+		res[:dtmf] = dtmf
+		res[:mf]   = mf
+
+
 		# Generate a MP3 audio file
-		system("sox -s -2 -r 8000 -t raw -c 1 #{rawfile.path} #{bname}.wav")
+		system("#{WarVOX::Config.tool_path('sox')} -s -2 -r 8000 -t raw -c 1 #{rawfile.path} #{bname}.wav")
 		
 		# Default samples at 8k, bump it to 32k to get better quality
-		system("lame -b 32 #{bname}.wav #{bname}.mp3 >/dev/null 2>&1")
+		system("#{WarVOX::Config.tool_path('lame')} -b 32 #{bname}.wav #{bname}.mp3 >/dev/null 2>&1")
 		
 		File.unlink("#{bname}.wav")
 		File.unlink(rawfile.path)

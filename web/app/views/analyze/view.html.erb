@@ -35,8 +35,13 @@
 		CallerID: <%= dial_result.cid%><br/>
 		Provider: <%=h dial_result.provider.name %><br/>
 		Audio: <%=h dial_result.seconds %> Seconds<br/>
-		Ringer: <%=h dial_result.ringtime %> Seconds
-					
+		Ringer: <%=h dial_result.ringtime %> Seconds<br/>
+		<% if(dial_result.dtmf and dial_result.dtmf.length > 0) %>
+			DTMF: <%=h dial_result.dtmf %><br/>
+		<% end %>
+		<% if(dial_result.mf and dial_result.mf.length > 0) %>
+			MF: <%=h dial_result.mf %><br/>
+		<% end %>					
 	</td>
   	<td align='center'>
 		<b><%=h dial_result.line_type.upcase %></b><br/>

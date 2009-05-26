@@ -4,6 +4,7 @@
  * overhaul of the signature system (etc/sigs/*.rb)
  * filter analysis results by line type
  * overhaul of results view + show signatures
+ * added dtmf2num support to decode dtmf tones
 
 2009-05-10  H D Moore  <hdm[at]metasploit.com>
  

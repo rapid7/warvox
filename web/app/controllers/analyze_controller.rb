@@ -81,7 +81,7 @@ class AnalyzeController < ApplicationController
 			@job_id,
 			:page => params[:page], 
 			:order => 'number ASC',
-			:per_page => 10,
+			:per_page => 20,
 			:conditions => [ 'completed = ? and processed = ? and busy = ? and line_type = ?', true, true, false, @shown ]
 		)	
 	else
@@ -89,7 +89,7 @@ class AnalyzeController < ApplicationController
 			@job_id,
 			:page => params[:page], 
 			:order => 'number ASC',
-			:per_page => 10,
+			:per_page => 20,
 			:conditions => [ 'completed = ? and processed = ? and busy = ?', true, true, false ]
 		)
 	end
