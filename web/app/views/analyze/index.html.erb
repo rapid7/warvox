@@ -24,7 +24,7 @@
     <td><%=h dial_job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S") %></td>
     <!-- <td><%= link_to 'Overview', show_analyze_path(dial_job) %></td> -->
     <td><%= link_to 'Browse', view_analyze_path(dial_job) %></td>
-	<td><%= link_to 'ReAnalyze', reanalyze_dial_result_path(@dial_job), :confirm => 'Process this job again?' %></td>
+	<td><%= link_to 'ReAnalyze', reanalyze_dial_result_path(dial_job), :confirm => 'Process this job again?' %></td>
   </tr>
 <% end %>
 </table>
