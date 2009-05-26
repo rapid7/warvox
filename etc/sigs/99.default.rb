@@ -9,6 +9,9 @@
 freq = data[:freq]
 fcnt = data[:fcnt]
 maxf = data[:maxf]
+ecnt = data[:ecnt]
+scnt = data[:scnt]
+
 
 # Look for voice mail by detecting the 1000hz BEEP
 # If the call length was too short to catch the beep,
@@ -16,7 +19,7 @@ maxf = data[:maxf]
 # is often a different frequency entirely.
 if(fcnt[1000] >= 1.0)
 	@line_type = 'voicemail'
-	break				
+	break		
 end
 
 # Look for voicemail by detecting a peak frequency of
@@ -24,7 +27,20 @@ end
 # the fallback script.
 if(maxf > 995 and maxf < 1005)
 	@line_type = 'voicemail'
-	break	
+	break
+end
+
+#
+# Look for silence by checking the frequency signature
+#
+if(freq.map{|f| f.length}.inject(:+) == 0)
+	@line_type = 'silence'
+	break
+end
+
+if(ecnt == scnt)
+	@line_type = 'silence'
+	break
 end
 
 #

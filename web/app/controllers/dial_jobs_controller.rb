@@ -23,10 +23,13 @@ class DialJobsController < ApplicationController
     end
   end
 
+=begin
   # GET /dial_jobs/1/edit
   def edit
     @dial_job = DialJob.find(params[:id])
   end
+=end
+  
 
   # GET /dial_jobs/1/run
   def run
@@ -118,6 +121,7 @@ class DialJobsController < ApplicationController
     
   # PUT /dial_jobs/1
   # PUT /dial_jobs/1.xml
+=begin  
   def update
     @dial_job = DialJob.find(params[:id])
     respond_to do |format|
@@ -131,5 +135,6 @@ class DialJobsController < ApplicationController
       end
     end
   end
+=end  
   
 end

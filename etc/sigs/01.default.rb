@@ -19,14 +19,6 @@ fcnt = data[:fcnt]
 maxf = data[:maxf]
 
 #
-# Look for silence by checking the frequency signature
-#
-if(freq.map{|f| f.length}.inject(:+) == 0)
-	@line_type = 'silence'
-	break
-end
-
-#
 # Look for silence by checking for a strong frequency in each sample
 #
 scnt = 0
@@ -41,10 +33,6 @@ freq.each do |fsec|
 	fsec.map {|x| sump += x[1] }
 	savg = sump / fsec.length
 	ecnt += 1 if (savg < 100)
-end
-if(ecnt == scnt)
-	@line_type = 'silence'
-	break
 end
 
 # Store these into data for use later on
@@ -97,19 +85,6 @@ if(fcnt[440] > 1.0 and fcnt[350] > 1.0)
 	@line_type = 'dialtone'
 	break
 end
-
-
-#
-# Look for voice mail by detecting the 1000hz BEEP
-# If the call length was too short to catch the beep,
-# this signature can fail. For non-US numbers, the beep
-# is often a different frequency entirely.
-#
-if(fcnt[1000] >= 1.0)
-	@line_type = 'voicemail'
-	break				
-end
-
 
 #
 # To use additional signatures, add new scripts to this directory

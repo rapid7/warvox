@@ -3,7 +3,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :dial_jobs, :has_many => [ :dial_results ], :member => { :run => :get, :stop => :get }
 
-  map.resources :analyze, :member => { :view => :get, :resource => :get }
+  map.resources :analyze, :member => { :view => :get, :resource => :get, :show => :get }
   map.connect   'analyze/:id/resource/:result_id/:type', :controller => 'analyze', :action => 'resource'
 
 

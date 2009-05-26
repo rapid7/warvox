@@ -4,7 +4,8 @@
 # This script can be used to redial an existing job through Asterix.
 # To use this script, add an entry to extensions.conf:
 #
-# exten => _777.,1,agi,warvox.agi|/warvox/data/20
+# exten => _777.,1,Answer()
+# exten => _777.,2,agi,warvox.agi|/warvox/data/20
 #
 
 base = ARGV.shift

@@ -1,3 +1,10 @@
+2009-05-25  H D Moore  <hdm[at]metasploit.com>
+ * switched MP3 quality to 32kbps from 8kpbs for better listening
+ * added bin/warvox.agi as an asterisk plugin to allow job re-dialing
+ * overhaul of the signature system (etc/sigs/*.rb)
+ * filter analysis results by line type
+ * overhaul of results view + show signatures
+
 2009-05-10  H D Moore  <hdm[at]metasploit.com>
  
  * release of version 1.0.1
