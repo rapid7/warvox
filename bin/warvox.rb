@@ -53,7 +53,7 @@ args = [
 	'server',
 	'-p', opts['ServerPort'].to_s, 
 	'-b', opts['ServerHost'],
-	'-e', 'development',
+	'-e', 'production',
 ]
 
 if opts['Background']

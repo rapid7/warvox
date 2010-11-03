@@ -27,21 +27,19 @@ private
 	end 
 
 	def check_auth
-		return true if session.data[:user]
+		return true if session[:user]
 		user,pass = get_creds
 		return false if not (user and pass)
 		
 		if(WarVOX::Config.authenticate(user,pass))
-			session.data[:user] = user
+			session[:user] = user
 			return true
 		end
 		
 		return false
 	end
 	
-	def get_auth
-		return true
-		
+	def get_auth		
 		if(not check_auth())
 			response.headers["Status"] = "Unauthorized" 
 			response.headers["WWW-Authenticate"] = 'Basic realm="WarVOX Console"'
