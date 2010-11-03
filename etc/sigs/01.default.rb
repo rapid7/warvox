@@ -44,7 +44,7 @@ data[:ecnt] = ecnt
 #
 if( (fcnt[2100] > 1.0 or fcnt[2230] > 1.0) and fcnt[2250] > 0.5)
 	@line_type = 'modem'
-	break				
+	raise Completed				
 end
 
 #
@@ -52,7 +52,7 @@ end
 #
 if(fcnt[2100] > 1.0 and (maxf > 2245.0 and maxf < 2255.0))
 	@line_type = 'modem'
-	break				
+	raise Completed				
 end
 
 #
@@ -60,7 +60,7 @@ end
 #
 if(fcnt[2100] > 1.0 and (maxf > 2995.0 and maxf < 3005.0))
 	@line_type = 'modem'
-	break				
+	raise Completed				
 end
 
 #
@@ -75,7 +75,7 @@ fax_sum = 0
 ].map{|x| fax_sum += [x,1.0].min }
 if(fax_sum >= 2.0)
 	@line_type = 'fax'
-	break
+	raise Completed
 end
 
 #
@@ -83,7 +83,7 @@ end
 #
 if(fcnt[440] > 1.0 and fcnt[350] > 1.0)
 	@line_type = 'dialtone'
-	break
+	raise Completed
 end
 
 #

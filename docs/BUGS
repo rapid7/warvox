@@ -4,5 +4,7 @@ KNOWN BUGS
    need to be removed and restarted.
  
  * Using the sound card (playing music, videos, etc) while warvox is running
-   can cause the dialing process to handle. Systems without sound cards are
-   not affected.
+   can cause the dialing process to hang.
+   
+ * Systems without sound cards may not be able to record any audio. Reports
+   have varied depending on the Linux distribution and version.

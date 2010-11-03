@@ -1,0 +1,45 @@
+<h1 class='title'>Introduction</h1>
+
+<p>
+WarVOX is a suite of tools for exploring, classifying, and auditing telephone systems. Unlike normal wardialing tools, 
+WarVOX works with the actual audio from each call and does not use a modem directly. This model allows WarVOX to find 
+and classify a wide range of interesting lines, including modems, faxes, voice mail boxes, PBXs, loops, dial tones, IVRs,
+and forwarders. WarVOX provides the unique ability to classify all telephone lines in a given range, not just those 
+connected to modems, allowing for a comprehensive audit of a telephone system.
+</p>
+
+<h1 class='title'>Getting Started</h1>
+<p>
+In order to make phone calls, WarVOX needs to be configured with one or more service providers. For a list of compatible VoIP ISPs, please see the <a href="http://warvox.org/#Providers">Service Providers</a> section of the WarVOX web site. To add a new provider to WarVOX, access the web interface, click the <a href="/providers">Providers</a> link, and fill in the <b>New Provider</b> form. This form allows you to specify a nickname for the provider and indicate how many concurrent outbound calls can be made using this account. WarVOX can make use of multiple service providers and multiple outbuond calls per provider when processing jobs.
+</p>
+
+<p>Once one or more service providers have been configured, click the <a href="/dial_jobs/">Jobs</a> link. This will present a form that asks for the phone number range to dial, the number of seconds of audio to capture, and the maximum number of outgoing lines to use for this job.
+</p>
+
+<p>The phone number range is specified by entering the phone number (including country code), with numbers replaced by X's where an entire range should be dialed. For example, the value 1-512-555-XXXX will make 10,000 calls, one to each number within the 512-555 exchange. In contrast, the value 1-512-555-555X will only make 10 calls, covering 5550 to 5559. Only 5 digits of the phone number range can be masked.
+</p>
+
+<p>
+The seconds field indicates the number of seconds to spend on each call, including the ring time. The larger the value, the more audio that can be captured, but you run the risk of leaving silent voice mail messages if this value is too large. Keep in mind that many per-minute service providers include ring time in the billing and round up to the nearest minute. This rounding is why the default value is set to 53 seconds. Most service providers do not charge for calls which were not answered.
+</p>
+
+<p>
+The outgoing line count is limited by the number of providers available and the number of lines available at each provider. If you are dialing a range with a limited number of inbound lines, the outgoing line count should be set to a small value, otherwise leave this value at the maximum number of available lines to complete jobs as quickly as possible. Each concurrent outbound call requires approximately 80kbits/s of downstream bandwidth.
+</p>
+
+<p>The Caller ID is specified by entering the phone number (including country code), with numbers replaced by X's where parts of the number should be chosen randomly. This field also accepts the special value of "SELF", which will cause all calls to be made with the Caller ID set to the destination number (useful for testing poorly implemented voice mail security).
+</p>
+
+<p>
+Once the job parameters have been specified, click the <b>Create</b> button to start dialing. If you return the main <a href="/dial_jobs/">Jobs</a> screen you can track the progress of the job via the percentage value in the active jobs table. The amount of time a given job takes depends on the number of phone numbers within the range, the number of seconds of audio to record, and the number of concurrent outbound lines. A 1,000 number range with 53 seconds of audio and 10 outbound lines would take approximately 100 minutes to complete.
+</p>
+
+<p>
+After the job completes, access the <a href="/dial_results/">Results</a> link to view a listing of finished jobs. Click the <b>View</b> link to look at the raw call breakdown. To analyze the call data, click on the Results link, and then click the <b>Analyze Calls</b> link. Depending on the speed of your server, this can take up to 60 seconds per connected call to process all of the data. Once the data has been processed, the results will now be listed under the <a href="/analyze/">Analysis</a> link. Viewing the results will provide the signal graph, spectrum graph, and an audio player to hear the actual call.
+</p>
+
+
+<h1 class='title'>Troubleshooting</h1>
+<p>
+If for some reason WarVOX is not working correctly, or if you have any questions, please contact the WarVOX development team at warvox[at]metasploit.com. To determine whether software dependencies have been satisfied, you can use the <b>bin/verify_install.rb</b> Ruby script included with the WarVOX distribution. The <a href="/home/about/">About</a> page also includes detailed information that may help resolve installation issues. If your calls fail to produce any results, double check the Provider configuration. To obtain the latest version of this software, please check the <a href="http://warvox.org/">WarVOX Web Site</a>.
+</p>

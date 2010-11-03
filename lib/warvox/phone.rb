@@ -2,7 +2,11 @@ module WarVOX
 class Phone
 
 	# Convert 123456XXXX to an array of expanded numbers
-	def self.crack_mask(masks)
+	def self.crack_mask(mask)
+		self.crack_masks([mask])
+	end
+	
+	def self.crack_masks(masks)
 		res = {}
 		masks.each do |mask|
 			mask = mask.strip

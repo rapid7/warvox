@@ -1,0 +1,44 @@
+<% if @dial_results %>
+
+
+<h1 class='title'>Dial Results for Job <%=@dial_results[0].dial_job_id%></h1>
+
+<%= will_paginate @dial_results %>
+<table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
+<tr>
+	<td align='center'><%= raw(render_ezgraphix @g1) %></td>
+</tr>
+</table>
+
+<table class='table_scaffold' width='100%'>
+  <tr>
+    <th>Number</th>
+    <th>CallerID</th>
+    <th>Provider</th>
+    <th>Completed</th>
+    <th>Busy</th>
+    <th>Seconds</th>
+	<th>Ring Time</th>
+  </tr>
+
+
+<% for dial_result in @dial_results.sort{|a,b| a.number <=> b.number } %>
+  <tr>
+    <td><%=h dial_result.number %></td>
+    <td><%=h dial_result.cid %></td>	
+    <td><%=h dial_result.provider.name %></td>
+    <td><%=h dial_result.completed %></td>
+    <td><%=h dial_result.busy %></td>
+    <td><%=h dial_result.seconds %></td>
+    <td><%=h dial_result.ringtime.to_i %></td>
+  </tr>
+<% end %>
+</table>
+<%= will_paginate @dial_results %>
+
+<% else %>
+
+<h1 class='title'>No Dial Results</h1>
+
+<% end %>
+<br />

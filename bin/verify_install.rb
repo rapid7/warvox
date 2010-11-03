@@ -22,6 +22,25 @@ puts("*                                                                    *")
 puts("**********************************************************************")
 puts(" ")
 
+
+begin
+	require 'rubygems'
+	puts "[*] RubyGems have been installed"
+rescue ::LoadError
+	puts "[*] ERROR: The RubyGems package has not been installed:"
+	puts "    $ sudo apt-get install rubygems"
+	exit
+end
+
+begin
+	require 'bundler'
+	puts "[*] The Bundler gem has been installed"
+rescue ::LoadError
+	puts "[*] ERROR: The Bundler gem has not been installed:"
+	puts "    $ sudo gem install bundler"	
+	exit
+end
+
 begin 
 	require 'kissfft'
 	puts "[*] The KissFFT module appears to be available"

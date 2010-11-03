@@ -1,0 +1,38 @@
+<h1 class='title'>Edit Provider</h1>
+
+<% form_for(@provider) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :enabled %><br />
+    <%= f.check_box :enabled %>
+  </p>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :host %><br />
+    <%= f.text_field :host %>
+  </p>
+  <p>
+    <%= f.label :port %><br />
+    <%= f.text_field :port %>
+  </p>
+  <p>
+    <%= f.label :user %><br />
+    <%= f.text_field :user %>
+  </p>
+  <p>
+    <%= f.label :pass %><br />
+    <%= f.text_field :pass %>
+  </p>
+  <p>
+    <%= f.label :lines %><br />
+    <%= f.text_field :lines %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', providers_path %>

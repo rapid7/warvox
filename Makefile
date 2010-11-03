@@ -3,7 +3,7 @@ all: test
 test: install
 	bin/verify_install.rb
 	
-install: iaxrecord dtmf2num ruby-kissfft db
+install: bundler iaxrecord dtmf2num ruby-kissfft db
 	cp -a src/iaxrecord/iaxrecord bin/
 	cp -a src/dtmf2num/dtmf2num bin/
 
@@ -28,6 +28,16 @@ db_null:
 
 web/db/production.sqlite3: ruby-kissfft-install
 	(cd web; RAILS_ENV=production rake db:migrate )
+
+bundler:
+	@echo "Checking for RubyGems and the Bundler gem..."
+	@ruby -rrubygems -e 'require "bundler"; puts "OK"'
+
+	@echo "Validating that 'bundle' is in the path..."
+	which bundle
+	
+	@echo "Installing missing gems as needed.."
+	(cd web; bundle install)
 
 clean:
 	( cd src/ruby-kissfft/; ruby extconf.rb )

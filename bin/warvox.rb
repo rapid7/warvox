@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 ###################
 
+require 'getoptlong'
+
+
 #
 # Load the library path
 # 
@@ -10,10 +13,9 @@ while File.symlink?(base)
 end
 
 voxroot = File.join(File.dirname(base), '..', 'web')
-Dir.chdir(voxroot)
-require 'getoptlong'
+voxserv = File.join(File.expand_path(voxroot), 'script', 'rails')
 
-voxserv = File.join('script', 'server')
+Dir.chdir(voxroot)
 
 def usage
 	$stderr.puts "#{$0} [--address IP] [--port PORT] --background"
@@ -47,20 +49,15 @@ args.each do |opt,arg|
 	end
 end
 
-
-# Clear ARGV
-while(ARGV.length > 0)
-	ARGV.shift
-end
-
-# Rebuild ARGV
-[
+args = [
+	'server',
 	'-p', opts['ServerPort'].to_s, 
 	'-b', opts['ServerHost'],
-	'-e', 'production',
-	(opts['Background'] ? '-d' : '')
-].each do |arg|
-	ARGV.push arg
+	'-e', 'development',
+]
+
+if opts['Background']
+	args.push("-d")
 end
 
 $browser_url   = "http://#{opts['ServerHost']}:#{opts['ServerPort']}/"
@@ -68,5 +65,8 @@ $browser_url   = "http://#{opts['ServerHost']}:#{opts['ServerPort']}/"
 $stderr.puts ""
 $stderr.puts "[*] Starting WarVOX on #{$browser_url}"
 $stderr.puts ""
+
+while(ARGV.length > 0); ARGV.shift; end
+args.each {|arg| ARGV.push(arg) }
 
 load(voxserv)

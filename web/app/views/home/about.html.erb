@@ -1,0 +1,142 @@
+<table width='100%' align='center' border='0' cellpadding='9' cellspacing='0'>
+<tr><td valign='top'>
+
+<h1 class='title'>About WarVOX</h1>
+
+<b>WarVOX</b> is a product of <a href="http://www.rapid7.com/">Rapid7 LLC</a> and is provided as 
+free software under the BSD license. WarVOX is intended for legal security assessment, asset inventory,
+and research purposes only. The latest version of WarVOX can be found at
+<a href="http://warvox.org/">http://warvox.org/</a>. The WarVOX development
+team can be reached by email at warvox[at]metasploit.com.
+
+</td><td valign='top' align='center'>
+
+
+<h1 class='title'>Statistics</h1>
+
+<table id="warvox_stats" cellspacing="0" width=200>
+
+<tr>
+	<td valign="top" align="right" class="header_item">
+		WarVOX Version:
+	</td>
+	<td><%= WarVOX::VERSION %></td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" class="header_item">
+		Providers:
+	</td>
+	<td><%= Provider.count %></td>
+</tr>
+
+
+<tr>
+	<td valign="top" align="right" class="header_item">
+		Active Jobs:
+	</td>
+	<td><%= DialJob.count(:conditions => ['status = ?', 'active']) %></td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" class="header_item">
+		Total Jobs:
+	</td>
+	<td><%= DialJob.count %></td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" class="header_item">
+		Results:
+	</td>
+	<td><%= DialResult.count %></td>
+</tr>
+</table>
+
+
+</td></tr>
+<tr><td valign='top' colspan='2'>
+
+<h1 class='title'>Configuration</h1>
+
+
+<table id="warvox_conf" cellspacing="0" width='100%'>
+
+<tr>
+	<td valign="top" align="right" class="header_item" width='200'>
+		Base Directory:
+	</td>
+	<td><%= WarVOX::Base %></td>
+</tr>
+
+
+<tr>
+	<td valign="top" align="right" class="header_item" width='200'>
+		Configuration File:
+	</td>
+	<td><%= WarVOX::Conf %></td>
+</tr>
+
+
+<tr>
+	<td valign="top" align="right" class="header_item" width='200'>
+		Data Storage:
+	</td>
+	<td><%= WarVOX::Config.data_path %></td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" class="header_item" width='200'>
+		Admin User:
+	</td>
+	<td><%= WarVOX::Config.authentication_creds[0] %></td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" class="header_item" width='200'>
+		GNUPlot
+	</td>
+	<td><%= WarVOX::Config.tool_path('gnuplot') || "MISSING" %></td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" class="header_item" width='200'>
+		SOX
+	</td>
+	<td><%= WarVOX::Config.tool_path('sox') || "MISSING" %></td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" class="header_item" width='200'>
+		LAME
+	</td>
+	<td><%= WarVOX::Config.tool_path('lame') || "MISSING" %></td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" class="header_item" width='200'>
+		IAXRECORD
+	</td>
+	<td><%= WarVOX::Config.tool_path('iaxrecord') || "MISSING" %></td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" class="header_item" width='200'>
+		KissFFT
+	</td>
+	<td><%= @has_kissfft %></td>
+</tr>
+</table>
+
+<br/><br/>
+
+<h1 class='title'>Dial Exclusions (Blacklist)</h1>
+<table id="warvox_blacklist" cellspacing="0" width='100%'>
+<tr>
+	<td valign="top" align="left" class="header_item" width='200'>
+		<pre><%=h File.read(WarVOX::Config.blacklist_path) %></pre>
+	</td>
+</tr>
+</table>
+
+</td></tr></table>

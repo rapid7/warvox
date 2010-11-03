@@ -23,8 +23,13 @@ class JobQueue
 	end
 	
 	def schedule(klass, job_id)
+		begin
 		return false if scheduled?(klass, job_id)
 		@queue.push(klass.new(job_id))
+		rescue ::Exception => e
+			$stderr.puts "ERROR!!!!!: #{e} #{e.backtrace}"
+			false
+		end
 	end
 	
 	def manage_queue

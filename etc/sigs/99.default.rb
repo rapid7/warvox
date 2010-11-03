@@ -19,7 +19,7 @@ scnt = data[:scnt]
 # is often a different frequency entirely.
 if(fcnt[1000] >= 1.0)
 	@line_type = 'voicemail'
-	break		
+	raise Completed		
 end
 
 # Look for voicemail by detecting a peak frequency of
@@ -27,7 +27,7 @@ end
 # the fallback script.
 if(maxf > 995 and maxf < 1005)
 	@line_type = 'voicemail'
-	break
+	raise Completed
 end
 
 #
@@ -35,12 +35,12 @@ end
 #
 if(freq.map{|f| f.length}.inject(:+) == 0)
 	@line_type = 'silence'
-	break
+	raise Completed
 end
 
 if(ecnt == scnt)
 	@line_type = 'silence'
-	break
+	raise Completed
 end
 
 #

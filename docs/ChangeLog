@@ -1,3 +1,9 @@
+2010-11-03  H D Moore  <hdm[at]metasploit.com>
+ * bumped the version number to 1.1.0
+ * upgraded the web interface to Rails 3
+ * added support for Ruby 1.9.1
+ * updated README and LICENSE
+ 
 2009-05-25  H D Moore  <hdm[at]metasploit.com>
  * switched MP3 quality to 32kbps from 8kpbs for better listening
  * added bin/warvox.agi as an asterisk plugin to allow job re-dialing
@@ -7,7 +13,6 @@
  * added dtmf2num support to decode dtmf tones
 
 2009-05-10  H D Moore  <hdm[at]metasploit.com>
- 
  * release of version 1.0.1
  * switched to the BSD license for WarVOX
  * swapped the sox -w flag to -2 (deprecated)
@@ -18,5 +23,4 @@
  * added getopt parser to iaxrecord.c
  
 2009-03-05  H D Moore  <hdm[at]metasploit.com>
-
  * initial public release of version 1.0.0

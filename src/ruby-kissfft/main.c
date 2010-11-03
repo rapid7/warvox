@@ -1,13 +1,13 @@
 /*
 	ruby-kissfft: a simple ruby module embedding the Kiss FFT library
-	Copyright (C) 2009 H D Moore <hdm[at]metasploit.com>
+	Copyright (C) 2009-2010 Rapid7 LLC - H D Moore <hdm[at]metasploit.com>
 	
 	Derived from "psdpng.c" from the KissFFT tools directory
 	Copyright (C) 2003-2006 Mark Borgerding
 */
 
 #include "ruby.h"
-#include "rubysig.h"
+
 
 #include <stdlib.h>
 #include <math.h>
@@ -39,11 +39,8 @@ rbkiss_s_fftr(VALUE class, VALUE r_nfft, VALUE r_rate, VALUE r_buckets, VALUE r_
 	kiss_fft_cpx *fbuf;
 	float *mag2buf;
 	int i;
-	int n;
-	int sidx;
 	int avgctr=0;
 	int nrows=0;
-	int stereo=0;
 
 	int nfft;
 	int rate;
@@ -78,11 +75,11 @@ rbkiss_s_fftr(VALUE class, VALUE r_nfft, VALUE r_rate, VALUE r_buckets, VALUE r_
 		return Qnil;
 	}
 
-	if(RARRAY(r_data)->len == 0) {
+	if(RARRAY_LEN(r_data) == 0) {
 		return Qnil;
 	}
 
-	if(TYPE(RARRAY(r_data)->ptr[0]) != T_FIXNUM ) {
+	if(TYPE(RARRAY_PTR(r_data)[0]) != T_FIXNUM ) {
 		return Qnil;
 	}	
 
@@ -95,7 +92,7 @@ rbkiss_s_fftr(VALUE class, VALUE r_nfft, VALUE r_rate, VALUE r_buckets, VALUE r_
 
 	memset(mag2buf,0,sizeof(mag2buf)*nfreqs);
 
-	inp_len = RARRAY(r_data)->len;
+	inp_len = RARRAY_LEN(r_data);
 	inp_idx = 0;
 
 	while(inp_idx < inp_len) {
@@ -105,10 +102,10 @@ rbkiss_s_fftr(VALUE class, VALUE r_nfft, VALUE r_rate, VALUE r_buckets, VALUE r_
 			if(inp_idx + i >= inp_len) {
 				tbuf[i] = 0;
 			} else {
-				if(TYPE(RARRAY(r_data)->ptr[ inp_idx + i ]) != T_FIXNUM) {
+				if(TYPE(RARRAY_PTR(r_data)[ inp_idx + i ]) != T_FIXNUM) {
 					tbuf[i] = 0;
 				} else {
-					tbuf[i] = NUM2INT( RARRAY(r_data)->ptr[ inp_idx + i ] );
+					tbuf[i] = NUM2INT( RARRAY_PTR(r_data)[ inp_idx + i ] );
 				}
 			}
 		}

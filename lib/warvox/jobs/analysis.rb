@@ -15,6 +15,10 @@ class Analysis < Base
 	end
 	
 	class SignalProcessor
+	
+		class Completed < RuntimeError
+		end
+		
 		attr_accessor :line_type
 		attr_accessor :signatures
 		attr_accessor :data
@@ -25,9 +29,9 @@ class Analysis < Base
 		end
 		
 		def proc(str)
-			while(true);
+			begin
 				eval(str)
-				break
+			rescue Completed
 			end
 		end
 	end
