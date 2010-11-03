@@ -7,7 +7,7 @@
 <table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
 <tr>
 <% if @dial_data_done > 0 %>
-	<td align='center'><%= render_ezgraphix @g1 %></td>
+	<td align='center'><%= raw(render_ezgraphix @g1) %></td>
 <% end %>
 </tr>
 </table>

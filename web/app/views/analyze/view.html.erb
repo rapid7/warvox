@@ -8,7 +8,7 @@
 </tr>
 </table>
 
-<%= will_paginate @results %>
+<%= raw(will_paginate @results) %>
 
 <table class='table_scaffold' width='100%'>
   <tr>
@@ -59,4 +59,4 @@
 <% end %>
 </table>
 
-<%= will_paginate @results %>
+<%= raw(will_paginate @results) %>

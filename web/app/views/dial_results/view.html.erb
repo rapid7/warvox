@@ -3,7 +3,7 @@
 
 <h1 class='title'>Dial Results for Job <%=@dial_results[0].dial_job_id%></h1>
 
-<%= will_paginate @dial_results %>
+<%= raw(will_paginate @dial_results) %>
 <table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
 <tr>
 	<td align='center'><%= raw(render_ezgraphix @g1) %></td>
@@ -34,7 +34,7 @@
   </tr>
 <% end %>
 </table>
-<%= will_paginate @dial_results %>
+<%= raw(will_paginate @dial_results) %>
 
 <% else %>
 

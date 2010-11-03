@@ -1,7 +1,7 @@
 <% if @jobs.length > 0 %>
 <h1 class='title'>Analyzed Jobs</h1>
 
-<%= will_paginate @jobs %>
+<%= raw(will_paginate @jobs) %>
 <table class='table_scaffold' width='100%'>
   <tr>
     <th>ID</th>
@@ -29,7 +29,7 @@
 <% end %>
 </table>
 
-<%= will_paginate @jobs %>
+<%= raw(will_paginate @jobs) %>
 
 <% else %>
 
