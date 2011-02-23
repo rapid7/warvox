@@ -4,8 +4,7 @@ class DialResultsController < ApplicationController
   # GET /dial_results
   # GET /dial_results.xml
   def index
-    @completed_jobs = DialJob.paginate_all_by_status(
-		'completed', 
+    @completed_jobs = DialJob.where(:status => 'completed').paginate(
 		:page => params[:page], 
 		:order => 'id DESC',
 		:per_page => 30
@@ -62,8 +61,7 @@ class DialResultsController < ApplicationController
 	
 	@g1.data = res_types
 
-	@dial_data_todo = DialResult.paginate_all_by_dial_job_id(
-		@job_id,
+	@dial_data_todo = DialResult.where(:dial_job_id => @job_id).paginate(
 		:page => params[:page], 
 		:order => 'number ASC',
 		:per_page => 50,
@@ -78,8 +76,7 @@ class DialResultsController < ApplicationController
   # GET /dial_results/1/view
   # GET /dial_results/1/view.xml
   def view
-    @dial_results = DialResult.paginate_all_by_dial_job_id(
-		params[:id],
+    @dial_results = DialResult.where(:dial_job_id => params[:id]).paginate(
 		:page => params[:page], 
 		:order => 'number ASC',
 		:per_page => 30

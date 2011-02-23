@@ -2,7 +2,7 @@ class AnalyzeController < ApplicationController
   layout 'warvox'
   
   def index
-	@jobs = DialJob.where(:dial_job => true).paginate(
+	@jobs = DialJob.paginate(
 		:page => params[:page], 
 		:order => 'id DESC',
 		:per_page => 30

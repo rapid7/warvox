@@ -11,7 +11,7 @@ require 'warvox/db'
 
 # Global configuration
 module WarVOX
-	VERSION = '1.1.0'
+	VERSION = '1.2.0'
 	Base = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 	Conf = File.expand_path(File.join(Base, 'etc', 'warvox.conf'))
 	JobManager = WarVOX::JobQueue.new
