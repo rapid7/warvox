@@ -2,8 +2,7 @@ class AnalyzeController < ApplicationController
   layout 'warvox'
   
   def index
-	@jobs = DialJob.paginate_all_by_processed(
-		true,
+	@jobs = DialJob.where(:dial_job => true).paginate(
 		:page => params[:page], 
 		:order => 'id DESC',
 		:per_page => 30
@@ -31,16 +30,14 @@ class AnalyzeController < ApplicationController
 	@g1.data = res_types
 
 	if(@shown and @shown != 'all')
-		@results = DialResult.paginate_all_by_dial_job_id(
-			@job_id,
+		@results = DialResult.where(:dial_job_id => @job_id).paginate(
 			:page => params[:page], 
 			:order => 'number ASC',
 			:per_page => 10,
 			:conditions => [ 'completed = ? and processed = ? and busy = ? and line_type = ?', true, true, false, @shown ]
 		)	
 	else
-		@results = DialResult.paginate_all_by_dial_job_id(
-			@job_id,
+		@results = DialResult.where(:dial_job_id => @job_id).paginate(
 			:page => params[:page], 
 			:order => 'number ASC',
 			:per_page => 10,
@@ -77,16 +74,14 @@ class AnalyzeController < ApplicationController
 	@g1.data = res_types
 
 	if(@shown and @shown != 'all')
-		@results = DialResult.paginate_all_by_dial_job_id(
-			@job_id,
+		@results = DialJob.where(:id => @job_id).paginate(
 			:page => params[:page], 
 			:order => 'number ASC',
 			:per_page => 20,
 			:conditions => [ 'completed = ? and processed = ? and busy = ? and line_type = ?', true, true, false, @shown ]
 		)	
 	else
-		@results = DialResult.paginate_all_by_dial_job_id(
-			@job_id,
+		@results = DialJob.where(:id => @job_id).paginate(
 			:page => params[:page], 
 			:order => 'number ASC',
 			:per_page => 20,
