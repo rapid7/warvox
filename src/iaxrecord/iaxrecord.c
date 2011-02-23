@@ -1,7 +1,7 @@
 /*
  * IAXRecord: a utility for recording audio on an outbound IAX call
  *
- * Copyright (C) 2009, H D Moore <hdm[at]metasploit.com>
+ * Copyright (C) 2009-2010 Rapid7 LLC - H D Moore <hdm[at]metasploit.com>
  *
  * Based on simpleclient from the IAXClient distribution
  *
@@ -12,6 +12,8 @@
  * This program is free software, distributed under the terms of
  * the GNU General Public License
  */
+
+#define TEST_MODE 1
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +40,11 @@ int call_bytes  = 0;
 char *iax_out;
 int reg_id;
 
+#ifdef TEST_MODE
+int call_end = 0;
+unsigned char empty_buf[200];
+#endif
+
 void signal_handler(int signum) {
 	if ( signum == SIGTERM || signum == SIGINT ) {
 		done = 1;
@@ -54,7 +61,7 @@ int state_event_callback(struct iaxc_ev_call_state call) {
 	if(call.state & IAXC_CALL_STATE_COMPLETE) fail = 0;
 
 	call_state = call.state;
-/*
+
 	if(debug) {
 		fprintf(stdout, "STATE: ");
 		if(call.state & IAXC_CALL_STATE_FREE)
@@ -84,7 +91,7 @@ int state_event_callback(struct iaxc_ev_call_state call) {
 		fprintf(stdout, "\n");
 		fflush(stdout);
 	}
-*/
+
     return 0;
 }
 
@@ -198,10 +205,19 @@ int main(int argc, char **argv) {
 	/* install signal handler to catch CRTL-Cs */
 	signal(SIGINT, signal_handler);
 	signal(SIGTERM, signal_handler);
+
+	/* enable test mode */
+#ifdef TEST_MODE
+	iaxc_set_test_mode(1);
+#endif
 	
 	/* forcible disable pulse audio if the audio flag is not set (-A) */
-	if(! audio) setenv("PULSE_SERVER", "0.0.0.0", 1);
+	// if(! audio) setenv("PULSE_SERVER", "255.255.255.255", 1);
 	
+	setenv("ALSA_PCM_CARD", "pcm.null", 1);
+	setenv("ALSA_CARD", "pcm.null", 1);
+	setenv("ALSA_DEVICE", "pcm.null", 1);
+			
 	if(debug) fprintf(stderr, ">> INITIALIZING\n");
 	if ( iaxc_initialize(1) ) {
 		fprintf(stdout, "error: Could not initialize iaxclient!\n");
@@ -245,6 +261,13 @@ int main(int argc, char **argv) {
 			if(call_state & IAXC_CALL_STATE_BUSY) break;
 			if(iaxc_first_free_call() == call_id) break;
 			iaxc_millisleep(250);
+			
+#ifdef TEST_MODE
+			/* we need do send something to receive data... I don't know why... */
+			if( !call_end && call_state & IAXC_CALL_STATE_COMPLETE )
+				iaxc_push_audio(&empty_buf[0], 200, 200);
+#endif
+
 		}
 	} else {
 		fail = 1;
