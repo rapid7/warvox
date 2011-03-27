@@ -37,7 +37,7 @@ d.close
 
 puts "[*] Finished loading #{set.keys.length} signatures..."
 
-max   = 1
+max   = 10
 cnt   = 0
 stime = Time.now.to_f
 
@@ -59,6 +59,8 @@ while targs.length > 0
 		mine = targ
 		msig = set[targ]
 	
+		exit(0) if msig.length == 0
+		
 		res  = []
 		set.each_pair do |n,sig|
 			next if n == mine
