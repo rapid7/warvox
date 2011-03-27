@@ -138,14 +138,14 @@ class Analysis < Base
 		#		
 		raw  = WarVOX::Audio::Raw.from_file(input)
 		fft  = KissFFT.fftr(8192, 8000, 1, raw.samples)		
-		freq = WarVOX::Audio::Raw.fft_to_freq_sig(fft, 20)
-		flow = freq.inspect.gsub(/\s+/, '')
+		
+		freq = raw.to_freq_sig_txt()
 		fd   = File.new("#{bname}.sig", "wb")
-		fd.write "#{num} #{flow}\n"
+		fd.write freq
 		fd.close
 
 		# Save the signature data
-		res[:sig_data] = flow
+		res[:sig_data] = freq
 
 		#
 		# Create a raw decompressed file

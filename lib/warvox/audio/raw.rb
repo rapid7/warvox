@@ -151,6 +151,72 @@ class Raw
 		self.class.fft_to_freq_sig(ffts, freq_cnt)
 	end
 	
+	def to_freq_sig(opts={})
+		fcnt = opts[:frequency_count] || 5
+
+		ffts = []
+
+		# Obtain 20 DFTs for the sample, at 1/20th second offsets into the stream
+		0.upto(19) do |i|
+			ffts[i] = KissFFT.fftr(8192, 8000, 1, self.samples[ i * 400, self.samples.length - (i * 400)])
+		end
+
+		# Create a frequency table at 100hz boundaries
+		f = [ *(0.step(4000, 100)) ]
+
+		# Create a worker method to find the closest frequency
+		barker = Proc.new do |t|
+			t = t.to_i
+			f.sort { |a,b|
+				(a-t).abs <=> (b-t).abs
+			}.first
+		end
+
+		# Map each slice of the audio's FFT with each FFT chunk (8k samples) and then work on it
+		tops = ffts.map{|x| x.map{|y| y.map{|z| 
+
+			frq,pwr = z
+	
+			# Toss any signals with a strength under 100
+			if pwr < 100.0
+				frq,pwr = [0,0]
+			# Map the signal to the closest offset of 50hz
+			else
+				frq = barker.call(frq)
+			end
+	
+			# Make sure the strength is an integer
+			pwr = pwr.to_i
+
+			# Sort by signal strength and take the top fcnt items
+			[frq, pwr]}.sort{|a,b| 
+				b[1] <=> a[1]
+			}[0, fcnt].map{|w| 
+			# Grab just the frequency (drop the strength)
+				w[0]
+			# Remove any duplicates due to hz mapping
+			}.uniq
+	
+		} }
+
+		# Track the generated 4-second chunk signatures
+		sigs = []
+
+		# Expand the list of top frequencies per sample into a flat list of each permutation
+		tops.each do |t|
+			next if t.length < 4
+			0.upto(t.length - 4) { |i| t[i].each { |a| t[i+1].each { |b| t[i+2].each { |c| t[i+3].each { |d| sigs << [a,b,c,d] } } } } }
+		end
+
+		# Dump any duplicate signatures
+		sigs = sigs.uniq
+	end
+	
+	def to_freq_sig_txt(opts={})
+		# Convert this to comma delimited frequencies, one sequence per line
+		to_freq_sig(opts).map{|x| x.join(",") }.sort.join("\n")		
+	end
+	
 	def self.fft_to_freq_sig(ffts, freq_cnt)
 		sig = []
 		ffts.each do |s|
@@ -231,6 +297,7 @@ class Raw
 		
 		final
 	end
+	
 
 end
 end

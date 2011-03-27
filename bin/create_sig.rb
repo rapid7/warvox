@@ -34,4 +34,5 @@ if(raw.samples.length == 0)
 	exit(1)
 end
 
-$stdout.puts raw.to_freq.inspect.gsub(/\s+/,'')
+
+$stdout.puts raw.to_freq_sig_txt
