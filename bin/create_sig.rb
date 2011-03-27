@@ -25,7 +25,7 @@ inp = ARGV.shift() || usage()
 skp = (ARGV.shift() || 0).to_i
 len = (ARGV.shift() || 0).to_i
 
-raw = WarVOX::Audio::Raw.from_file(inp)
+raw = WarVOX::Audio::Raw.from_file(File.expand_path(inp))
 raw.samples = (raw.samples[skp, raw.samples.length]||[]) if skp > 0
 raw.samples = (raw.samples[0, len]||[]) if len > 0
 
