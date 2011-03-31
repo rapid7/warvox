@@ -180,7 +180,7 @@ class Raw
 			# Toss any signals with a strength under 100
 			if pwr < 100.0
 				frq,pwr = [0,0]
-			# Map the signal to the closest offset of 50hz
+			# Map the signal to the closest offset of 100hz
 			else
 				frq = barker.call(frq)
 			end
@@ -210,11 +210,15 @@ class Raw
 
 		# Dump any duplicate signatures
 		sigs = sigs.uniq
+		
+		# Convert each signature into a single 32-bit integer
+		# This is essentially [0-40, 0-40, 0-40, 0-40]
+		sigs.map{|x| x.map{|y| y / 100}.pack("C4").unpack("N")[0] }
 	end
 	
 	def to_freq_sig_txt(opts={})
-		# Convert this to comma delimited frequencies, one sequence per line
-		to_freq_sig(opts).map{|x| x.join(",") }.sort.join("\n")		
+		# Convert this to a text file
+		to_freq_sig(opts).sort.join("\n")
 	end
 	
 	def self.fft_to_freq_sig(ffts, freq_cnt)

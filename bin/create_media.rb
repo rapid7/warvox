@@ -33,8 +33,10 @@ dir = Dir.new(src)
 dir.entries.sort.each do |ent|
 
 	path = File.join(src, ent)
-	next if ent !~ /(.*)\.raw/m
+	next if ent !~ /(.*)\.raw\.gz$/m
 	num = $1
+
+	next if File.exist?(File.join(dst, num + ".mp3"))
 
 	puts "Processing #{num}..."
 

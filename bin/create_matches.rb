@@ -7,13 +7,13 @@
 
 
 def is_bad_sig?(sig)
-	return true if sig == [0,0,0,0]
+	return true if sig == 0
 	false
 end
 
 def load_signature(data)
 	data.split("\n").map { |line|
-		line.strip.split(",").map{|bits| bits.to_i }
+		line.strip.to_i
 	}.reject {|sig| is_bad_sig?(sig) }
 end
 
@@ -24,7 +24,7 @@ set = {}
 
 d = Dir.new(dir)
 d.entries.each do |ent|
-	next if ent !~ /\.sig$/
+	next if ent !~ /\.sigs$/
 	name,trash = ent.split('.', 2)
 	data       = File.read(File.join(dir, ent))
 	set[name]  = load_signature(data)
