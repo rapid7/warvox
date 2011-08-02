@@ -1,25 +1,25 @@
 module WarVOX
 module Jobs
-class Dialer < Base 
+class Dialer < Base
 
 	require 'fileutils'
-	
+
 	def type
 		'dialer'
 	end
-	
+
 	def initialize(job_id)
 		@name    = job_id
-		model    = get_job
-		@range   = model.range
-		@seconds = model.seconds
-		@lines   = model.lines		
+		@job     = get_job
+		@range   = @job.range
+		@seconds = @job.seconds
+		@lines   = @job.lines
 		@nums    = shuffle_a(WarVOX::Phone.crack_mask(@range))
-		
+
 		# CallerID modes (SELF or a mask)
-		@cid_self = model.cid_mask == 'SELF'
+		@cid_self = @job.cid_mask == 'SELF'
 		if(not @cid_self)
-			@cid_range = WarVOX::Phone.crack_mask(model.cid_mask)
+			@cid_range = WarVOX::Phone.crack_mask(@job.cid_mask)
 		end
 	end
 
@@ -56,31 +56,31 @@ class Dialer < Base
 			}
 			1.upto(prov.lines) {|i| res.push(info) }
 		end
-		
+
 		shuffle_a(res)
 	end
-	
+
 	def get_job
 		::DialJob.find(@name)
 	end
-	
+
 	def start
 		begin
-		
+
 		model = get_job
 		model.status = 'active'
 		model.started_at = Time.now
 		db_save(model)
-		
+
 		start_dialing()
-		
+
 		stop()
-		
+
 		rescue ::Exception => e
 			$stderr.puts "Exception in the job queue: #{$e.class} #{e} #{e.backtrace}"
 		end
 	end
-	
+
 	def stop
 		@status = 'completed'
 		model = get_job
@@ -88,11 +88,11 @@ class Dialer < Base
 		model.completed_at = Time.now
 		db_save(model)
 	end
-	
+
 	def start_dialing
-		dest = File.join(WarVOX::Config.data_path, "#{@name}")
+		dest = File.join(WarVOX::Config.data_path, @name.to_s)
 		FileUtils.mkdir_p(dest)
-	
+
 		# Scrub all numbers matching the blacklist
 		list = WarVOX::Config.blacklist_load
 		list.each do |b|
@@ -104,26 +104,26 @@ class Dialer < Base
 				end
 			end
 		end
-	
+
 		@nums_total = @nums.length
 		while(@nums.length > 0)
 			@calls    = []
 			@provs    = get_providers
 			tasks     = []
 			max_tasks = [@provs.length, @lines].min
-			
+
 			1.upto(max_tasks) do
 				tasks << Thread.new do
-					
+
 					Thread.current.kill if @nums.length == 0
 					Thread.current.kill if @provs.length == 0
-		
+
 					num  = @nums.shift
 					prov = @provs.shift
-					
+
 					Thread.current.kill if not num
 					Thread.current.kill if not prov
-					
+
 					out = File.join(dest, num+".raw")
 
 					begin
@@ -134,7 +134,7 @@ class Dialer < Base
 					byte = 0
 					path = ''
 					cid  = @cid_self ? num : @cid_range[ rand(@cid_range.length) ]
-					
+
 					IO.popen(
 						[
 							WarVOX::Config.tool_path('iaxrecord'),
@@ -152,8 +152,8 @@ class Dialer < Base
 							num,
 							"-l",
 							@seconds
-						].map{|i| 
-							"'" + i.to_s.gsub("'",'') +"'" 
+						].map{|i|
+							"'" + i.to_s.gsub("'",'') +"'"
 					}.join(" ")).each_line do |line|
 						$stderr.puts "DEBUG: #{line.strip}"
 						if(line =~ /^COMPLETED/)
@@ -161,12 +161,12 @@ class Dialer < Base
 								busy = info[1].to_i if info[0] == 'BUSY'
 								fail = info[1].to_i if info[0] == 'FAIL'
 								ring = info[1].to_i if info[0] == 'RINGTIME'
-								byte = info[1].to_i if info[0] == 'BYTES'	
+								byte = info[1].to_i if info[0] == 'BYTES'
 								path = info[1]      if info[0] == 'FILE'
 							end
 						end
 					end
-					
+
 					res = ::DialResult.new
 					res.number = num
 					res.cid = cid
@@ -177,21 +177,21 @@ class Dialer < Base
 					res.seconds = (byte / 16000)  # 8khz @ 16-bit
 					res.ringtime = ring
 					res.processed = false
-					res.created_at = Time.now
-					res.updated_at = Time.now
-					
+
 					if(File.exists?(out))
-						system("gzip -9 #{out}")
-						res.rawfile = out + ".gz"
+						File.open(out, "rb") do |fd|
+							res.audio = fd.read(fd.stat.size)
+						end
+						File.unlink(out)
 					end
-					
+
 					@calls << res
-					
+
 					rescue ::Exception => e
 						$stderr.puts "ERROR: #{e.class} #{e} #{e.backtrace} #{num} #{prov.inspect}"
 					end
 				end
-	
+
 				# END NEW THREAD
 			end
 			# END SPAWN THREADS
@@ -206,13 +206,14 @@ class Dialer < Base
 			model = get_job
 			model.progress = ((@nums_total - @nums.length) / @nums_total.to_f) * 100
 			db_save(model)
-			
+
 			clear_zombies()
 		end
-		
+
 		# ALL DONE
 	end
 
 end
 end
 end
+

@@ -1,7 +1,7 @@
 class AddMfAndDtmfToDialResults < ActiveRecord::Migration
   def self.up
-	  add_column :dial_results, :dtmf, :string
-	  add_column :dial_results, :mf, :string
+	  add_column :dial_results, :dtmf, :text
+	  add_column :dial_results, :mf, :text
   end
 
   def self.down

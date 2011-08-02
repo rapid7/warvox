@@ -1,11 +1,11 @@
 class CreateProviders < ActiveRecord::Migration
   def self.up
     create_table :providers do |t|
-      t.string :name
-      t.string :host
+      t.text :name
+      t.text :host
       t.integer :port
-      t.string :user
-      t.string :pass
+      t.text :user
+      t.text :pass
       t.integer :lines
 
       t.timestamps

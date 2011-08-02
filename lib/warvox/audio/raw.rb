@@ -1,14 +1,14 @@
 module WarVOX
 module Audio
 class Raw
-	
+
 	@@kissfft_loaded = false
 	begin
 		require 'kissfft'
 		@@kissfft_loaded = true
 	rescue ::LoadError
 	end
-		
+
 	require 'zlib'
 
 	##
@@ -17,50 +17,50 @@ class Raw
 
 	##
 	# Static methods
-	## 
-	
+	##
+
 	def self.from_str(str)
 		self.class.new(str)
 	end
-	
+
 	def self.from_file(path)
 		if(not path)
 			raise Error, "No audio path specified"
 		end
-		
+
 		if(path == "-")
 			return self.new($stdin.read)
 		end
-		
+
 		if(not File.readable?(path))
 			raise Error, "The specified audio file does not exist"
 		end
-		
+
 		if(path =~ /\.gz$/)
 			return self.new(Zlib::GzipReader.open(path).read)
 		end
-	
+
 		self.new(File.read(path, File.size(path)))
 	end
 
 	##
 	# Class methods
-	## 
-	
+	##
+
 	attr_accessor :samples
-	
+
 	def initialize(data)
-		self.samples = data.unpack('v*').map do |s| 
+		self.samples = data.unpack('v*').map do |s|
 			(s > 0x7fff) ? (0x10000 - s) * -1 : s
 		end
 	end
-	
+
 	def to_flow(opts={})
 
 		lo_lim = (opts[:lo_lim] || 100).to_i
 		lo_min = (opts[:lo_min] || 5).to_i
 		hi_min = (opts[:hi_min] || 5).to_i
-		lo_cnt = 0		
+		lo_cnt = 0
 		hi_cnt = 0
 
 		data = self.samples.map {|c| c.abs}
@@ -90,7 +90,7 @@ class Raw
 				while(idx < data.length and data[idx] > lo_lim)
 					buff << data[idx]
 					idx += 1
-				end	
+				end
 
 				# Ignore any sequence that is too small
 				fprint << [:hi, buff.length, buff] if buff.length > hi_min
@@ -123,7 +123,7 @@ class Raw
 
 		#
 		# Process results
-		# 
+		#
 		sig = ""
 
 		final.each do |f|
@@ -132,7 +132,7 @@ class Raw
 			avg = (sum == 0) ? 0 : sum / f[2].length
 			sig << "#{f[0].to_s.upcase[0,1]},#{f[1]},#{avg} "
 		end
-		
+
 		# Return the results
 		return sig
 	end
@@ -141,16 +141,16 @@ class Raw
 
 		if(not @@kissfft_loaded)
 			raise RuntimeError, "The KissFFT module is not availabale, raw.to_freq() failed"
-		end	
-		
+		end
+
 		freq_cnt = opts[:frequency_count] || 20
-		
+
 		# Perform a DFT on the samples
 		ffts = KissFFT.fftr(8192, 8000, 1, self.samples)
 
 		self.class.fft_to_freq_sig(ffts, freq_cnt)
 	end
-	
+
 	def to_freq_sig(opts={})
 		fcnt = opts[:frequency_count] || 5
 
@@ -173,10 +173,10 @@ class Raw
 		end
 
 		# Map each slice of the audio's FFT with each FFT chunk (8k samples) and then work on it
-		tops = ffts.map{|x| x.map{|y| y.map{|z| 
+		tops = ffts.map{|x| x.map{|y| y.map{|z|
 
 			frq,pwr = z
-	
+
 			# Toss any signals with a strength under 100
 			if pwr < 100.0
 				frq,pwr = [0,0]
@@ -184,19 +184,19 @@ class Raw
 			else
 				frq = barker.call(frq)
 			end
-	
+
 			# Make sure the strength is an integer
 			pwr = pwr.to_i
 
 			# Sort by signal strength and take the top fcnt items
-			[frq, pwr]}.sort{|a,b| 
+			[frq, pwr]}.sort{|a,b|
 				b[1] <=> a[1]
-			}[0, fcnt].map{|w| 
+			}[0, fcnt].map{|w|
 			# Grab just the frequency (drop the strength)
 				w[0]
 			# Remove any duplicates due to hz mapping
 			}.uniq
-	
+
 		} }
 
 		# Track the generated 4-second chunk signatures
@@ -210,17 +210,17 @@ class Raw
 
 		# Dump any duplicate signatures
 		sigs = sigs.uniq
-		
+
 		# Convert each signature into a single 32-bit integer
 		# This is essentially [0-40, 0-40, 0-40, 0-40]
 		sigs.map{|x| x.map{|y| y / 100}.pack("C4").unpack("N")[0] }
 	end
-	
+
+	# Converts a signature to a postgresql integer array (text) format
 	def to_freq_sig_txt(opts={})
-		# Convert this to a text file
-		to_freq_sig(opts).sort.join("\n")
+		"{" + to_freq_sig(opts).sort.join(",") + "}"
 	end
-	
+
 	def self.fft_to_freq_sig(ffts, freq_cnt)
 		sig = []
 		ffts.each do |s|
@@ -231,34 +231,34 @@ class Raw
 				if( f[1] > maxp )
 					maxf,maxp = f
 				end
-				
+
 				if(maxf > 0 and f[1] < maxp and (maxf + 4.5 < f[0]))
 					res << [maxf, maxp]
 					maxf,maxp = [0,0]
 				end
 			end
-			
-			sig << res.sort{ |a,b|                              # sort by signal strength
-				a[1] <=> b[1] 
+
+			sig << res.sort{ |a,b|                             # sort by signal strength
+				a[1] <=> b[1]
 			}.reverse[0,freq_cnt].sort { |a,b|                 # take the top 20 and sort by frequency
-				a[0] <=> b[0]                                   
-			}.map {|a| [a[0].round, a[1].round ] }              # round to whole numbers
+				a[0] <=> b[0]
+			}.map {|a| [a[0].round, a[1].round ] }             # round to whole numbers
 		end
-		
-		sig	
+
+		sig
 	end
-	
+
 	# Find pattern inside of sample
-	def self.compare_freq_sig(pat, zam, opts)	
-		
+	def self.compare_freq_sig(pat, zam, opts)
+
 		fuzz_f = opts[:fuzz_f] || 7
 		fuzz_p = opts[:fuzz_p] || 10
 		final  = []
-		
+
 		0.upto(zam.length - 1) do |si|
-			res = []		
+			res = []
 			sam = zam[si, zam.length]
-	
+
 			0.upto(pat.length - 1) do |pi|
 				diff = []
 				next if not pat[pi]
@@ -295,14 +295,15 @@ class Raw
 				end
 				prev = len
 			end
-			
+
 			final << [ (rsum / res.length.to_f), res.map {|x| x.length}]
 		end
-		
+
 		final
 	end
-	
+
 
 end
 end
 end
+

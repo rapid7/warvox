@@ -23,6 +23,7 @@ maxf = data[:maxf]
 #
 scnt = 0
 ecnt = 0
+=begin
 freq.each do |fsec|
 	scnt += 1
 	if(fsec.length == 0)
@@ -34,6 +35,7 @@ freq.each do |fsec|
 	savg = sump / fsec.length
 	ecnt += 1 if (savg < 100)
 end
+=end
 
 # Store these into data for use later on
 data[:scnt] = scnt
@@ -44,7 +46,7 @@ data[:ecnt] = ecnt
 #
 if( (fcnt[2100] > 1.0 or fcnt[2230] > 1.0) and fcnt[2250] > 0.5)
 	@line_type = 'modem'
-	raise Completed				
+	raise Completed
 end
 
 #
@@ -52,7 +54,7 @@ end
 #
 if(fcnt[2100] > 1.0 and (maxf > 2245.0 and maxf < 2255.0))
 	@line_type = 'modem'
-	raise Completed				
+	raise Completed
 end
 
 #
@@ -60,15 +62,15 @@ end
 #
 if(fcnt[2100] > 1.0 and (maxf > 2995.0 and maxf < 3005.0))
 	@line_type = 'modem'
-	raise Completed				
+	raise Completed
 end
 
 #
 # Look for faxes by checking for a handful of tones (min two)
 #
 fax_sum = 0
-[ 
-	fcnt[1625], fcnt[1660], fcnt[1825], fcnt[2100], 
+[
+	fcnt[1625], fcnt[1660], fcnt[1825], fcnt[2100],
 	fcnt[600],  fcnt[1855], fcnt[1100], fcnt[2250],
 	fcnt[2230], fcnt[2220], fcnt[1800], fcnt[2095],
 	fcnt[2105]
@@ -92,3 +94,4 @@ end
 # 99 and greater than 01.
 #
 #
+

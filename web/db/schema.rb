@@ -10,56 +10,75 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090526031826) do
+ActiveRecord::Schema.define(:version => 20110801000003) do
 
   create_table "dial_jobs", :force => true do |t|
-    t.string   "range"
+    t.text     "range"
     t.integer  "seconds"
     t.integer  "lines"
-    t.string   "status"
+    t.text     "status"
     t.integer  "progress"
     t.datetime "started_at"
     t.datetime "completed_at"
     t.boolean  "processed"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "cid_mask"
+    t.text     "cid_mask"
   end
 
   create_table "dial_results", :force => true do |t|
-    t.integer  "number"
+    t.text     "number"
     t.integer  "dial_job_id"
     t.integer  "provider_id"
     t.boolean  "completed"
     t.boolean  "busy"
     t.integer  "seconds"
     t.integer  "ringtime"
-    t.string   "rawfile"
+    t.text     "rawfile"
     t.boolean  "processed"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "processed_at"
-    t.string   "cid"
-    t.decimal  "peak_freq"
-    t.string   "peak_freq_data"
-    t.string   "sig_data"
-    t.string   "line_type"
-    t.string   "notes"
-    t.string   "signatures"
-    t.string   "dtmf"
-    t.string   "mf"
+    t.text     "cid"
+    t.float    "peak_freq"
+    t.text     "peak_freq_data"
+    t.text     "sig_data"
+    t.text     "line_type"
+    t.text     "notes"
+    t.text     "signatures"
+    t.text     "dtmf"
+    t.text     "mf"
+    t.string   "fprint",         :limit => nil
+    t.binary   "audio"
+    t.binary   "mp3"
+    t.binary   "png_big"
+    t.binary   "png_big_dots"
+    t.binary   "png_big_freq"
+    t.binary   "png_sig"
+    t.binary   "png_sig_freq"
   end
 
   create_table "providers", :force => true do |t|
-    t.string   "name"
-    t.string   "host"
+    t.text     "name"
+    t.text     "host"
     t.integer  "port"
-    t.string   "user"
-    t.string   "pass"
+    t.text     "user"
+    t.text     "pass"
     t.integer  "lines"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "enabled"
+  end
+
+  create_table "signatures", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.string   "category"
+    t.text     "description"
+    t.string   "mode"
+    t.string   "print",       :limit => nil
+    t.text     "rules"
   end
 
 end

@@ -1,10 +1,10 @@
 class CreateDialJobs < ActiveRecord::Migration
   def self.up
     create_table :dial_jobs do |t|
-      t.string :range
+      t.text :range
       t.integer :seconds
       t.integer :lines
-      t.string :status
+      t.text :status
       t.integer :progress
       t.datetime :started_at
       t.datetime :completed_at
