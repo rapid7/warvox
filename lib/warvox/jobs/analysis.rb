@@ -356,7 +356,7 @@ class Analysis < Base
 		File.unlink(rawfile.path)
 		rawfile.close
 
-		::File.open(tmp_wav.path, "rb") { |fd| res[:mp3] = fd.read }
+		::File.open(tmp_mp3.path, "rb") { |fd| res[:mp3] = fd.read }
 
 		[tmp_wav, tmp_mp3].map {|x| x.unlink; x.close }
 
