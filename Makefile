@@ -3,15 +3,11 @@ all: test
 test: install
 	bin/verify_install.rb
 	
-install: bundler iaxrecord dtmf2num ruby-kissfft db
-	cp -a src/iaxrecord/iaxrecord bin/
+install: bundler dtmf2num ruby-kissfft db
 	cp -a src/dtmf2num/dtmf2num bin/
 
 ruby-kissfft-install: ruby-kissfft
 	cp -a src/ruby-kissfft/kissfft.so lib/
-
-iaxrecord:
-	make -C src/iaxrecord/
 
 dtmf2num:
 	make -C src/dtmf2num/
@@ -20,10 +16,8 @@ ruby-kissfft:
 	( cd src/ruby-kissfft/; ruby extconf.rb )
 	make -C src/ruby-kissfft/
 
-db: web/db/production.sqlite3
+db:
 	@echo "Checking the database.."
-
-web/db/production.sqlite3: ruby-kissfft-install
 	(cd web; RAILS_ENV=production rake db:migrate )
 
 bundler:
@@ -39,6 +33,5 @@ bundler:
 clean:
 	( cd src/ruby-kissfft/; ruby extconf.rb )
 	make -C src/ruby-kissfft/ clean
-	make -C src/iaxrecord/ clean
 	make -C src/dtmf2num/ clean
-	rm -f bin/iaxrecord lib/kissfft.so
+	rm -f lib/kissfft.so
