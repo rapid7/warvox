@@ -12,6 +12,7 @@ Web::Application.routes.draw do
 
   match '/analyze/:id/resource/:result_id/:type' => 'analyze#resource', :as => :resource_analyze
   match '/analyze/:id/view'    => 'analyze#view', :as => :view_analyze
+  match '/analyze/:dial_result_id/matches'    => 'analyze#view_matches', :as => :view_matches
   match '/analyze/:id/show'    => 'analyze#show', :as => :show_analyze  
   match '/analyze'             => 'analyze#index'
     
