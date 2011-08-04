@@ -76,12 +76,6 @@ end
 puts "[*] The LAME binary appears to be available"
 
 
-if(not WarVOX::Config.tool_path('iaxrecord'))
-	puts "[*] ERROR: The 'iaxrecord' binary could not be installed"
-	exit
-end
-puts "[*] The IAXRECORD binary appears to be available"
-
 if(not WarVOX::Config.tool_path('dtmf2num'))
 	puts "[*] ERROR: The 'dtmf2num' binary could not be installed"
 	exit
