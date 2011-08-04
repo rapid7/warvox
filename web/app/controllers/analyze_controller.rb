@@ -137,5 +137,12 @@ class AnalyzeController < ApplicationController
 
     send_data(cdata, :type => ctype, :disposition => 'inline')
   end
+  
+  
+  def view_matches
+  	@result = DialResult.find(params[:dial_result_id])
+  	@job_id = @result.dial_job_id
+	@results = @result.matches.select{|x| x.matchscore.to_f > 10.0 }
+  end  
 end
 

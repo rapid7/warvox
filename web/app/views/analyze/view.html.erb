@@ -53,7 +53,10 @@
 			col = ("%.2x" % (255 - str)) * 3
 		%>
 			<div style="color: #<%= col%>;"><%=h name%> (<%=h sid %>@<%=h mat %>)</div>
-		<% end %>			
+		<% end %>		
+		<% if dial_result.fprint %>
+			<a href="<%=view_matches_path(dial_result.id)%>">View Matches</a>
+		<% end %>	
 	</td>
   </tr>
 <% end %>
