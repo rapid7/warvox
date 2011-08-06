@@ -7,7 +7,6 @@ require 'warvox/config'
 require 'warvox/jobs'
 require 'warvox/phone'
 require 'warvox/audio'
-require 'warvox/db'
 
 # Global configuration
 module WarVOX
