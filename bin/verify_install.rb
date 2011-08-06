@@ -49,20 +49,6 @@ rescue ::LoadError
 	exit
 end
 
-sox_path = WarVOX::Config.tool_path('sox')
-if(not sox_path)
-	puts "[*] ERROR: The 'sox' binary could not be found"
-	exit
-end
-
-sox_data = `#{sox_path} --help 2>&1`
-if(sox_data !~ /raw/)
-	puts "[*] ERROR: The 'sox' binary does not have support for RAW audio"
-	exit
-end
-puts "[*] The SOX binary appears to be available with RAW file support"
-
-
 if(not WarVOX::Config.tool_path('gnuplot'))
 	puts "[*] ERROR: The 'gnuplot' binary could not be installed"
 	exit

@@ -347,8 +347,10 @@ class Analysis < Base
 		tmp_wav = Tempfile.new("wav")
 		tmp_mp3 = Tempfile.new("mp3")
 
-		# Generate a MP3 audio file
-		system("#{WarVOX::Config.tool_path('sox')} -s -2 -r 8000 -t raw -c 1 #{rawfile.path} -t wav #{tmp_wav.path}")
+		# Generate a WAV file from raw linear PCM
+		::File.open(tmp_wav, "wb") do |fd|
+			fd.write(raw.to_wav)
+		end
 
 		# Default samples at 8k, bump it to 32k to get better quality
 		system("#{WarVOX::Config.tool_path('lame')} -b 32 #{tmp_wav.path} #{tmp_mp3.path} >/dev/null 2>&1")

@@ -54,6 +54,23 @@ class Raw
 			(s > 0x7fff) ? (0x10000 - s) * -1 : s
 		end
 	end
+	
+	def to_raw
+		self.samples.pack("v*")
+	end
+	
+	def to_wav
+		raw = self.to_raw
+		wav = 
+			"RIFF" + 
+				[raw.length + 36].pack("V") +
+			"WAVE" +
+			"fmt " +
+				[16, 1, 1, 8000, 16000, 2, 16 ].pack("VvvVVvv") +
+			"data" +
+				[ raw.length ].pack("V") +
+			raw
+	end 
 
 	def to_flow(opts={})
 
