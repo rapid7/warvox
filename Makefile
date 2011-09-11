@@ -18,7 +18,7 @@ ruby-kissfft:
 
 db:
 	@echo "Checking the database.."
-	(cd web; RAILS_ENV=production rake db:migrate )
+	(cd web; RAILS_ENV=production bundle exec rake db:migrate )
 
 bundler:
 	@echo "Checking for RubyGems and the Bundler gem..."
