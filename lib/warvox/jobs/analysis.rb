@@ -348,7 +348,7 @@ class Analysis < Base
 		tmp_mp3 = Tempfile.new("mp3")
 
 		# Generate a WAV file from raw linear PCM
-		::File.open(tmp_wav, "wb") do |fd|
+		::File.open(tmp_wav.path, "wb") do |fd|
 			fd.write(raw.to_wav)
 		end
 
