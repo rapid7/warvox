@@ -110,7 +110,7 @@ class Analysis < Base
 		tmp = Tempfile.new("Analysis")
 		begin
 
-		::File.open(tmp, "wb") do |fd|
+		::File.open(tmp.path, "wb") do |fd|
 			fd.write(r.audio)
 		end
 
