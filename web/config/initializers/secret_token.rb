@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Web::Application.config.secret_token = '1bd648becb978b46fd65fe255a047ea09d9a068749f6b1bf8340e3a109c91cda4176732d9dbadae8bba444436828cde14073151a993497fc5f314c3079dbea26'
+Web::Application.config.secret_token = WarVOX::Config.load_session_key
