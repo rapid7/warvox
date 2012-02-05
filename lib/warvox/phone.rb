@@ -3,7 +3,9 @@ class Phone
 
 	# Convert 123456XXXX to an array of expanded numbers
 	def self.crack_mask(mask)
-		self.crack_masks([mask])
+		masks = mask.split(/[\s,]+/) || [ ]
+		masks.delete(nil)
+		self.crack_masks(masks)
 	end
 	
 	def self.crack_masks(masks)
