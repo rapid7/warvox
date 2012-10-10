@@ -48,6 +48,7 @@ GEM
       railties (>= 3.1.0, < 5.0)
       thor (~> 0.14)
     json (1.7.5)
+    kissfft (0.0.1)
     libv8 (3.3.10.4)
     mail (2.4.4)
       i18n (>= 0.4.0)
@@ -111,6 +112,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   dynamic_form
   jquery-rails
+  kissfft
   pg (= 0.11)
   rails (= 3.2.8)
   sass-rails (~> 3.2.3)
