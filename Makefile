@@ -3,7 +3,7 @@ all: test
 test: install
 	bin/verify_install.rb
 	
-install: bundler dtmf2num ruby-kissfft db
+install: bundler dtmf2num ruby-kissfft
 	cp -a src/dtmf2num/dtmf2num bin/
 
 ruby-kissfft-install: ruby-kissfft
