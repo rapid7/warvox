@@ -14,7 +14,7 @@ dtmf2num:
 	
 ruby-kissfft:
 	( cd src/ruby-kissfft/; ruby extconf.rb )
-	make -C src/ruby-kissfft/
+	make -C src/ruby-kissfft/ && cp src/ruby-kissfft/kissfft.so lib/
 
 db:
 	@echo "Checking the database.."
