@@ -2,12 +2,10 @@
 <html>
 <head>
   <title><%= @title || "WarVOX" %></title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
-  <%= stylesheet_link_tag 'global', 'lightbox' %>
+  <%= stylesheet_link_tag 'global' %>
   <!--[if IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->		
-  <%= javascript_include_tag 'custom', 'prototype', 'effects', 'FusionCharts', 'lightbox' %>  
+  <%= javascript_include_tag 'jquery' %>  
 </head>
 <body>
 
@@ -17,7 +15,7 @@
 
 <div id="content">
 	<div class="box_full">
-	<img src="/images/round_top.png" id="round_top" alt=""/>
+	<img src="<%= asset_path('round_top.png') %>" id="round_top" alt=""/>
 	<div id="main">
 <%= yield %>
 		<br/><br/>
@@ -27,7 +25,7 @@
 		</div>
 	
 	</div>
-	<img src="/images/round_bot.png" id="round_bot" alt=""/>
+	<img src="<%= asset_path('round_bot.png') %>" id="round_bot" alt=""/>
 	</div>
 </div>
 

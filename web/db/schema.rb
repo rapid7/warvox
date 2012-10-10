@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -21,8 +22,8 @@ ActiveRecord::Schema.define(:version => 20110801000003) do
     t.datetime "started_at"
     t.datetime "completed_at"
     t.boolean  "processed"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.text     "cid_mask"
   end
 
@@ -36,8 +37,8 @@ ActiveRecord::Schema.define(:version => 20110801000003) do
     t.integer  "ringtime"
     t.text     "rawfile"
     t.boolean  "processed"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.datetime "processed_at"
     t.text     "cid"
     t.float    "peak_freq"
@@ -65,20 +66,9 @@ ActiveRecord::Schema.define(:version => 20110801000003) do
     t.text     "user"
     t.text     "pass"
     t.integer  "lines"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.boolean  "enabled"
-  end
-
-  create_table "signatures", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "name"
-    t.string   "category"
-    t.text     "description"
-    t.string   "mode"
-    t.string   "print",       :limit => nil
-    t.text     "rules"
   end
 
 end

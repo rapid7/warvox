@@ -8,3 +8,14 @@ production:
   pool: 100
   timeout: 5
 
+development:
+  adapter: postgresql
+  database: warvox
+  username: warvox
+  password: "<yourpass>"
+  host: 127.0.0.1
+  port: 5433
+  pool: 100
+  timeout: 5
+
+
