@@ -2,10 +2,9 @@
 <html>
 <head>
   <title><%= @title || "WarVOX" %></title>
-  <%= csrf_meta_tag %>
-  <%= stylesheet_link_tag 'global' %>
-  <!--[if IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->
-  <%= javascript_include_tag 'jquery' %>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
 </head>
 <body>
 
@@ -21,6 +20,7 @@
 	<div id="flash"></div>
 
 <%= yield %>
+
 		<br/><br/>
 
 		<div id="footer">

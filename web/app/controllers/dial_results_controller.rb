@@ -1,11 +1,11 @@
 class DialResultsController < ApplicationController
   layout 'warvox'
-  
+
   # GET /dial_results
   # GET /dial_results.xml
   def index
     @completed_jobs = DialJob.where(:status => 'completed').paginate(
-		:page => params[:page], 
+		:page => params[:page],
 		:order => 'id DESC',
 		:per_page => 30
 
@@ -23,12 +23,12 @@ class DialResultsController < ApplicationController
 	j = DialJob.find(params[:id])
 	j.processed = false
 	j.save
-	
+
 	redirect_to :action => 'analyze'
   end
-  
+
   # GET /dial_results/1/process
-  # GET /dial_results/1/process.xml  
+  # GET /dial_results/1/process.xml
   def analyze
   	@job_id = params[:id]
 	@job    = DialJob.find(@job_id)
@@ -37,18 +37,15 @@ class DialResultsController < ApplicationController
 		redirect_to :controller => 'analyze', :action => 'view', :id => @job_id
 		return
 	end
-	
+
 	@dial_data_total = DialResult.count(
 		:conditions => [ 'dial_job_id = ? and completed = ?', @job_id, true ]
 	)
-	
+
 	@dial_data_done = DialResult.count(
 		:conditions => [ 'dial_job_id = ? and processed = ?', @job_id, true ]
 	)
 
-	@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
-	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines', :w => 700, :h => 300)
-	
 	ltypes = DialResult.find( :all, :select => 'DISTINCT line_type', :conditions => ["dial_job_id = ?", @job_id] ).map{|r| r.line_type}
 	res_types = {}
 
@@ -58,16 +55,16 @@ class DialResultsController < ApplicationController
 			:conditions => ['dial_job_id = ? and line_type = ?', @job_id, k]
 		)
 	end
-	
-	@g1.data = res_types
+
+	@lines_by_type = res_types
 
 	@dial_data_todo = DialResult.where(:dial_job_id => @job_id).paginate(
-		:page => params[:page], 
+		:page => params[:page],
 		:order => 'number ASC',
 		:per_page => 50,
 		:conditions => [ 'completed = ? and processed = ? and busy = ?', true, false, false ]
 	)
-	
+
 	if(@dial_data_todo.length > 0)
         WarVOX::JobManager.schedule(::WarVOX::Jobs::Analysis, @job_id)
 	end
@@ -77,16 +74,13 @@ class DialResultsController < ApplicationController
   # GET /dial_results/1/view.xml
   def view
     @dial_results = DialResult.where(:dial_job_id => params[:id]).paginate(
-		:page => params[:page], 
+		:page => params[:page],
 		:order => 'number ASC',
 		:per_page => 30
-	)		
-	
-	if(@dial_results)
-		@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
-		@g1.render_options(:caption => 'Call Results', :w => 700, :h => 300)
+	)
 
-		@g1.data = {
+	if(@dial_results)
+		@call_results = {
 			:Timeout  => DialResult.count(:conditions =>['dial_job_id = ? and completed = ?', params[:id], false]),
 			:Busy     => DialResult.count(:conditions =>['dial_job_id = ? and busy = ?', params[:id], true]),
 			:Answered => DialResult.count(:conditions =>['dial_job_id = ? and completed = ?', params[:id], true]),
@@ -98,7 +92,7 @@ class DialResultsController < ApplicationController
       format.xml  { render :xml => @dial_results }
     end
   end
-  
+
   # GET /dial_results/1
   # GET /dial_results/1.xml
   def show
@@ -163,13 +157,13 @@ class DialResultsController < ApplicationController
   # DELETE /dial_results/1
   # DELETE /dial_results/1.xml
   def purge
-  
+
     @job = DialJob.find(params[:id])
 	@job.dial_results.each do |r|
 		r.destroy
 	end
 	@job.destroy
-	
+
 	dir = nil
 	jid = @job.id
 	dfd = Dir.new(WarVOX::Config.data_path)
@@ -179,7 +173,7 @@ class DialResultsController < ApplicationController
 			dir = File.join(WarVOX::Config.data_path, ent)
 		end
 	end
-	
+
 	FileUtils.rm_rf(dir) if dir
 
     respond_to do |format|
@@ -187,7 +181,7 @@ class DialResultsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
   # DELETE /dial_results/1
   # DELETE /dial_results/1.xml
   def delete
@@ -197,5 +191,5 @@ class DialResultsController < ApplicationController
       format.html { redirect_to :action => 'index' }
       format.xml  { head :ok }
     end
-  end  
+  end
 end

@@ -60,7 +60,7 @@ h3 {
 
 #main {
 	border: 0;
-	padding: 0;	
+	padding: 0;
 	background-color: white;
 	padding-top: 6px;
 	padding-left: 18px;
@@ -74,7 +74,7 @@ h3 {
 }
 
 #footer {
-	
+
 	margin: 0;
 	text-align: center;
 }
@@ -99,7 +99,7 @@ h3 {
 	width: 800px;
 	margin: 0 auto 10px;
 	color: white;
-	  
+
 }
 
 #logo {
@@ -160,7 +160,7 @@ h3 {
 
 #home_table {
 	border: 0;
-	margin-top: 0px;	
+	margin-top: 0px;
 }
 
 #home_table td  {
@@ -307,7 +307,7 @@ h3 {
 }
 
 .date-header {
-	background: url('<%= asset_path 'bluefade.jpg' %>') #222222 repeat-x top;
+	background: url('/assets/bluefade.jpg') #222222 repeat-x top;
 	color: white;
 	padding: 2px;
 	margin: 2px;
@@ -318,7 +318,7 @@ h3 {
 }
 
 .date-header-center {
-	background: url('<%= asset_path 'bluefade.jpg' %>') #8c0000 repeat-x top;
+	background: url('/assets/bluefade.jpg') #8c0000 repeat-x top;
 	color: white;
 	padding: 2px;
 	margin: 2px;
@@ -331,7 +331,7 @@ h3 {
 
 
 .balloon {
-	background: url('<%= asset_path 'balloon.jpg' %>') repeat-x top;
+	background: url('/assets/balloon.jpg') repeat-x top;
 	width: 277px;
 	height: 98px;
 	color: white;
@@ -342,7 +342,7 @@ h3 {
 	float: left;
 	margin-top: 10px;
 	margin-left: 6px;
-	
+
 }
 
 .balloon_links p {
@@ -437,16 +437,16 @@ h3 {
 	padding-bottom: 1em;
 }
 
-.vulnInfoTable { 
+.vulnInfoTable {
 	background: #dddddd;
-	
+
 }
 
-.vulnInfoHeader { 
+.vulnInfoHeader {
 	font-weight: bold;
 }
 
-.vulnInfoData { 
+.vulnInfoData {
 
 }
 
@@ -465,20 +465,20 @@ h3 {
 
 
 
-.level1 
+.level1
 {
 	list-style: none;
 	text-align: left;
 	padding: 0em 0em 1em 0em;
 	font-size: 16px;
-	font-weight: bold;	
+	font-weight: bold;
 }
 .level1 li
 {
 	padding: 1em .25em 0.25em 0.25em;
 }
 
-.level2 
+.level2
 {
 	list-style: circle;
 	text-align: left;
@@ -491,7 +491,7 @@ h3 {
 	font-weight: bold;
 }
 
-.level3 
+.level3
 {
 	list-style: square;
 	text-align: left;
@@ -504,42 +504,42 @@ h3 {
 
 
 
-.boxTable 
-{ 
-	border-left-style: solid; 
-	border-top-style: solid; 
-	border-right-style: solid; 
+.boxTable
+{
+	border-left-style: solid;
+	border-top-style: solid;
+	border-right-style: solid;
 	border-bottom-style: solid;
 	border-color: #dddddd;
-	font-family: verdana, sans-serif; 
-	font-size: 8pt; 
+	font-family: verdana, sans-serif;
+	font-size: 8pt;
 	background-color: #dddddd;
 }
-.boxInnerTable 
-{ 
-	font-family: verdana, sans-serif; 
-	font-size: 8pt; 
+.boxInnerTable
+{
+	font-family: verdana, sans-serif;
+	font-size: 8pt;
 }
-.boxTdHeader 
-{ 
-	border-width: 0 0 0 0; 
-	border-color: #dddddd; 
-	border-left-style: solid; 
-	border-top-style: solid; 
-	border-right-style: solid; 
-	border-bottom-style: solid; 
+.boxTdHeader
+{
+	border-width: 0 0 0 0;
+	border-color: #dddddd;
+	border-left-style: solid;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
 	background-color: #dddddd;
 	color: black;
-	height: 20px; 
+	height: 20px;
 	font-weight: bold
 }
-.boxTd 
-{ 
-	border-width: 0 0 0 0; 
-	border-left-style: solid; 
+.boxTd
+{
+	border-width: 0 0 0 0;
+	border-left-style: solid;
 	border-top-style: solid;
-	border-right-style: solid; 
-	border-bottom-style: solid; 
+	border-right-style: solid;
+	border-bottom-style: solid;
 }
 .boxTd1
 {
@@ -553,4 +553,3 @@ h3 {
 {
 	background-color: #dddddd;
 }
-

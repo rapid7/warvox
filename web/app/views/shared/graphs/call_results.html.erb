@@ -1,0 +1,60 @@
+<%
+
+
+graph_id = "g" + rand(0x1000000).to_s
+pie_data = ""
+
+
+
+%>
+
+<div id="<%= graph_id %>"></div>
+
+
+<%= javascript_tag do %>
+
+ $(function () {
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: '<%= graph_id %>',
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                shadow: true
+            },
+            title: {
+                text: 'Calls by Type'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+                percentageDecimals: 1
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage) +' %';
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Result Type',
+                data: [<%= pie_data %>]
+            }]
+        });
+    });
+});
+
+
+<% end %>
+
+</div>

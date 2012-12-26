@@ -14,9 +14,6 @@ class AnalyzeController < ApplicationController
   	@dial_job = DialJob.find(@job_id)
 	@shown    = params[:show]
 
-	@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
-	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines', :w => 700, :h => 300)
-
 	ltypes = DialResult.find( :all, :select => 'DISTINCT line_type', :conditions => ["dial_job_id = ?", @job_id] ).map{|r| r.line_type}
 	res_types = {}
 
@@ -27,7 +24,7 @@ class AnalyzeController < ApplicationController
 		)
 	end
 
-	@g1.data = res_types
+	@lines_by_type = res_types
 
 	if(@shown and @shown != 'all')
 		@results = DialResult.where(:dial_job_id => @job_id).paginate(
@@ -58,9 +55,6 @@ class AnalyzeController < ApplicationController
   	@dial_job = DialJob.find(@job_id)
 	@shown    = params[:show]
 
-	@g1 = Ezgraphix::Graphic.new(:c_type => 'col3d', :div_name => 'calls_pie1')
-	@g1.render_options(:caption => 'Detected Lines by Type', :y_name => 'Lines', :w => 700, :h => 300)
-
 	ltypes = DialResult.find( :all, :select => 'DISTINCT line_type', :conditions => ["dial_job_id = ?", @job_id] ).map{|r| r.line_type}
 	res_types = {}
 
@@ -71,7 +65,7 @@ class AnalyzeController < ApplicationController
 		)
 	end
 
-	@g1.data = res_types
+	@lines_by_type = res_types
 
 	if(@shown and @shown != 'all')
 		@results = DialJob.where(:id => @job_id).paginate(
@@ -137,12 +131,11 @@ class AnalyzeController < ApplicationController
 
     send_data(cdata, :type => ctype, :disposition => 'inline')
   end
-  
-  
+
+
   def view_matches
   	@result = DialResult.find(params[:dial_result_id])
   	@job_id = @result.dial_job_id
 	@results = @result.matches.select{|x| x.matchscore.to_f > 10.0 }
-  end  
+  end
 end
-

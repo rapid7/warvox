@@ -6,7 +6,9 @@
 <%= raw(will_paginate @dial_results) %>
 <table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
 <tr>
-	<td align='center'><%= raw(render_ezgraphix @g1) %></td>
+	<td align='center'>
+		<%= render :partial => 'shared/graphs/call_results' %>
+	</td>
 </tr>
 </table>
 
@@ -20,17 +22,15 @@
     <th>Seconds</th>
 	<th>Ring Time</th>
   </tr>
-
-
 <% for dial_result in @dial_results.sort{|a,b| a.number <=> b.number } %>
   <tr>
-    <td><%=h dial_result.number %></td>
-    <td><%=h dial_result.cid %></td>	
-    <td><%=h dial_result.provider.name %></td>
-    <td><%=h dial_result.completed %></td>
-    <td><%=h dial_result.busy %></td>
-    <td><%=h dial_result.seconds %></td>
-    <td><%=h dial_result.ringtime.to_i %></td>
+    <td><%= dial_result.number %></td>
+    <td><%= dial_result.cid %></td>
+    <td><%= dial_result.provider.name %></td>
+    <td><%= dial_result.completed %></td>
+    <td><%= dial_result.busy %></td>
+    <td><%= dial_result.seconds %></td>
+    <td><%= dial_result.ringtime.to_i %></td>
   </tr>
 <% end %>
 </table>

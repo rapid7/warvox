@@ -4,7 +4,9 @@
 
 <table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
 <tr>
-	<td align='center'><%= raw(render_ezgraphix @g1) %></td>
+	<td align='center'>
+		<%= render :partial => 'shared/graphs/lines_by_type' %>
+	</td>
 </tr>
 </table>
 
@@ -19,10 +21,10 @@
 <%  @results.each do |dial_result| %>
   <tr>
     <td align='center'>
-	
+
 		<object
 			type="application/x-shockwave-flash"
-			data="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id, dial_result.id, "mp3")%>" 
+			data="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id, dial_result.id, "mp3")%>"
 			width="20"
 			height="17"
 			style="margin-bottom: -5px;"
@@ -41,22 +43,22 @@
 		<% end %>
 		<% if(dial_result.mf and dial_result.mf.length > 0) %>
 			MF: <%=h dial_result.mf %><br/>
-		<% end %>					
+		<% end %>
 	</td>
   	<td align='center'>
 		<b><%=h dial_result.line_type.upcase %></b><br/>
 		<a href="<%=resource_analyze_path(@job_id, dial_result.id, "big_sig_dots")%>" rel="lightbox"><img src="<%=resource_analyze_path(@job_id, dial_result.id, "small_sig")%>" /></a>
 		<a href="<%=resource_analyze_path(@job_id, dial_result.id, "big_freq")%>" rel="lightbox"><img src="<%=resource_analyze_path(@job_id, dial_result.id, "small_freq")%>" /></a><br/>
-		<% (dial_result.signatures||"").split("\n").each do |s| 
+		<% (dial_result.signatures||"").split("\n").each do |s|
 			sid,mat,name = s.split(':', 3)
 			str = [mat.to_i * 6.4, 255].min
 			col = ("%.2x" % (255 - str)) * 3
 		%>
 			<div style="color: #<%= col%>;"><%=h name%> (<%=h sid %>@<%=h mat %>)</div>
-		<% end %>		
+		<% end %>
 		<% if dial_result.fprint %>
 			<a href="<%=view_matches_path(dial_result.id)%>">View Matches</a>
-		<% end %>	
+		<% end %>
 	</td>
   </tr>
 <% end %>
