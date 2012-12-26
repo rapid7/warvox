@@ -41,14 +41,6 @@ rescue ::LoadError
 	exit
 end
 
-begin 
-	require 'kissfft'
-	puts "[*] The KissFFT module appears to be available"
-rescue ::LoadError
-	puts "[*] ERROR: The KissFFT module has not been installed"
-	exit
-end
-
 if(not WarVOX::Config.tool_path('gnuplot'))
 	puts "[*] ERROR: The 'gnuplot' binary could not be installed"
 	puts "[*] $ sudo apt-get install gnuplot"

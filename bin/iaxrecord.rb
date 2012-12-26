@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 $:.unshift(::File.join(::File.dirname(__FILE__), "..", "lib"))
+
+require 'rubygems'
 require "rex/proto/iax2"
 require "optparse"
 
