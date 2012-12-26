@@ -1,6 +1,6 @@
 class DialJobsController < ApplicationController
   layout 'warvox'
-  
+
   # GET /dial_jobs
   # GET /dial_jobs.xml
   def index
@@ -29,12 +29,12 @@ class DialJobsController < ApplicationController
     @dial_job = DialJob.find(params[:id])
   end
 =end
-  
+
 
   # GET /dial_jobs/1/run
   def run
     @dial_job = DialJob.find(params[:id])
-	
+
 	if(@dial_job.status != 'submitted')
 	  flash[:notice] = 'Job is already running or completed'
 	  return
@@ -43,25 +43,25 @@ class DialJobsController < ApplicationController
 	WarVOX::JobManager.schedule(::WarVOX::Jobs::Dialer, @dial_job.id)
 	redirect_to :action => 'index'
   end
-  
+
   def stop
     @dial_job = DialJob.find(params[:id])
 
 	if(@dial_job.status != 'submitted')
 	  flash[:notice] = 'Job is already running or completed'
 	  return
-	end 
+	end
   end
-  
-  
+
+
   # POST /dial_jobs
   # POST /dial_jobs.xml
   def create
-				   
+
 	@dial_job = DialJob.new(params[:dial_job])
-  
+
     if(Provider.find_all_by_enabled(true).length == 0)
-		@dial_job.errors.add("No providers have been configured or enabled, this job cannot be run")
+		@dial_job.errors.add(:base, "No providers have been configured or enabled, this job cannot be run")
 		respond_to do |format|
 			format.html { render :action => "new" }
 			format.xml  { render :xml => @dial_job.errors, :status => :unprocessable_entity }
@@ -83,10 +83,10 @@ class DialJobsController < ApplicationController
     respond_to do |format|
       if @dial_job.save
         flash[:notice] = 'Job was successfully created.'
-        
-        # Launch it	
+
+        # Launch it
         WarVOX::JobManager.schedule(::WarVOX::Jobs::Dialer, @dial_job.id)
-	
+
         format.html { redirect_to(@dial_job) }
         format.xml  { render :xml => @dial_job, :status => :created, :location => @dial_job }
       else
@@ -107,7 +107,7 @@ class DialJobsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
   # GET /dial_jobs/1
   # GET /dial_jobs/1.xml
   def show
@@ -119,5 +119,5 @@ class DialJobsController < ApplicationController
     end
   end
 
-  
+
 end

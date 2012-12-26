@@ -2,7 +2,7 @@
 <h1 class='title'>Providers</h1>
 <table class='table_scaffold' width='100%'>
   <tr>
-    <th>Enabled</th>  
+    <th>Enabled</th>
     <th>Name</th>
     <th>Host</th>
     <th>Port</th>
@@ -13,7 +13,7 @@
 
 <% for provider in @providers %>
   <tr>
-    <td><%=h provider.enabled %></td>  
+    <td><%=h provider.enabled %></td>
     <td><%=h provider.name %></td>
     <td><%=h provider.host %></td>
     <td><%=h provider.port %></td>
@@ -35,9 +35,9 @@
 <h1 class='title'>No Configured Providers</h1>
 <br/>
 
-<h1 class='title'>New Provider</h1>
+<h1 class='title'>Configure a New Provider</h1>
 
-<% form_for(@new_provider) do |f| %>
+<%= form_for(@new_provider) do |f| %>
   <%= f.error_messages %>
   <p>
     <%= f.label :name, 'The nickname for this provider' %><br />
@@ -69,4 +69,3 @@
 <% end %>
 
 <% end %>
-

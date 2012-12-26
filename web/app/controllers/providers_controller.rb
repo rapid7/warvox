@@ -7,7 +7,7 @@ class ProvidersController < ApplicationController
     @providers = Provider.find(:all)
 	@new_provider = Provider.new
 	@new_provider.enabled = true
-	
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @providers }

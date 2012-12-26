@@ -1,6 +1,6 @@
 <h1>Editing dial_result</h1>
 
-<% form_for(@dial_result) do |f| %>
+<%= form_for(@dial_result) do |f| %>
   <%= f.error_messages %>
 
   <p>
@@ -10,7 +10,7 @@
   <p>
     <%= f.label :cid %><br />
     <%= f.text_field :cid %>
-  </p>  
+  </p>
   <p>
     <%= f.label :dial_job_id %><br />
     <%= f.text_field :dial_job_id %>

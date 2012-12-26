@@ -4,8 +4,8 @@
   <title><%= @title || "WarVOX" %></title>
   <%= csrf_meta_tag %>
   <%= stylesheet_link_tag 'global' %>
-  <!--[if IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->		
-  <%= javascript_include_tag 'jquery' %>  
+  <!--[if IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->
+  <%= javascript_include_tag 'jquery' %>
 </head>
 <body>
 
@@ -17,13 +17,16 @@
 	<div class="box_full">
 	<img src="<%= asset_path('round_top.png') %>" id="round_top" alt=""/>
 	<div id="main">
+
+	<div id="flash"></div>
+
 <%= yield %>
 		<br/><br/>
-	
+
 		<div id="footer">
 		  <%= render :partial => 'shared/footer' %>
 		</div>
-	
+
 	</div>
 	<img src="<%= asset_path('round_bot.png') %>" id="round_bot" alt=""/>
 	</div>
