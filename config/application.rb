@@ -2,7 +2,7 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 # Bootstrap the WarVOX code base
-$:.unshift(File.join(File.dirname(__FILE__), '..', '..', 'lib'))
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'warvox'
 
 if defined?(Bundler)
