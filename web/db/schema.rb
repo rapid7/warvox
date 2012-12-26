@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(:version => 20110801000003) do
 
+  # Require the intarray extension
+  execute "CREATE EXTENSION IF NOT EXISTS intarray"
+
   create_table "dial_jobs", :force => true do |t|
     t.text     "range"
     t.integer  "seconds"
