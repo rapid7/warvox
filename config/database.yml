@@ -4,7 +4,7 @@ production:
   username: warvox
   password: "<yourpass>"
   host: 127.0.0.1
-  port: 5433
+  port: 5432
   pool: 100
   timeout: 5
 
@@ -14,7 +14,7 @@ development:
   username: warvox
   password: "<yourpass>"
   host: 127.0.0.1
-  port: 5433
+  port: 5432
   pool: 100
   timeout: 5
 
