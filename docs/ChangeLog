@@ -1,16 +1,20 @@
-2011-02-23  H D Moore  <hdm[at]metasploit.com>
+2012-12-26  HD Moore <hdm[at]rapid7.com>
+ * overhauled, updated gems, merged directories with web
+ * swapped in Rapid7-licensed Highcharts for graphics
+
+2011-02-23  HD Moore <hdm[at]rapid7.com>
  * bumped the version number to 1.2.0
  * applied patch from mediaservice for iaxclient v2 test mode
  * fixed pagination issues with rails 3
  * updated the copyright for 2011
- 
-2010-11-03  H D Moore  <hdm[at]metasploit.com>
+
+2010-11-03  HD Moore <hdm[at]rapid7.com>
  * bumped the version number to 1.1.0
  * upgraded the web interface to Rails 3
  * added support for Ruby 1.9.1
  * updated README and LICENSE
- 
-2009-05-25  H D Moore  <hdm[at]metasploit.com>
+
+2009-05-25  HD Moore <hdm[at]rapid7.com>
  * switched MP3 quality to 32kbps from 8kpbs for better listening
  * added bin/warvox.agi as an asterisk plugin to allow job re-dialing
  * overhaul of the signature system (etc/sigs/*.rb)
@@ -18,7 +22,7 @@
  * overhaul of results view + show signatures
  * added dtmf2num support to decode dtmf tones
 
-2009-05-10  H D Moore  <hdm[at]metasploit.com>
+2009-05-10  HD Moore <hdm[at]rapid7.com>
  * release of version 1.0.1
  * switched to the BSD license for WarVOX
  * swapped the sox -w flag to -2 (deprecated)
@@ -27,6 +31,6 @@
  * added support for file input for a dial range
  * fixed a hang with pulse audio on some systems
  * added getopt parser to iaxrecord.c
- 
-2009-03-05  H D Moore  <hdm[at]metasploit.com>
+
+2009-03-05  HD Moore <hdm[at]rapid7.com>
  * initial public release of version 1.0.0
