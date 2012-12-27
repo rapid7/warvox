@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20110801000003) do
     t.text     "line_type"
     t.text     "notes"
     t.text     "signatures"
-    t.text     "fprint"
+    t.integer  "fprint", :array => true
     t.binary   "audio"
     t.binary   "mp3"
     t.binary   "png_big"

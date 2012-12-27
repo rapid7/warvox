@@ -59,7 +59,11 @@ GEM
     mime-types (1.19)
     multi_json (1.5.0)
     pg (0.11.0)
+    pg_array_parser (0.0.1)
     polyglot (0.3.3)
+    postgres_ext (0.0.6)
+      activerecord (~> 3.2.0)
+      pg_array_parser (~> 0.0.1)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -119,6 +123,7 @@ DEPENDENCIES
   kissfft
   librex
   pg (= 0.11)
+  postgres_ext
   rails (= 3.2.8)
   sass-rails (~> 3.2.3)
   thin
