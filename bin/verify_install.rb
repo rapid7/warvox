@@ -56,13 +56,6 @@ end
 puts "[*] The LAME binary appears to be available"
 
 
-if(not WarVOX::Config.tool_path('dtmf2num'))
-	puts "[*] ERROR: The 'dtmf2num' binary could not be installed"
-	exit
-end
-puts "[*] The DTMF2NUM binary appears to be available"
-
-
 puts " "
 puts "[*] Congratulations! You are almost ready to run WarVOX"
 puts " "

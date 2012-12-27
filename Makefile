@@ -3,11 +3,7 @@ all: test
 test: install
 	bin/verify_install.rb
 
-install: bundler dtmf2num
-	cp -a src/dtmf2num/dtmf2num bin/
-
-dtmf2num:
-	make -C src/dtmf2num/
+install: bundler
 
 db:
 	@echo "Checking the database.."
@@ -22,6 +18,3 @@ bundler:
 
 	@echo "Installing missing gems as needed.."
 	bundle install
-
-clean:
-	make -C src/dtmf2num/ clean

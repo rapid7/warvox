@@ -323,27 +323,6 @@ class Analysis < Base
 
 		[png_big, png_big_dots, png_big_freq, png_sig, png_sig_freq ].map {|x| x.unlink; x.close }
 
-
-		# Detect DTMF and MF tones
-		dtmf = ''
-		mf   = ''
-		pfd = IO.popen("#{WarVOX::Config.tool_path('dtmf2num')} -r 8000 1 16 #{rawfile.path} 2>/dev/null")
-		pfd.each_line do |line|
-			line = line.strip
-			if(line.strip =~ /^- MF numbers:\s+(.*)/)
-				next if $1 == 'none'
-				mf = $1
-			end
-			if(line.strip =~ /^- DTMF numbers:\s+(.*)/)
-				next if $1 == 'none'
-				dtmf = $1
-			end
-		end
-		pfd.close
-		res[:dtmf] = dtmf
-		res[:mf]   = mf
-
-
 		tmp_wav = Tempfile.new("wav")
 		tmp_mp3 = Tempfile.new("mp3")
 
@@ -418,4 +397,3 @@ end
 
 end
 end
-
