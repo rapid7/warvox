@@ -3,7 +3,7 @@
 
 #
 # Load the library path
-# 
+#
 base = __FILE__
 while File.symlink?(base)
 	base = File.expand_path(File.readlink(base), File.dirname(base))
@@ -37,7 +37,7 @@ begin
 	puts "[*] The Bundler gem has been installed"
 rescue ::LoadError
 	puts "[*] ERROR: The Bundler gem has not been installed:"
-	puts "    $ sudo gem install bundler"	
+	puts "    $ sudo gem install bundler"
 	exit
 end
 
@@ -93,7 +93,7 @@ puts "[*]    $ psql"
 puts "[*]    psql> alter user warvox with password 'randompass';"
 puts "[*]    psql> exit"
 puts "[*]"
-puts "[*] 5. Modify web/config/database.yml to match this password"
+puts "[*] 5. Modify config/database.yml to match this password"
 puts "[*]"
 puts "[*] 6. Modify etc/warvox.conf and set a UI password"
 puts "[*]"

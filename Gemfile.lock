@@ -38,11 +38,6 @@ GEM
       execjs
     coffee-script-source (1.4.0)
     daemons (1.1.9)
-    delayed_job (3.0.4)
-      activesupport (~> 3.0)
-    delayed_job_active_record (0.3.3)
-      activerecord (>= 2.1.0, < 4)
-      delayed_job (~> 3.0)
     dynamic_form (1.1.4)
     erubis (2.7.0)
     eventmachine (1.0.0)
@@ -119,7 +114,6 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
-  delayed_job_active_record
   dynamic_form
   jquery-rails
   kissfft

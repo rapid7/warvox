@@ -6,13 +6,13 @@ require 'getoptlong'
 
 #
 # Load the library path
-# 
+#
 base = __FILE__
 while File.symlink?(base)
 	base = File.expand_path(File.readlink(base), File.dirname(base))
 end
 
-voxroot = File.join(File.dirname(base), '..', 'web')
+voxroot = File.join(File.dirname(base), '..')
 voxserv = File.join(File.expand_path(voxroot), 'script', 'rails')
 
 Dir.chdir(voxroot)
@@ -22,7 +22,7 @@ def usage
 	exit(0)
 end
 
-opts    = 
+opts    =
 {
 	'ServerPort' => 7777,
 	'ServerHost' => '127.0.0.1',
@@ -51,7 +51,7 @@ end
 
 args = [
 	'server',
-	'-p', opts['ServerPort'].to_s, 
+	'-p', opts['ServerPort'].to_s,
 	'-b', opts['ServerHost'],
 	'-e', 'production',
 ]

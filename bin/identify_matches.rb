@@ -3,7 +3,7 @@
 
 #
 # Load the library path
-# 
+#
 base = __FILE__
 while File.symlink?(base)
 	base = File.expand_path(File.readlink(base), File.dirname(base))
@@ -14,7 +14,7 @@ require 'warvox'
 
 ENV['RAILS_ENV'] ||= 'production'
 
-$:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'web'))
+$:.unshift(File.join(File.expand_path(File.dirname(base)), '..'))
 require 'config/boot'
 require 'config/environment'
 
@@ -46,7 +46,7 @@ end
 fp  = $stdin.read.strip if fp == "-"
 job = nil if job.downcase == "all"
 
-if not fp 
+if not fp
 	usage()
 end
 
@@ -59,7 +59,7 @@ begin
 			" (( icount('#{fp}'::int[] & dial_results.fprint::int[]) / icount('#{fp}'::int[])::float ) * 100.0 ) AS matchscore " +
 			"FROM dial_results " +
 			"WHERE " +
-			" icount(dial_results.fprint) > 0 AND " + 
+			" icount(dial_results.fprint) > 0 AND " +
 			" dial_results.dial_job_id = '#{job.id}' " +
 			"ORDER BY matchscore DESC"
 	else

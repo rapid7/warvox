@@ -3,7 +3,7 @@
 
 #
 # Load the library path
-# 
+#
 base = __FILE__
 while File.symlink?(base)
 	base = File.expand_path(File.readlink(base), File.dirname(base))
@@ -14,7 +14,7 @@ require 'warvox'
 
 ENV['RAILS_ENV'] ||= 'production'
 
-$:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'web'))
+$:.unshift(File.join(File.expand_path(File.dirname(base)), '..'))
 require 'config/boot'
 require 'config/environment'
 
@@ -55,4 +55,3 @@ rescue ActiveRecord::RecordNotFound
 	$stderr.puts "Job not found"
 	exit
 end
-
