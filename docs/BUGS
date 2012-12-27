@@ -2,9 +2,3 @@ KNOWN BUGS
 
  * Stopping WarVOX in mid-scan will leave a hung scan job, the job will
    need to be removed and restarted.
- 
- * Using the sound card (playing music, videos, etc) while warvox is running
-   can cause the dialing process to hang.
-   
- * Systems without sound cards may not be able to record any audio. Reports
-   have varied depending on the Linux distribution and version.
