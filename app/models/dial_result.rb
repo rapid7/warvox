@@ -21,5 +21,4 @@ class DialResult < ActiveRecord::Base
 		"dial_results.id != \'#{id}\' " +
 		'ORDER BY matchscore DESC'
 	}
-
 end
