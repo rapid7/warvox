@@ -2,5 +2,5 @@
 // This file is automatically included by javascript_include_tag :defaults
 //= require jquery
 //= require jquery_ujs
+//= require jquery.lightbox-0.5
 //= require highcharts
-// require_tree
