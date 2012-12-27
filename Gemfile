@@ -5,6 +5,9 @@ gem 'thin'
 gem 'rails', '3.2.8'
 gem 'pg', '0.11'
 
+# Integer array support (until Rails 4.0 is released)
+gem 'postgres_ext'
+
 gem 'kissfft'
 gem 'librex'
 
