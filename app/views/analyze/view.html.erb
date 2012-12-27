@@ -42,7 +42,7 @@
   	<td align='center'>
 		<b><%=h dial_result.line_type.upcase %></b><br/>
 		<a href="<%=resource_analyze_path(@job_id, dial_result.id, "big_sig_dots")%>" class="lightbox"><img src="<%=resource_analyze_path(@job_id, dial_result.id, "small_sig")%>" /></a>
-		<a href="<%=resource_analyze_path(@job_id, dial_result.id, "big_freq")%>" ="lightbox"><img src="<%=resource_analyze_path(@job_id, dial_result.id, "small_freq")%>" /></a><br/>
+		<a href="<%=resource_analyze_path(@job_id, dial_result.id, "big_freq")%>" class="lightbox"><img src="<%=resource_analyze_path(@job_id, dial_result.id, "small_freq")%>" /></a><br/>
 		<% (dial_result.signatures||"").split("\n").each do |s|
 			sid,mat,name = s.split(':', 3)
 			str = [mat.to_i * 6.4, 255].min
