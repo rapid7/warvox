@@ -4,7 +4,6 @@ class Analysis < Base
 
 	require 'fileutils'
 	require 'tempfile'
-	require 'yaml'
 	require 'open3'
 
 	@@kissfft_loaded = false
@@ -52,6 +51,7 @@ class Analysis < Base
 	end
 
 	def start
+
 		@status = 'active'
 
 		begin
@@ -59,6 +59,7 @@ class Analysis < Base
 
 		model = get_job
 		model.processed = true
+
 		db_save(model)
 
 		stop()
@@ -104,8 +105,6 @@ class Analysis < Base
 	def run_analyze_call(r)
 		$stderr.puts "DEBUG: Processing audio for #{r.number}..."
 
-
-
 		bin = File.join(WarVOX::Base, 'bin', 'analyze_result.rb')
 		tmp = Tempfile.new("Analysis")
 		begin
@@ -115,16 +114,13 @@ class Analysis < Base
 		end
 
 		pfd = IO.popen("#{bin} '#{tmp.path}'")
-		out = YAML.load(pfd.read)
+		out = Marshal.load(pfd.read)
 		pfd.close
 
 		return if not out
 
 		out.each_key do |k|
-			setter = "#{k.to_s}="
-			if(r.respond_to?(setter))
-				r.send(setter, out[k])
-			end
+			r[k] = out[k]
 		end
 
 		r.processed_at = Time.now
@@ -155,7 +151,7 @@ class Analysis < Base
 		raw  = WarVOX::Audio::Raw.from_file(input)
 		fft  = KissFFT.fftr(8192, 8000, 1, raw.samples)
 
-		freq = raw.to_freq_sig_txt()
+		freq = raw.to_freq_sig_arr()
 
 		# Save the signature data
 		res[:fprint] = freq

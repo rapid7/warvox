@@ -54,15 +54,15 @@ class Raw
 			(s > 0x7fff) ? (0x10000 - s) * -1 : s
 		end
 	end
-	
+
 	def to_raw
 		self.samples.pack("v*")
 	end
-	
+
 	def to_wav
 		raw = self.to_raw
-		wav = 
-			"RIFF" + 
+		wav =
+			"RIFF" +
 				[raw.length + 36].pack("V") +
 			"WAVE" +
 			"fmt " +
@@ -70,7 +70,7 @@ class Raw
 			"data" +
 				[ raw.length ].pack("V") +
 			raw
-	end 
+	end
 
 	def to_flow(opts={})
 
@@ -238,6 +238,10 @@ class Raw
 		"{" + to_freq_sig(opts).sort.join(",") + "}"
 	end
 
+	def to_freq_sig_arr(opts={})
+		to_freq_sig(opts)
+	end
+
 	def self.fft_to_freq_sig(ffts, freq_cnt)
 		sig = []
 		ffts.each do |s|
@@ -323,4 +327,3 @@ class Raw
 end
 end
 end
-

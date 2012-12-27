@@ -50,7 +50,7 @@
 		%>
 			<div style="color: #<%= col%>;"><%=h name%> (<%=h sid %>@<%=h mat %>)</div>
 		<% end %>
-		<% if dial_result.fprint and dial_result.fprint.to_s != '{}' %>
+		<% if dial_result.fprint and dial_result.fprint.length > 0 %>
 			<a href="<%=view_matches_path(dial_result.id)%>">View Matches</a>
 		<% end %>
 	</td>

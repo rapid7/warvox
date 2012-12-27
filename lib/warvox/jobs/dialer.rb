@@ -216,4 +216,3 @@ class Dialer < Base
 end
 end
 end
-
