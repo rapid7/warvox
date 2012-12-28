@@ -11,6 +11,7 @@ end
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
 
 require 'warvox'
+require 'csv'
 
 ENV['RAILS_ENV'] ||= 'production'
 
@@ -43,12 +44,17 @@ if(not job)
 	exit
 end
 
+fields = %W{ number line_type cid completed busy seconds ringtime peak_freq notes signatures }
 begin
-	job = DialJob.find(job.to_i)
-	job.dial_results.sort{|a,b| a.number.to_i <=> b.number.to_i}.each do |r|
+	$stdout.puts fields.to_csv
+	DialResult.where(:dial_job_id => job.to_i).find(:order => :number) do |r|
 		next if not r.number
 		if(not typ or typ.downcase == (r.line_type||"").downcase)
-			puts "#{r.number}\t#{r.line_type}\tbusy=#{r.busy}\tring=#{r.ringtime}"
+			out = []
+			fields.each do |f|
+				out << r[f].to_s
+			end
+			$stdout.puts out.to_csv
 		end
 	end
 rescue ActiveRecord::RecordNotFound
