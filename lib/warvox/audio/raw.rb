@@ -189,6 +189,9 @@ class Raw
 			}.first
 		end
 
+		# Purge any empty fft slices
+		ffts.delete(nil)
+
 		# Map each slice of the audio's FFT with each FFT chunk (8k samples) and then work on it
 		tops = ffts.map{|x| x.map{|y| y.map{|z|
 
