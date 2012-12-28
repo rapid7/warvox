@@ -98,7 +98,7 @@ class AnalyzeController < ApplicationController
 	cpath = nil
 	cdata = "File not found"
 
-	res = DialResult.find(params[:result_id])
+	res = DialResultMedium.where(:dial_result_id => params[:result_id].to_i).first
 
 	if res
 		case params[:type]

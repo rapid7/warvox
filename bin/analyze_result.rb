@@ -16,14 +16,16 @@ require 'warvox'
 #
 
 inp = ARGV.shift || exit(0)
-$0  = "warvox(analyzer): #{inp}"
+num = ARGV.shift || exit(0)
+
+$0  = "warvox(analyzer): #{inp} #{num}"
 
 $stdout.write(
 	Marshal.dump(
 		WarVOX::Jobs::CallAnalysis.new(
 			0
 		).analyze_call(
-			inp
+			inp, num
 		)
 	)
 )

@@ -40,7 +40,7 @@ end
 if(not job)
 	$stderr.puts "Listing all available jobs"
 	$stderr.puts "=========================="
-	DialJob.find(:all).each do |j|
+	DialJob.all.each do |j|
 		puts "#{j.id}\t#{j.started_at} --> #{j.completed_at}"
 	end
 	exit
@@ -51,13 +51,14 @@ end
 
 begin
 	cnt = 0
-	job = DialJob.find(job.to_i)
-	job.dial_results.each do |r|
+	DialResult.where(:dial_job_id => job.to_i).find_each do |r|
 		next if not r.number
-		next if r.audio.to_s.length == 0
+		m = r.media
+		next if not m
+		next if m.audio.to_s.length == 0
 		out = ::File.join(dir, "#{r.number}.raw")
 		::File.open(out, "wb") do |fd|
-			fd.write( r.audio )
+			fd.write( m.audio )
 		end
 		cnt += 1
 	end

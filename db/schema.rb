@@ -11,12 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110801000003) do
+ActiveRecord::Schema.define(:version => 20121228171549) do
 
-  # Require the intarray extension
-  execute "CREATE EXTENSION IF NOT EXISTS intarray"
+  add_extension "intarray"
 
   create_table "dial_jobs", :force => true do |t|
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.text     "range"
     t.integer  "seconds"
     t.integer  "lines"
@@ -25,12 +26,23 @@ ActiveRecord::Schema.define(:version => 20110801000003) do
     t.datetime "started_at"
     t.datetime "completed_at"
     t.boolean  "processed"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
     t.text     "cid_mask"
   end
 
+  create_table "dial_result_media", :force => true do |t|
+    t.integer "dial_result_id"
+    t.binary  "audio"
+    t.binary  "mp3"
+    t.binary  "png_big"
+    t.binary  "png_big_dots"
+    t.binary  "png_big_freq"
+    t.binary  "png_sig"
+    t.binary  "png_sig_freq"
+  end
+
   create_table "dial_results", :force => true do |t|
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.text     "number"
     t.integer  "dial_job_id"
     t.integer  "provider_id"
@@ -38,10 +50,7 @@ ActiveRecord::Schema.define(:version => 20110801000003) do
     t.boolean  "busy"
     t.integer  "seconds"
     t.integer  "ringtime"
-    t.text     "rawfile"
     t.boolean  "processed"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
     t.datetime "processed_at"
     t.text     "cid"
     t.float    "peak_freq"
@@ -50,25 +59,18 @@ ActiveRecord::Schema.define(:version => 20110801000003) do
     t.text     "line_type"
     t.text     "notes"
     t.text     "signatures"
-    t.integer  "fprint", :array => true
-    t.binary   "audio"
-    t.binary   "mp3"
-    t.binary   "png_big"
-    t.binary   "png_big_dots"
-    t.binary   "png_big_freq"
-    t.binary   "png_sig"
-    t.binary   "png_sig_freq"
+    t.integer  "fprint",                         :array => true
   end
 
   create_table "providers", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.text     "name"
     t.text     "host"
     t.integer  "port"
     t.text     "user"
     t.text     "pass"
     t.integer  "lines"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
     t.boolean  "enabled"
   end
 

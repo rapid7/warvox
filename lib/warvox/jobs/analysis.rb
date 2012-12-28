@@ -74,15 +74,7 @@ class Analysis < Base
 	end
 
 	def start_processing
-		todo = ::DialResult.find_all_by_dial_job_id(@name)
-		jobs = []
-		todo.each do |r|
-			next if r.processed
-			next if not r.completed
-			next if r.busy
-			jobs << r
-		end
-
+		jobs = ::DialResult.where(:dial_job_id => @name, :processed => false, :completed => true, :busy => false).all
 		max_threads = WarVOX::Config.analysis_threads
 
 		while(not jobs.empty?)
@@ -102,29 +94,35 @@ class Analysis < Base
 		end
 	end
 
-	def run_analyze_call(r)
-		$stderr.puts "DEBUG: Processing audio for #{r.number}..."
+	def run_analyze_call(dr)
+		$stderr.puts "DEBUG: Processing audio for #{dr.number}..."
 
 		bin = File.join(WarVOX::Base, 'bin', 'analyze_result.rb')
 		tmp = Tempfile.new("Analysis")
 		begin
 
+		mr = dr.media
 		::File.open(tmp.path, "wb") do |fd|
-			fd.write(r.audio)
+			fd.write(mr.audio)
 		end
 
-		pfd = IO.popen("#{bin} '#{tmp.path}'")
+		pfd = IO.popen("#{bin} '#{tmp.path}' '#{ dr.number.gsub("'", '') }'")
 		out = Marshal.load(pfd.read) rescue nil
 		pfd.close
 
 		return if not out
 
+		mf = dr.media_fields
 		out.each_key do |k|
-			r[k] = out[k]
+			if mf.include?(k.to_s)
+				mr[k] = out[k]
+			else
+				dr[k] = out[k]
+			end
 		end
 
-		r.processed_at = Time.now
-		r.processed    = true
+		dr.processed_at = Time.now
+		dr.processed    = true
 
 		rescue ::Interrupt
 		ensure
@@ -132,24 +130,26 @@ class Analysis < Base
 			tmp.unlink
 		end
 
+		mr.save
+
 		true
 	end
 
 	# Takes the raw file path as an argument, returns a hash
-	def analyze_call(input)
+	def analyze_call(input, num=nil)
 
 		return if not input
 		return if not File.exist?(input)
 
-		bname = File.expand_path(File.dirname(input))
-		num   = File.basename(input)
-		res   = {}
+		bname   = File.expand_path(File.dirname(input))
+		num   ||= File.basename(input)
+		res     = {}
 
 		#
 		# Create the signature database
 		#
 		raw  = WarVOX::Audio::Raw.from_file(input)
-		fft  = KissFFT.fftr(8192, 8000, 1, raw.samples)
+		fft  = KissFFT.fftr(8192, 8000, 1, raw.samples) || []
 
 		freq = raw.to_freq_sig_arr()
 

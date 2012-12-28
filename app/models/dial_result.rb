@@ -1,7 +1,7 @@
 class DialResult < ActiveRecord::Base
 	belongs_to :provider
 	belongs_to :dial_job
-
+	has_one :dial_result_medium, :dependent => :delete
 
 	has_many :matches, :class_name => 'DialResult', :finder_sql => proc {
 		'SELECT dial_results.*,  ' +
@@ -21,4 +21,14 @@ class DialResult < ActiveRecord::Base
 		"dial_results.id != \'#{id}\' " +
 		'ORDER BY matchscore DESC'
 	}
+
+
+	def media
+		DialResultMedium.find_or_create_by_dial_result_id(self[:id])
+	end
+
+	def media_fields
+		DialResultMedium.columns_hash.keys.reject{|x| x =~ /^id|_id$/}
+	end
+
 end
