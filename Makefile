@@ -5,10 +5,6 @@ test: install
 
 install: bundler
 
-db:
-	@echo "Checking the database.."
-	RAILS_ENV=production bundle exec rake db:migrate
-
 bundler:
 	@echo "Checking for RubyGems and the Bundler gem..."
 	@ruby -rrubygems -e 'require "bundler"; puts "OK"'
@@ -18,3 +14,8 @@ bundler:
 
 	@echo "Installing missing gems as needed.."
 	bundle install
+
+
+database:
+	@echo "Checking the database.."
+	RAILS_ENV=production bundle exec rake db:migrate
