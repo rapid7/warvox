@@ -11,7 +11,9 @@ class DialJob < ActiveRecord::Base
 	validate :validate_range
 
 	def validate_range
-		if(range.gsub(/[^0-9X:,\n]/, '').empty?)
+		return if range == "IMPORTED"
+
+		if range.gsub(/[^0-9X:,\n]/, '').empty?
 			errors.add(:range, "must be at least 1 character long and made up of 0-9 and X as the mask.")
 		end
 
