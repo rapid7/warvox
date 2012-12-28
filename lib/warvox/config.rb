@@ -40,10 +40,13 @@ module Config
 	end
 
 	def self.analysis_threads
+		core_count = File.read("/proc/cpuinfo").scan(/^processor\s+:/).length rescue 1
+
 		info = YAML.load_file(WarVOX::Conf)
-		return 1 if not info
-		return 1 if not info['analysis_threads']
-		[ info['analysis_threads'].to_i, 1 ].max
+		return core_count if not info
+		return core_count if not info['analysis_threads']
+		return core_count if info['analysis_threads'] == 0
+		[ info['analysis_threads'].to_i, core_count ].min
 	end
 
 	def self.blacklist_path
