@@ -79,15 +79,17 @@ class DialResultsController < ApplicationController
 		:per_page => 30
 	)
 
-	if(@dial_results)
-		@call_results = {
-			:Timeout  => DialResult.count(:conditions =>['dial_job_id = ? and completed = ?', params[:id], false]),
-			:Busy     => DialResult.count(:conditions =>['dial_job_id = ? and busy = ?', params[:id], true]),
-			:Answered => DialResult.count(:conditions =>['dial_job_id = ? and completed = ?', params[:id], true]),
-		}
+	unless @dial_results and @dial_results.length > 0
+		redirect_to :action => :index
+		return
 	end
+	@call_results = {
+		:Timeout  => DialResult.count(:conditions =>['dial_job_id = ? and completed = ?', params[:id], false]),
+		:Busy     => DialResult.count(:conditions =>['dial_job_id = ? and busy = ?', params[:id], true]),
+		:Answered => DialResult.count(:conditions =>['dial_job_id = ? and completed = ?', params[:id], true]),
+	}
 
-    respond_to do |format|
+	respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @dial_results }
     end
@@ -97,6 +99,11 @@ class DialResultsController < ApplicationController
   # GET /dial_results/1.xml
   def show
     @dial_result = DialResult.find(params[:id])
+
+	unless @dial_result
+		redirect_to :action => :index
+		return
+	end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -159,22 +166,7 @@ class DialResultsController < ApplicationController
   def purge
 
     @job = DialJob.find(params[:id])
-	@job.dial_results.each do |r|
-		r.destroy
-	end
 	@job.destroy
-
-	dir = nil
-	jid = @job.id
-	dfd = Dir.new(WarVOX::Config.data_path)
-	dfd.entries.each do |ent|
-		j,m = ent.split('-', 2)
-		if (m and j == jid)
-			dir = File.join(WarVOX::Config.data_path, ent)
-		end
-	end
-
-	FileUtils.rm_rf(dir) if dir
 
     respond_to do |format|
       format.html { redirect_to :action => 'index' }

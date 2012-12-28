@@ -44,7 +44,7 @@ class Dialer < Base
 	def get_providers
 		res = []
 
-		::Provider.find_all_by_enabled(true).each do |prov|
+		::Provider.where(:enabled => true).all.each do |prov|
 			info = {
 				:name  => prov.name,
 				:id    => prov.id,
@@ -175,10 +175,13 @@ class Dialer < Base
 					res.seconds = (byte / 16000)  # 8khz @ 16-bit
 					res.ringtime = ring
 					res.processed = false
+					res.save
 
 					if(File.exists?(out))
 						File.open(out, "rb") do |fd|
-							res.audio = fd.read(fd.stat.size)
+							med = res.media
+							med.audio = fd.read(fd.stat.size)
+							med.save
 						end
 					end
 

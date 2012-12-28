@@ -1,7 +1,7 @@
 class DialJob < ActiveRecord::Base
 	attr_accessor :range_file
 
-	has_many :dial_results
+	has_many :dial_results, :dependent => :destroy
 
 	validates_presence_of :range, :lines, :seconds
 	validates_numericality_of :lines, :less_than => 256, :greater_than => 0
