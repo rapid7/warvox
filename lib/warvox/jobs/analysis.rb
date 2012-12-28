@@ -114,7 +114,7 @@ class Analysis < Base
 		end
 
 		pfd = IO.popen("#{bin} '#{tmp.path}'")
-		out = Marshal.load(pfd.read)
+		out = Marshal.load(pfd.read) rescue nil
 		pfd.close
 
 		return if not out

@@ -90,9 +90,6 @@ class Dialer < Base
 	end
 
 	def start_dialing
-		dest = File.join(WarVOX::Config.data_path, @name.to_s)
-		FileUtils.mkdir_p(dest)
-
 		# Scrub all numbers matching the blacklist
 		list = WarVOX::Config.blacklist_load
 		list.each do |b|
@@ -124,7 +121,8 @@ class Dialer < Base
 					Thread.current.kill if not num
 					Thread.current.kill if not prov
 
-					out = File.join(dest, num+".raw")
+					out_fd = Tempfile.new("rawfile")
+					out    = out_fd.path
 
 					begin
 					# Execute and read the output
@@ -182,8 +180,10 @@ class Dialer < Base
 						File.open(out, "rb") do |fd|
 							res.audio = fd.read(fd.stat.size)
 						end
-						File.unlink(out)
 					end
+
+					out_fd.close
+					::FileUtils.rm_f(out)
 
 					@calls << res
 
