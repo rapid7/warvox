@@ -1,5 +1,4 @@
 class DialJobsController < ApplicationController
-  layout 'warvox'
 
   # GET /dial_jobs
   # GET /dial_jobs.xml

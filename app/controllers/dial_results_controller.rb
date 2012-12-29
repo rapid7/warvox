@@ -1,5 +1,4 @@
 class DialResultsController < ApplicationController
-  layout 'warvox'
 
   # GET /dial_results
   # GET /dial_results.xml

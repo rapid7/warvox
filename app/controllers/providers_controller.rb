@@ -1,5 +1,4 @@
 class ProvidersController < ApplicationController
-  layout 'warvox'
 
   # GET /providers
   # GET /providers.xml

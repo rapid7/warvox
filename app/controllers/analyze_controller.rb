@@ -1,5 +1,4 @@
 class AnalyzeController < ApplicationController
-  layout 'warvox'
 
   def index
 	@jobs = DialJob.paginate(
