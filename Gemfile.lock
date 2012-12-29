@@ -45,12 +45,19 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.4.0)
+    colored (1.2)
+    commonjs (0.2.6)
     daemons (1.1.9)
     dynamic_form (1.1.4)
     erubis (2.7.0)
     eventmachine (1.0.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    formtastic (2.2.1)
+      actionpack (>= 3.0)
+    formtastic-bootstrap (2.0.0)
+      formtastic (~> 2.2)
+      formtastic-bootstrap
     hike (1.2.1)
     i18n (0.6.1)
     journey (1.0.4)
@@ -59,6 +66,11 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.7.5)
     kissfft (0.0.1)
+    less (2.2.2)
+      commonjs (~> 0.2.6)
+    less-rails (2.2.4)
+      actionpack (>= 3.1)
+      less (~> 2.2.0)
     librex (0.0.68)
     mail (2.4.4)
       i18n (>= 0.4.0)
@@ -94,6 +106,7 @@ GEM
     rake (10.0.3)
     rdoc (3.12)
       json (~> 1.4)
+    ref (1.0.2)
     sass (3.2.4)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
@@ -103,6 +116,11 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
+    tabulous (1.3.0)
+      colored (~> 1.2.0)
+      rails (~> 3.0)
+    therubyracer (0.11.0)
+      ref
     thin (1.5.0)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -112,6 +130,11 @@ GEM
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
+    twitter-bootstrap-rails (2.1.4)
+      actionpack (>= 3.1)
+      less-rails (~> 2.2.3)
+      railties (>= 3.1)
+      therubyracer (>= 0.10.2)
     tzinfo (0.3.35)
     uglifier (1.3.0)
       execjs (>= 0.3.0)
@@ -124,13 +147,17 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   dynamic_form
+  formtastic-bootstrap
   jquery-rails
   kissfft
+  less-rails
   librex
   pg (= 0.11)
   postgres_ext!
   rails (= 3.2.8)
   sass-rails (~> 3.2.3)
+  tabulous
   thin
+  twitter-bootstrap-rails
   uglifier (>= 1.0.3)
   will_paginate (~> 3.0)

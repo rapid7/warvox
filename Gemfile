@@ -20,6 +20,11 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+gem "less-rails" 
+gem "twitter-bootstrap-rails"
+gem 'formtastic-bootstrap'
+gem 'tabulous'
+
 gem 'jquery-rails'
 gem 'will_paginate', '~> 3.0'
 gem 'dynamic_form'
