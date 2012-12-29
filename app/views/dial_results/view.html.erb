@@ -12,7 +12,10 @@
 </tr>
 </table>
 
-<table class='table_scaffold' width='100%'>
+<br/>
+
+<table class='table table-striped table-bordered' width='90%' id='results'>
+  <thead>
   <tr>
     <th>Number</th>
     <th>CallerID</th>
@@ -22,6 +25,8 @@
     <th>Seconds</th>
 	<th>Ring Time</th>
   </tr>
+  </thead>
+  <tbody>
 <% for dial_result in @dial_results.sort{|a,b| a.number <=> b.number } %>
   <tr>
     <td><%= dial_result.number %></td>
@@ -33,6 +38,7 @@
     <td><%= dial_result.ringtime.to_i %></td>
   </tr>
 <% end %>
+  </tbody>
 </table>
 <%= raw(will_paginate @dial_results) %>
 
@@ -42,3 +48,11 @@
 
 <% end %>
 <br />
+
+<%= javascript_tag do %>
+// For fixed width containers
+$('#results').dataTable({
+  "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+  "sPaginationType": "bootstrap"
+});
+<% end %>

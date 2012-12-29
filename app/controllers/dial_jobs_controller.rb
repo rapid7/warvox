@@ -22,14 +22,6 @@ class DialJobsController < ApplicationController
     end
   end
 
-=begin
-  # GET /dial_jobs/1/edit
-  def edit
-    @dial_job = DialJob.find(params[:id])
-  end
-=end
-
-
   # GET /dial_jobs/1/run
   def run
     @dial_job = DialJob.find(params[:id])
@@ -86,7 +78,7 @@ class DialJobsController < ApplicationController
         # Launch it
         WarVOX::JobManager.schedule(::WarVOX::Jobs::Dialer, @dial_job.id)
 
-        format.html { redirect_to(@dial_job) }
+        format.html { redirect_to :action => 'index' }
         format.xml  { render :xml => @dial_job, :status => :created, :location => @dial_job }
       else
         format.html { render :action => "new" }
@@ -106,17 +98,5 @@ class DialJobsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-
-  # GET /dial_jobs/1
-  # GET /dial_jobs/1.xml
-  def show
-    @dial_job = DialJob.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @dial_job }
-    end
-  end
-
 
 end

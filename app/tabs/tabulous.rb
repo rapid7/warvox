@@ -57,11 +57,10 @@ Tabulous.setup do |config|
       #----------------------------------------------------------------------------------------------------------#
       #    TAB NAME             |    DISPLAY TEXT    |    PATH                 |    VISIBLE?    |    ENABLED?    #
       #----------------------------------------------------------------------------------------------------------#
-      [    :home_tab            ,    'Home'          ,    root_path            ,    true        ,    true        ],
+      [    :start_tab           ,    'Start'         ,    new_dial_job_path    ,    true        ,    true        ],
       [    :dial_jobs_tab       ,    'Jobs'          ,    dial_jobs_path       ,    true        ,    true        ],
       [    :dial_results_tab    ,    'Results'       ,    dial_results_path    ,    true        ,    true        ],
       [    :providers_tab       ,    'Providers'     ,    providers_path       ,    true        ,    true        ],
-      [    :analyze_tab         ,    'Analysis'      ,    analyze_path         ,    true        ,    true        ],
       [    :about_tab           ,    'About'         ,    about_path           ,    true        ,    true        ],
       #----------------------------------------------------------------------------------------------------------#
       #    TAB NAME             |    DISPLAY TEXT    |    PATH                 |    VISIBLE?    |    ENABLED?    #
@@ -88,11 +87,11 @@ Tabulous.setup do |config|
       #--------------------------------------------------------------------#
       #    CONTROLLER       |    ACTION          |    TAB                  #
       #--------------------------------------------------------------------#
-      [    :dial_jobs       ,    :all_actions    ,    :dial_jobs_tab       ],
+      [    :dial_jobs       ,    :new            ,    :start_tab           ],
+      [    :dial_jobs       ,    :index          ,    :dial_jobs_tab       ],
       [    :dial_results    ,    :all_actions    ,    :dial_results_tab    ],
+      [    :analyze         ,    :all_actions    ,    :dial_results_tab    ],
       [    :providers       ,    :all_actions    ,    :providers_tab       ],
-      [    :analyze         ,    :all_actions    ,    :analyze_tab         ],
-      [    :home            ,    :index          ,    :home_tab            ],
       [    :home            ,    :about          ,    :about_tab           ],
       #--------------------------------------------------------------------#
       #    CONTROLLER       |    ACTION          |    TAB                  #
@@ -113,9 +112,10 @@ Tabulous.setup do |config|
   # Tabulous expects every controller action to be associated with a tab.
   # When an action does not have an associated tab (or subtab), you can
   # instruct tabulous how to behave:
-  config.when_action_has_no_tab = :raise_error      # the default behavior
-  # config.when_action_has_no_tab = :do_not_render  # no tab navigation HTML will be generated
-  # config.when_action_has_no_tab = :render         # the tab navigation HTML will be generated,
+  #config.when_action_has_no_tab = :raise_error      # the default behavior
+  #config.when_action_has_no_tab = :do_not_render  # no tab navigation HTML will be generated
+
+  config.when_action_has_no_tab = :render         # the tab navigation HTML will be generated,
                                                     # but no tab or subtab will be active
 
   #--------------------
@@ -129,7 +129,7 @@ Tabulous.setup do |config|
   # This gives you control over what class the <ul> element that wraps the tabs
   # will have.  Good for interfacing with third-party code like Twitter
   # Bootstrap.
-  config.tabs_ul_class = "nav nav-pills"
+  config.tabs_ul_class = "nav"
 
   # This gives you control over what class the <ul> element that wraps the subtabs
   # will have.  Good for interfacing with third-party code.
@@ -138,7 +138,7 @@ Tabulous.setup do |config|
   # Set this to true to have subtabs rendered in markup that Twitter Bootstrap
   # understands.  If this is set to true, you don't need to call subtabs in
   # your layout, just tabs.
-  # config.bootstrap_style_subtabs = true
+  config.bootstrap_style_subtabs = true
 
 
   #-------------------
@@ -165,11 +165,11 @@ Tabulous.setup do |config|
 
   # You can tweak the colors of the generated CSS.
 
-  config.css.background_color = '#ccc'
+  config.css.background_color = '#000'
   config.css.text_color = '#444'
-  config.css.active_tab_color = 'white'
-  config.css.hover_tab_color = '#ddd'
-  config.css.inactive_tab_color = '#aaa'
-  config.css.inactive_text_color = '#888'
+  config.css.active_tab_color = '#000'
+  config.css.hover_tab_color = '#000'
+  config.css.inactive_tab_color = '#000'
+  config.css.inactive_text_color = '#000'
 
 end

@@ -5,6 +5,9 @@ gem 'thin'
 gem 'rails', '3.2.8'
 gem 'pg', '0.11'
 
+gem 'jquery-rails'
+gem 'jquery-datatables-rails'
+
 # Integer array support (until Rails 4.0 is released)
 # Git version required to work around this bug: https://github.com/dockyard/postgres_ext/issues/5
 gem 'postgres_ext', :git => 'git://github.com/dockyard/postgres_ext.git'
@@ -20,11 +23,11 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem "less-rails" 
-gem "twitter-bootstrap-rails"
+gem 'twitter-bootstrap-rails'
 gem 'formtastic-bootstrap'
 gem 'tabulous'
 
-gem 'jquery-rails'
+gem "therubyracer", :group => :assets, :platform => :ruby
+
 gem 'will_paginate', '~> 3.0'
 gem 'dynamic_form'
