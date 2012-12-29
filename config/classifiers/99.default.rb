@@ -1,5 +1,5 @@
 #
-# WarVOX Fallback Signatures
+# WarVOX Classifiers
 #
 #
 
@@ -9,9 +9,6 @@
 freq = data[:freq]
 fcnt = data[:fcnt]
 maxf = data[:maxf]
-ecnt = data[:ecnt]
-scnt = data[:scnt]
-
 
 # Look for voice mail by detecting the 1000hz BEEP
 # If the call length was too short to catch the beep,
@@ -30,27 +27,10 @@ if(maxf > 995 and maxf < 1005)
 	raise Completed
 end
 
-=begin
-
-#
-# Look for silence by checking the frequency signature
-#
-if(freq.map{|f| f.length}.inject(:+) == 0)
-	@line_type = 'silence'
-	raise Completed
-end
-
-
-if(ecnt == scnt)
-	@line_type = 'silence'
-	raise Completed
-end
-=end
 
 #
 # Fall back to 'voice' if nothing else has been matched
-# This should be the last signature file processed
+# This should be the last check processed
 #
 
 @line_type = 'voice'
-

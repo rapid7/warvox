@@ -1,13 +1,20 @@
 #
-# WarVOX Default Signatures
+# WarVOX Classifiers
 #
 
 #
-# These signatures are used first and catch the majority of common
-# systems. If you want to force a different type of detection, add
-# your signatures to a file starting with "00." and place it in
-# this directory. Signature files are processed numerically from
-# lowest to highest (like RC scripts)
+# These lightweight signatures are used to determine the
+# line type, which is the top-level classification that
+# differentiates between modem, fax, voice, and other
+# common results.
+#
+
+
+#
+# If you want to force your checks to run first, add your
+# logic to a file starting with "00." and place it in
+# this directory. Signature files are processed numerically
+# from lowest to highest (like RC scripts)
 #
 
 
@@ -17,29 +24,6 @@
 freq = data[:freq]
 fcnt = data[:fcnt]
 maxf = data[:maxf]
-
-#
-# Look for silence by checking for a strong frequency in each sample
-#
-scnt = 0
-ecnt = 0
-=begin
-freq.each do |fsec|
-	scnt += 1
-	if(fsec.length == 0)
-		ecnt += 1
-		next
-	end
-	sump = 0
-	fsec.map {|x| sump += x[1] }
-	savg = sump / fsec.length
-	ecnt += 1 if (savg < 100)
-end
-=end
-
-# Store these into data for use later on
-data[:scnt] = scnt
-data[:ecnt] = ecnt
 
 #
 # Look for modems by detecting a 2100hz answer + 2250hz tone
@@ -89,9 +73,8 @@ if(fcnt[440] > 1.0 and fcnt[350] > 1.0)
 end
 
 #
-# To use additional signatures, add new scripts to this directory
+# To use additional heuristics, add new scripts to this directory
 # named XX.myscript.rb, where XX is a two digit number less than
 # 99 and greater than 01.
 #
 #
-
