@@ -10,6 +10,7 @@ class DialResult < ActiveRecord::Base
 		'WHERE icount(dial_results.fprint) > 0 AND ' +
 		"dial_results.dial_job_id = \'#{dial_job_id}\' AND " +
 		"dial_results.id != \'#{id}\' " +
+#		"AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & dial_results.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > 10.0 " +
 		'ORDER BY matchscore DESC'
 	}
 
@@ -19,6 +20,7 @@ class DialResult < ActiveRecord::Base
 		'FROM dial_results ' +
 		'WHERE icount(dial_results.fprint) > 0 AND ' +
 		"dial_results.id != \'#{id}\' " +
+#		"AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & dial_results.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > 10.0 " +
 		'ORDER BY matchscore DESC'
 	}
 
