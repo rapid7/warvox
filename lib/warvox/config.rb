@@ -32,13 +32,6 @@ module Config
 		)
 	end
 
-	def self.data_path
-		info = YAML.load_file(WarVOX::Conf)
-		return nil if not info
-		return nil if not info['data_path']
-		File.expand_path(info['data_path'].gsub('%BASE%', WarVOX::Base))
-	end
-
 	def self.analysis_threads
 		core_count = File.read("/proc/cpuinfo").scan(/^processor\s+:/).length rescue 1
 
@@ -83,8 +76,15 @@ module Config
 		File.expand_path(info['signatures'].gsub('%BASE%', WarVOX::Base))
 	end
 
-	def self.signatures_load
-		path = signatures_path
+	def self.classifiers_path
+		info = YAML.load_file(WarVOX::Conf)
+		return nil if not info
+		return nil if not info['classifiers']
+		File.expand_path(info['classifiers'].gsub('%BASE%', WarVOX::Base))
+	end
+
+	def self.classifiers_load
+		path = classifiers_path
 		sigs = []
 		return sigs if not path
 

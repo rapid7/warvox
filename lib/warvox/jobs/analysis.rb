@@ -13,7 +13,7 @@ class Analysis < Base
 	rescue ::LoadError
 	end
 
-	class SignalProcessor
+	class Classifier
 
 		class Completed < RuntimeError
 		end
@@ -106,7 +106,7 @@ class Analysis < Base
 			fd.write(mr.audio)
 		end
 
-		pfd = IO.popen("#{bin} '#{tmp.path}' '#{ dr.number.gsub("'", '') }'")
+		pfd = IO.popen("#{bin} '#{tmp.path}' '#{ dr.number.gsub(/[^0-9a-zA-Z\-\+]+/, '') }'")
 		out = Marshal.load(pfd.read) rescue nil
 		pfd.close
 
@@ -231,10 +231,10 @@ class Analysis < Base
 		end
 
 		#
-		# Signature processing
+		# Classifier processing
 		#
 
-		sproc = SignalProcessor.new
+		sproc = Classifier.new
 		sproc.data =
 		{
 			:raw  => raw,
@@ -247,7 +247,7 @@ class Analysis < Base
 			:maxp => maxp
 		}
 
-		WarVOX::Config.signatures_load.each do |sigfile|
+		WarVOX::Config.classifiers_load.each do |sigfile|
 			begin
 				str = File.read(sigfile, File.size(sigfile))
 				sproc.proc(str)
@@ -259,9 +259,6 @@ class Analysis < Base
 
 		# Save the guessed line type
 		res[:line_type] = sproc.line_type
-
-		# Save any matched signatures
-		res[:signatures] = sproc.signatures.map{|s| "#{s[0]}:#{s[1]}:#{s[2]}" }.join("\n")
 
 		png_big       = Tempfile.new("big")
 		png_big_dots  = Tempfile.new("bigdots")
