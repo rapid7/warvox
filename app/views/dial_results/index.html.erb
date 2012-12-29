@@ -1,41 +1,57 @@
-<% if @completed_jobs.length > 0 %>
+<% if @jobs.length > 0 %>
 <h1 class='title'>Completed Jobs</h1>
 
-<table class='table_scaffold' width='100%'>
+<%= raw(will_paginate @jobs) %>
+<table class='table table-striped table-bordered' width='90%'>
+  <thead>
   <tr>
     <th>ID</th>
     <th>Range</th>
-    <th>CID</th>
-    <th>Answered</th>	
-    <th>Time</th>
+	<th>CallerID</th>
+    <th>Connected</th>
+    <th>Date</th>
+    <th>Actions</th>
   </tr>
+  </thead>
+  <tbody>
 
-<% @completed_jobs.sort{|a,b| b.id <=> a.id}.each do |dial_job|  %>
+<% @jobs.sort{|a,b| b.id <=> a.id}.each do |dial_job|  %>
   <tr>
     <td><%=h dial_job.id %></td>
     <td><%=h dial_job.range %></td>
-    <td><%=h dial_job.cid_mask %></td>	
+    <td><%=h dial_job.cid_mask %></td>
     <td><%=h (
-		DialResult.count(:conditions => ['dial_job_id = ? and completed = ?', dial_job.id, true]).to_s + 
-		"/" + 
-		DialResult.count(:conditions => ['dial_job_id = ?', dial_job.id]).to_s 
+		DialResult.count(:conditions => ['dial_job_id = ? and processed = ?', dial_job.id, true]).to_s +
+		"/" +
+		DialResult.count(:conditions => ['dial_job_id = ?', dial_job.id]).to_s
 	)%></td>
     <td><%=h dial_job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S") %></td>
-    <td><%= link_to 'View', view_dial_result_path(dial_job) %></td>
-	<% if(dial_job.processed) %>
-		<td><%= link_to 'View Analysis', analyze_dial_result_path(dial_job) %></td>
-	<% else %>
-		<td><%= link_to 'Analyze Calls', analyze_dial_result_path(dial_job) %></td>
-	<% end %>
-	<td><%= link_to 'Purge', purge_dial_result_path(dial_job), :confirm => "Delete all data for this job?" %></td>
+
+    <td>
+        <a class="btn btn-mini" href="<%= view_dial_result_path(dial_job) %>" rel="tooltip" title="View Call Connections" ><i class="icon-bar-chart"></i></a>
+
+		<% if(dial_job.processed) %>
+			<a class="btn btn-mini" href="<%= analyze_dial_result_path(dial_job) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
+			<a class="btn btn-mini" href="<%= reanalyze_dial_result_path(dial_job) %>" data-confirm="Reprocess this job?" rel="nofollow tooltip" title="Rerun Call Analysis"><i class="icon-refresh"></i></a>
+		<% else %>
+			<a class="btn btn-mini" href="<%= analyze_dial_result_path(dial_job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-bolt"></i></a>
+		<% end %>
+
+    	<a class="btn btn-mini" href="<%= dial_result_path(dial_job) %>" data-confirm="Delete all data for this job?" data-method="delete" rel="nofollow tooltip" title="Delete Call Data"><i class="icon-trash"></i></a>
+	</td>
   </tr>
+
 <% end %>
+</tbody>
 </table>
 
-<%= raw(will_paginate @completed_jobs) %>
+<%= raw(will_paginate @jobs) %>
 
 <% else %>
 
 <h1 class='title'>No Completed Jobs</h1>
+<br/>
 
 <% end %>
+
+<a class="btn" href="<%= new_dial_job_path %>"><i class="icon-plus"></i> Start Job </a>

@@ -1,11 +1,10 @@
 <%
 
 graph_id = "g" + rand(0x1000000).to_s
-pie_data = raw("")
-
+line_data = raw("")
 
 @lines_by_type.keys.sort{|a,b| @lines_by_type[b] <=> @lines_by_type[a]}.each do |k|
-	pie_data << raw("[ '#{k.to_s.capitalize}', #{@lines_by_type[k].to_i.to_s} ], ")
+	line_data << raw("{ name: '#{k.to_s.capitalize}', data: [ #{ @lines_by_type[k].to_i.to_s} ]}, ")
 end
 
 %>
@@ -17,44 +16,43 @@ end
  $(function () {
     var chart;
     $(document).ready(function() {
-        chart = new Highcharts.Chart({
+          chart = new Highcharts.Chart({
             chart: {
                 renderTo: '<%= graph_id %>',
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                shadow: true,
-                width: 600,
-                height: 400
+                type: 'bar',
+                height: 150
             },
             title: {
-                text: 'Line Classification'
+                text: 'Line Types'
             },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage}%</b>',
-                percentageDecimals: 1
+            xAxis: {
+                categories: ['Lines']
             },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        color: '#000000',
-                        connectorColor: '#000000',
-                        formatter: function() {
-                            return '<b>'+ this.point.name +'</b>: '+ Math.round(this.percentage) +' %';
-                        }
-                    }
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Lines by Type'
                 }
             },
-            series: [{
-                type: 'pie',
-                name: 'Result',
-                data: [<%= pie_data %>]
-            }]
+            legend: {
+                backgroundColor: '#FFFFFF',
+                reversed: true
+            },
+            tooltip: {
+                formatter: function() {
+                    return ''+
+                        this.series.name +': '+ this.y +'';
+                }
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+            series: [ <%= line_data %> ]
         });
     });
+
 });
 
 

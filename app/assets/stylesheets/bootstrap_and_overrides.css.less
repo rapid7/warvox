@@ -1,30 +1,148 @@
 @import "twitter/bootstrap/bootstrap";
+
+body {
+	padding-top: 5px;
+}
+
 @import "twitter/bootstrap/responsive";
 
 // Set the correct sprite paths
-@iconSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings.png");
-@iconWhiteSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings-white.png");
+@iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
+@iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
 
 // Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
 // Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not
-//       have the proper paths. So for now we use the absolute path.
-@fontAwesomeEotPath: asset-path("fontawesome-webfont.eot");
-@fontAwesomeWoffPath: asset-path("fontawesome-webfont.woff");
-@fontAwesomeTtfPath: asset-path("fontawesome-webfont.ttf");
-@fontAwesomeSvgPath: asset-path("fontawesome-webfont.svg");
+// have the proper paths. So for now we use the absolute path.
+@fontAwesomeEotPath: '/assets/fontawesome-webfont.eot';
+@fontAwesomeWoffPath: '/assets/fontawesome-webfont.woff';
+@fontAwesomeTtfPath: '/assets/fontawesome-webfont.ttf';
+@fontAwesomeSvgPath: '/assets/fontawesome-webfont.svg';
 
 // Font Awesome
-@import "fontawesome";
+@import "fontawesome.less";
 
-// Your custom LESS stylesheets goes here
-//
-// Since bootstrap was imported above you have access to its mixins which
-// you may use and inherit here
-//
-// If you'd like to override bootstrap's own variables, you can do so here as well
-// See http://twitter.github.com/bootstrap/customize.html#variables for their names and documentation
-//
-// Example:
-// @linkColor: #ff0000;
+@sansFontFamily: "Trebuchet MS", Arial, Helvetica, sans-serif;
+@green: #90d552;
+@orange: #ea5709;
+@darkGray: #29383f;
+@lightGray: #666666;
+@blue: #0197b8;
 
-body { padding-top: 80px; }
+@linkColor: @blue;
+@linkColorHover: @darkGray;
+
+@btnPrimaryBackground: @blue;
+@btnPrimaryBackgroundHighlight: @btnPrimaryBackground;
+
+@navbarLinkColor: @white;
+@navbarLinkColorActive: @white;
+@navbarLinkColorHover: @yellow;
+
+@dropdownLinkColorHover: @yellow;
+@dropdownLinkBackgroundHover: @dropdownBackground;
+
+@headingsColor: @darkGray;
+
+@navbarBackground: #ea5709;
+@navbarBackgroundHighlight: #4A1C04;
+
+.nav {
+   a {
+    font-size: 15px;
+  }
+}
+
+.content {
+	margin-top: 40px;
+}
+
+.accordion-toggle:hover {
+  text-decoration: none;
+}
+
+h1 {
+	font-size: 24px;
+	line-height: 30px;
+}
+
+h2 {
+	font-size: 20px;
+	line-height: 24px;
+}
+
+h3 {
+	font-size: 16px;
+	line-height: 18px;
+}
+
+.header {
+  border-top: solid 4px @orange;
+  padding-top: 20px;
+}
+
+.header a {
+  color: @darkGray;
+}
+
+.header a:hover {
+  text-decoration: none;
+  color: @orange;
+}
+
+.footer {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 50px;
+  color: #aaa;
+}
+
+.no-space {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.right {
+  text-align: right;
+}
+
+.tabs-left {
+  text-align: left;
+}
+
+.text-large {
+  font-size: 18px;
+}
+
+h3.toc {
+  border-bottom: 1px solid #ccc;
+}
+
+.carousel .item {
+  height: 50px;
+  text-align: center;
+}
+
+.carousel .item > img {
+  display: inline;
+}
+
+.lead-box h3 {
+  text-align: center;
+}
+
+.lead-box p {
+  height: 80px;
+}
+
+.table td {
+  vertical-align: middle;
+}
+table.dataTable tr td.sorting_1 {
+  background-color: #fff !important;
+}
+.tab-content {
+  overflow: hidden;
+}
+.carousel-control {
+  background: #fff;
+}

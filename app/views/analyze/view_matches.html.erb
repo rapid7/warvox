@@ -1,12 +1,11 @@
 <%  dial_result = @result %>
 
 <h1 class='title'><%= @result.number %> (<a href="<%=view_analyze_path(dial_result.dial_job_id)%>">Back to Job</a>)</h1>
-<table class='table_scaffold' width='100%'>
+<table class='table table-striped table-bordered' width='90%'>
   <tr>
     <th>Number</th>
   	<th>Signal</th>
   </tr>
-
 
   <tr>
     <td align='center'>
@@ -42,15 +41,19 @@
 		<% end %>
 	</td>
   </tr>
+
 </table><br/><br/>
 
 <h1 class='title'>Matches for <%= @result.number %></h1>
 
-<table class='table_scaffold' width='100%'>
+<table class='table table-striped table-bordered' width='90%'>
+  <thead>
   <tr>
     <th>Number</th>
   	<th>Signal</th>
   </tr>
+  </thead>
+  <tbody>
 
 <%  @results.each do |dial_result| %>
   <tr>
@@ -93,6 +96,7 @@
 	</td>
   </tr>
 <% end %>
+</tbody>
 </table>
 
 <script type="text/javascript">

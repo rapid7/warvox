@@ -3,7 +3,7 @@ class DialResultsController < ApplicationController
   # GET /dial_results
   # GET /dial_results.xml
   def index
-    @completed_jobs = DialJob.where(:status => 'completed').paginate(
+    @jobs = DialJob.where(:status => 'completed').paginate(
 		:page => params[:page],
 		:order => 'id DESC',
 		:per_page => 30
@@ -162,7 +162,7 @@ class DialResultsController < ApplicationController
 
   # DELETE /dial_results/1
   # DELETE /dial_results/1.xml
-  def purge
+  def destroy
 
     @job = DialJob.find(params[:id])
 	@job.destroy
@@ -173,14 +173,4 @@ class DialResultsController < ApplicationController
     end
   end
 
-  # DELETE /dial_results/1
-  # DELETE /dial_results/1.xml
-  def delete
-    @res = DialResult.find(params[:id])
-	@res.destroy
-    respond_to do |format|
-      format.html { redirect_to :action => 'index' }
-      format.xml  { head :ok }
-    end
-  end
 end

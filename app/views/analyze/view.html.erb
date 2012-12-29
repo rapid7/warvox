@@ -12,11 +12,14 @@
 
 <%= raw(will_paginate @results) %>
 
-<table class='table_scaffold' width='100%'>
+<table class='table table-striped table-bordered' width='90%'>
+  <thead>
   <tr>
     <th>Number</th>
   	<th>Signal</th>
   </tr>
+  </thead>
+  <tbody>
 
 <%  @results.each do |dial_result| %>
   <tr>
@@ -56,13 +59,13 @@
 	</td>
   </tr>
 <% end %>
+</tbody>
 </table>
 
 <%= raw(will_paginate @results) %>
 
 <script type="text/javascript">
 $(function() {
-	// Use this example, or...
 	$('a.lightbox').lightBox();
 });
 </script>
