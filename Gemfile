@@ -23,11 +23,16 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+gem 'authlogic'
+gem 'rails-settings-cached'
+
 gem 'twitter-bootstrap-rails'
+gem 'formtastic'
 gem 'formtastic-bootstrap'
-gem 'tabulous'
+gem 'rails_bootstrap_navbar'
 
 gem "therubyracer", :group => :assets, :platform => :ruby
 
 gem 'will_paginate', '~> 3.0'
+gem 'will_paginate-bootstrap'
 gem 'dynamic_form'

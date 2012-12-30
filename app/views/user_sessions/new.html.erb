@@ -1,0 +1,13 @@
+	<noscript>
+		<p class="noscript_warning">Please enable Javascript before using WarVOX</p>
+	</noscript>
+
+	<%= form_for @user_session do |f| %>
+		<% if @user_session.errors.any? %>
+			<div class="alert"><%= @user_session.errors.full_messages.first %></div>
+		<% end %>
+		<p><div class="login-label"><h3>Username</h3></div><%= f.text_field :login, :spellcheck => false %></p>
+		<p><div class="login-label"><h3>Password</h3></div><%= f.password_field :password, :autocomplete => 'off' %></p>
+		<%= f.submit "Sign in", :class => "btn-login btn btn-warning" %>
+	<% end %>
+	<%= set_focus('user_session_login') %>

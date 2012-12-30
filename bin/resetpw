@@ -1,0 +1,92 @@
+#!/usr/bin/env ruby
+
+ENV['RAILS_ENV'] ||= 'production'
+
+# bundler/setup just sets up the $LOAD_PATHs, the gems aren't automatically required...
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile',File.dirname(__FILE__))
+require 'bundler/setup'
+
+# rails/all must be required explicitly to get the railties that pro/ui/config/application.rb uses
+require 'rails/all'
+# require all the gems in the current environment
+Bundler.require(*Rails.groups(:assets => %w(development test cucumber)))
+
+APP_PATH = File.expand_path('../../config/application',  __FILE__)
+require File.expand_path('../../config/boot',  __FILE__)
+require APP_PATH
+Rails.application.require_environment!
+
+uname = ARGV.shift
+upass = ARGV.shift
+
+def generate_password
+	set = ( [*(0x21 .. 0x2f)] + [*(0x3a .. 0x3F)] + [*(0x5b .. 0x60)] + [*(0x7b .. 0x7e)] ).flatten.pack("C*")
+	set << "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+	str = ''
+	cnt = 0
+	while not (str.length >= 8 and str =~ /[A-Za-z]/ and str =~ /[0-9]/ and str =~ /[\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x3a\x3b\x3c\x3d\x3e\x3f\x5b\x5c\x5d\x5e\x5f\x60\x7b\x7c\x7d\x7e]/)
+		if str.length > 12
+			str = str[0,4]
+			next
+		end
+		str << set[ rand(set.length), 1]
+		cnt += 1
+	end
+	str
+end
+
+
+user = uname ? User.find_by_login(uname) : User.find(:first)
+if uname and not user
+	$stderr.puts "[-] User #{uname} was not found"
+	exit(1)
+end
+
+if not user
+	$stderr.puts "[-] No user account has been created"
+	exit(1)
+end
+
+randpass = upass || generate_password()
+
+
+$stdout.puts %Q|
+
+********************************
+*                              *
+*    WarVOX Password Reset     *
+*                              *
+********************************
+
+[*] Warning! This tool will reset the password for the '#{user.login}' user account.
+[*] To continue, please type "yes"
+
+|
+
+$stdout.write "Continue? (yes/no) > "
+$stdout.flush
+
+inp = $stdin.readline
+
+if inp.strip.downcase != 'yes'
+	$stdout.puts "[*] Reset cancelled, hit enter to exit"
+	$stdin.readline
+	exit(0)
+end
+
+
+user.password = randpass
+user.password_confirmation = randpass
+user.save!
+
+$stdout.puts %Q|
+[*] The password for #{user.login} has been reset to a random value
+
+    New Password: #{randpass}
+
+[*] Please change this password on the next login.
+|
+
+$stdout.puts "[*] Hit enter to exit"
+$stdin.readline
+exit(0)

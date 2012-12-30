@@ -14,35 +14,62 @@
     <%= javascript_include_tag "application" %>
     <%= stylesheet_link_tag "application", :media => "all" %>
 
-    <%= favicon_link_tag 'images/apple-touch-icon-144x144-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '144x144' %>
-    <%= favicon_link_tag 'images/apple-touch-icon-114x114-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '114x114' %>
-    <%= favicon_link_tag 'images/apple-touch-icon-72x72-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '72x72' %>
-    <%= favicon_link_tag 'images/apple-touch-icon-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png' %>
-    <%= favicon_link_tag 'images/favicon.ico', :rel => 'shortcut icon' %>
+    <%= favicon_link_tag '/assets/apple-touch-icon-144x144-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '144x144' %>
+    <%= favicon_link_tag '/assets/apple-touch-icon-114x114-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '114x114' %>
+    <%= favicon_link_tag '/assets/apple-touch-icon-72x72-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '72x72' %>
+    <%= favicon_link_tag '/assets/apple-touch-icon-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png' %>
+    <%= favicon_link_tag '/assets/favicon.ico', :rel => 'shortcut icon' %>
 
 	<%= javascript_tag do %>
 		$(document).ready(function() {
 			$("a").tooltip();
-		}
+		});
 	<% end %>
   </head>
   <body>
+	<div class="container">
+		<%= nav_bar :fixed => :top, :brand => raw('<img src="/assets/logo_light.png" border=0 alt="WarVOX">'), :responsive => true do %>
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="/"><img src="/assets/logo_light.png" border=0 alt="WarVOX"></a>
-          <%= tabs %>
-        </div>
-      </div>
-    </div>
+			<%= menu_group :pull => :right  do %>
+			<% if @project and @project.id %>
+				<li class="project-title"><%= truncate(@project.name, :length => 25) %></li>
+				<%= menu_item "Dial", new_dial_job_path(@project) %>
+				<%= menu_item "Jobs", dial_jobs_path(@project) %>
+				<%= menu_item "Results", dial_results_path(@project) %>
+				<%= menu_item "Analysis", analyze_path(@project)%>
+			<% end %>
+
+				<%= drop_down "Projects" do %>
+					<%= menu_item raw('<i class="icon-list"></i> Browse Projects'),projects_path %>
+					<%= menu_item raw('<i class="icon-plus"></i> Create Project'), new_project_path %>
+					<%= drop_down_divider %>
+					<%= drop_down_header "Recent Projects" %>
+					<% Project.find(:all, :order => 'ID DESC', :limit => 5).each do |project| %>
+						<%= menu_item raw('<i class="icon-chevron-right"></i> ' + truncate(project.name, :length => 15).html_safe),project_path(project) %>
+					<% end %>
+				<% end %>
+
+				<%= drop_down "Administration" do %>
+					<%= menu_item raw('<i class="icon-user"></i> My Account'), user_path(current_user) %>
+					<%= menu_item raw('<i class="icon-globe"></i> Providers'), providers_path %>
+					<%= menu_item raw('<i class="icon-wrench"></i> Config'), settings_path %>
+					<%= menu_item raw('<i class="icon-info-sign"></i> About'), about_path %>
+				<% end %>
+
+				<%= menu_item "Logout", logout_path %>
+			<% end %>
+		<% end %>
 
 
-    <div class="container">
       <div class="row">
         <div class="span12 content">
-
+<% # render_breadcrumbs %>
           <div class="content">
+
+
+
+<p style="color: green"><%= flash[:notice] %></p>
+
           <%= yield %>
           </div>
 
@@ -53,7 +80,6 @@
         </div>
       </div>
     </div> <!-- /container -->
-
 
   </body>
 </html>

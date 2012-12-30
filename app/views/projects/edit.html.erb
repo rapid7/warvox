@@ -1,0 +1,11 @@
+<h1 class='title'>Update Project</h1>
+
+<%= semantic_form_for(@project) do |f| %>
+	<%= f.input :name, :as => :string, :label => 'Project Name' %>
+	<%= f.input :description, :as => :text, :input_html => { :class => 'project_description' } %>
+	<%= f.input :included,  :as => :text, :label => 'Default phone numbers to include', :input_html => { :class => 'project_includes' } %>
+	<%= f.input :excluded,  :as => :text, :label => 'Default phone numbers to exclude', :input_html => { :class => 'project_includes' } %>
+	<%= f.actions :submit, :label => 'Update' %>
+<% end %>
+
+<%= link_to 'Back', projects_path %>

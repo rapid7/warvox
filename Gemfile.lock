@@ -37,6 +37,9 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     arel (3.0.2)
+    authlogic (3.1.0)
+      activerecord (>= 3.0.7)
+      activerecord (>= 3.0.7)
     builder (3.0.4)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -45,7 +48,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.4.0)
-    colored (1.2)
     commonjs (0.2.6)
     daemons (1.1.9)
     dynamic_form (1.1.4)
@@ -98,6 +100,10 @@ GEM
       activesupport (= 3.2.8)
       bundler (~> 1.0)
       railties (= 3.2.8)
+    rails-settings-cached (0.2.4)
+      rails (>= 3.0.0)
+    rails_bootstrap_navbar (0.1.5.beta)
+      rails (>= 3.0.0)
     railties (3.2.8)
       actionpack (= 3.2.8)
       activesupport (= 3.2.8)
@@ -118,9 +124,6 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    tabulous (1.3.0)
-      colored (~> 1.2.0)
-      rails (~> 3.0)
     therubyracer (0.11.0)
       ref
     thin (1.5.0)
@@ -142,13 +145,17 @@ GEM
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     will_paginate (3.0.3)
+    will_paginate-bootstrap (0.2.2)
+      will_paginate (>= 3.0.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  authlogic
   coffee-rails (~> 3.2.1)
   dynamic_form
+  formtastic
   formtastic-bootstrap
   jquery-datatables-rails
   jquery-rails
@@ -157,10 +164,12 @@ DEPENDENCIES
   pg (= 0.11)
   postgres_ext!
   rails (= 3.2.8)
+  rails-settings-cached
+  rails_bootstrap_navbar
   sass-rails (~> 3.2.3)
-  tabulous
   therubyracer
   thin
   twitter-bootstrap-rails
   uglifier (>= 1.0.3)
   will_paginate (~> 3.0)
+  will_paginate-bootstrap

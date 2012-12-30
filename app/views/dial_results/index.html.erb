@@ -28,16 +28,16 @@
     <td><%=h dial_job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S") %></td>
 
     <td>
-        <a class="btn btn-mini" href="<%= view_dial_result_path(dial_job) %>" rel="tooltip" title="View Call Connections" ><i class="icon-bar-chart"></i></a>
+        <a class="btn btn-mini" href="<%= view_dial_result_path(@project,dial_job) %>" rel="tooltip" title="View Call Connections" ><i class="icon-bar-chart"></i></a>
 
 		<% if(dial_job.processed) %>
-			<a class="btn btn-mini" href="<%= analyze_dial_result_path(dial_job) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
-			<a class="btn btn-mini" href="<%= reanalyze_dial_result_path(dial_job) %>" data-confirm="Reprocess this job?" rel="nofollow tooltip" title="Rerun Call Analysis"><i class="icon-refresh"></i></a>
+			<a class="btn btn-mini" href="<%= analyze_dial_result_path(@project,dial_job) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
+			<a class="btn btn-mini" href="<%= reanalyze_dial_result_path(@project,dial_job) %>" data-confirm="Reprocess this job?" rel="nofollow tooltip" title="Rerun Call Analysis"><i class="icon-refresh"></i></a>
 		<% else %>
-			<a class="btn btn-mini" href="<%= analyze_dial_result_path(dial_job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-bolt"></i></a>
+			<a class="btn btn-mini" href="<%= analyze_dial_result_path(@project,dial_job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-bolt"></i></a>
 		<% end %>
 
-    	<a class="btn btn-mini" href="<%= dial_result_path(dial_job) %>" data-confirm="Delete all data for this job?" data-method="delete" rel="nofollow tooltip" title="Delete Call Data"><i class="icon-trash"></i></a>
+    	<a class="btn btn-mini" href="<%= dial_result_path(@project,dial_job) %>" data-confirm="Delete all data for this job?" data-method="delete" rel="nofollow tooltip" title="Delete Call Data"><i class="icon-trash"></i></a>
 	</td>
   </tr>
 
@@ -54,4 +54,4 @@
 
 <% end %>
 
-<a class="btn" href="<%= new_dial_job_path %>"><i class="icon-plus"></i> Start Job </a>
+<a class="btn" href="<%= new_dial_job_path(@project) %>"><i class="icon-plus"></i> Start Job </a>

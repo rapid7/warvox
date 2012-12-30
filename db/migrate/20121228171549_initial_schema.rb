@@ -4,6 +4,49 @@ class InitialSchema < ActiveRecord::Migration
 		# Require the intarray extension
 		execute("CREATE EXTENSION IF NOT EXISTS intarray")
 
+
+		create_table :settings do |t|
+			t.string :var, :null => false
+			t.text   :value, :null => true
+			t.integer :thing_id, :null => true
+			t.string :thing_type, :limit => 30, :null => true
+			t.timestamps
+		end
+
+		add_index :settings, [ :thing_type, :thing_id, :var ], :unique => true
+
+		create_table 'users' do |t|
+			t.string    :login,               :null => false                # optional, you can use email instead, or both
+			t.string    :email,               :null => true                 # optional, you can use login instead, or both
+			t.string    :crypted_password,    :null => false                # optional, see below
+			t.string    :password_salt,       :null => false                # optional, but highly recommended
+			t.string    :persistence_token,   :null => false                # required
+			t.string    :single_access_token, :null => false                # optional, see Authlogic::Session::Params
+			t.string    :perishable_token,    :null => false                # optional, see Authlogic::Session::Perishability
+
+			# Magic columns, just like ActiveRecord's created_at and updated_at. These are automatically maintained by Authlogic if they are present.
+			t.integer   :login_count,         :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
+			t.integer   :failed_login_count,  :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
+			t.datetime  :last_request_at                                    # optional, see Authlogic::Session::MagicColumns
+			t.datetime  :current_login_at                                   # optional, see Authlogic::Session::MagicColumns
+			t.datetime  :last_login_at                                      # optional, see Authlogic::Session::MagicColumns
+			t.string    :current_login_ip                                   # optional, see Authlogic::Session::MagicColumns
+			t.string    :last_login_ip                                      # optional, see Authlogic::Session::MagicColumns
+
+			t.timestamps
+			t.boolean   "enabled", :default => true
+			t.boolean   "admin",   :default => true
+		end
+
+		create_table 'projects' do |t|
+			t.timestamps
+			t.text      "name"
+			t.text      "description"
+			t.text		"included"
+			t.text		"excluded"
+			t.string	"created_by"
+		end
+
 		create_table "dial_jobs" do |t|
 			t.timestamps
 			t.text		"range"
@@ -63,9 +106,12 @@ class InitialSchema < ActiveRecord::Migration
 	end
 
 	def down
-		remove_table "providers"
-		remove_table "dial_result_media"
-		remove_table "dial_results"
-		remove_table "dial_jobs"
+		drop_table "providers"
+		drop_table "dial_result_media"
+		drop_table "dial_results"
+		drop_table "dial_jobs"
+		drop_table "projects"
+		drop_table "users"
+		drop_table "settings"
 	end
 end

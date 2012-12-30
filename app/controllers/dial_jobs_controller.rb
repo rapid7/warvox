@@ -38,10 +38,13 @@ class DialJobsController < ApplicationController
   def stop
     @dial_job = DialJob.find(params[:id])
 
+	@dial_job.stop
+
 	if(@dial_job.status != 'submitted')
 	  flash[:notice] = 'Job is already running or completed'
 	  return
 	end
+    format.html { redirect_to :action => 'index' }
   end
 
 
@@ -75,10 +78,12 @@ class DialJobsController < ApplicationController
       if @dial_job.save
         flash[:notice] = 'Job was successfully created.'
 
-        # Launch it
-        WarVOX::JobManager.schedule(::WarVOX::Jobs::Dialer, @dial_job.id)
+		res = @dial_job.schedule(:dialer)
+		unless res
+			flash[:error] = "Unable to launch dialer job"
+		end
 
-        format.html { redirect_to :action => 'index' }
+	    format.html { redirect_to :action => 'index' }
         format.xml  { render :xml => @dial_job, :status => :created, :location => @dial_job }
       else
         format.html { render :action => "new" }

@@ -64,8 +64,11 @@ class DialResultsController < ApplicationController
 		:conditions => [ 'completed = ? and processed = ? and busy = ?', true, false, false ]
 	)
 
-	if(@dial_data_todo.length > 0)
-        WarVOX::JobManager.schedule(::WarVOX::Jobs::Analysis, @job_id)
+	if @dial_data_todo.length > 0
+        res = @job.schedule(:analysis)
+		unless res
+			flash[:error] = "Unable to launch analysis job"
+		end
 	end
   end
 

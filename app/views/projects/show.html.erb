@@ -1,0 +1,24 @@
+<h1 class='title'>View Project</h1>
+<p>
+  <b>Name:</b>
+  <%=h @project.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @project.description %>
+</p>
+
+<p>
+  <b>Default Include:</b>
+  <%=h @project.included %>
+</p>
+
+<p>
+  <b>Default Exclude:</b>
+  <%=h @project.excluded %>
+</p>
+
+
+<%= link_to 'Edit', edit_project_path(@project) %> |
+<%= link_to 'Back', projects_path %>
