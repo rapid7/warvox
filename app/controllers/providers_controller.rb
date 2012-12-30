@@ -17,6 +17,7 @@ class ProvidersController < ApplicationController
   # GET /providers/1.xml
   def show
     @provider = Provider.find(params[:id])
+	@provider.pass = "********"
 
     respond_to do |format|
       format.html # show.html.erb
@@ -39,6 +40,7 @@ class ProvidersController < ApplicationController
   # GET /providers/1/edit
   def edit
     @provider = Provider.find(params[:id])
+	@provider.pass = "********"
   end
 
   # POST /providers
@@ -63,6 +65,11 @@ class ProvidersController < ApplicationController
   # PUT /providers/1.xml
   def update
     @provider = Provider.find(params[:id])
+
+	# Dont set the password if its the placeholder
+	if params[:provider] and params[:provider][:pass] and params[:provider][:pass] == "********"
+		params[:provider].delete(:pass)
+	end
 
     respond_to do |format|
       if @provider.update_attributes(params[:provider])

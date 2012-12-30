@@ -31,4 +31,19 @@ class DialJob < ActiveRecord::Base
 	end
 
 	attr_accessible :range, :seconds, :lines, :cid_mask
+
+
+	def schedule(jtype)
+		res = nil
+		case jtype
+		when :dialer
+			res = WarVOX::JobManager.schedule(::WarVOX::Jobs::Dialer, self[:id])
+		when :analysis
+			res = WarVOX::JobManager.schedule(::WarVOX::Jobs::Analysis, self[:id])
+		else
+			raise RuntimeError, "Unknown task type: #{jtype} for Job #{self[:id]}"
+		end
+		res
+	end
+
 end

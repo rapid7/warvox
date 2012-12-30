@@ -62,6 +62,16 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
     t.integer  "fprint",                         :array => true
   end
 
+  create_table "projects", :force => true do |t|
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.text     "name"
+    t.text     "description"
+    t.text     "included"
+    t.text     "excluded"
+    t.string   "created_by"
+  end
+
   create_table "providers", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -72,6 +82,38 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
     t.text     "pass"
     t.integer  "lines"
     t.boolean  "enabled"
+  end
+
+  create_table "settings", :force => true do |t|
+    t.string   "var",                      :null => false
+    t.text     "value"
+    t.integer  "thing_id"
+    t.string   "thing_type", :limit => 30
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+  end
+
+  add_index "settings", ["thing_type", "thing_id", "var"], :name => "index_settings_on_thing_type_and_thing_id_and_var", :unique => true
+
+  create_table "users", :force => true do |t|
+    t.string   "login",                                 :null => false
+    t.string   "email"
+    t.string   "crypted_password",                      :null => false
+    t.string   "password_salt",                         :null => false
+    t.string   "persistence_token",                     :null => false
+    t.string   "single_access_token",                   :null => false
+    t.string   "perishable_token",                      :null => false
+    t.integer  "login_count",         :default => 0,    :null => false
+    t.integer  "failed_login_count",  :default => 0,    :null => false
+    t.datetime "last_request_at"
+    t.datetime "current_login_at"
+    t.datetime "last_login_at"
+    t.string   "current_login_ip"
+    t.string   "last_login_ip"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+    t.boolean  "enabled",             :default => true
+    t.boolean  "admin",               :default => true
   end
 
 end

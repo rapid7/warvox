@@ -10,16 +10,6 @@ body {
 @iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
 @iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
 
-// Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
-// Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not
-// have the proper paths. So for now we use the absolute path.
-@fontAwesomeEotPath: '/assets/fontawesome-webfont.eot';
-@fontAwesomeWoffPath: '/assets/fontawesome-webfont.woff';
-@fontAwesomeTtfPath: '/assets/fontawesome-webfont.ttf';
-@fontAwesomeSvgPath: '/assets/fontawesome-webfont.svg';
-
-// Font Awesome
-@import "fontawesome.less";
 
 @sansFontFamily: "Trebuchet MS", Arial, Helvetica, sans-serif;
 @green: #90d552;
@@ -38,13 +28,129 @@ body {
 @navbarLinkColorActive: @white;
 @navbarLinkColorHover: @yellow;
 
-@dropdownLinkColorHover: @yellow;
-@dropdownLinkBackgroundHover: @dropdownBackground;
+@dropdownLinkColorHover: @white;
+@dropdownLinkBackgroundHover: @orange;
+@dropdownBackgroundActive: @white;
+@dropdownBackground: @white;
 
 @headingsColor: @darkGray;
 
 @navbarBackground: #ea5709;
 @navbarBackgroundHighlight: #4A1C04;
+
+.project-title {
+	font-size: 22px;
+	color: @white;
+	margin-top: 10px;
+	margin-right: 50px;
+
+}
+
+// Hacks to override active drop-down item background color and hover
+.dropdown-menu .active > a {
+	background-color: @white;
+	background-image: none;
+	color: @darkGray;
+}
+
+// Do not make active icons white
+.dropdown-menu > .active > a > [class^="icon-"], .dropdown-menu > .active > a > [class*="icon-"] {
+	color: @darkGray;
+	background-image: url("/assets/twitter/bootstrap/glyphicons-halflings.png");
+}
+
+.dropdown-menu .active > a:hover {
+	background-color: @orange;
+	background-image: none;
+	color: @white;
+}
+
+.fconstrained {
+	width: 400px;
+}
+
+.fbtn {
+
+}
+
+.project_description {
+	height: 100px;
+	padding: 5px;
+}
+.project_includes {
+	height: 100px;
+	padding: 5px;
+}
+
+body#login {
+
+background-color: black;
+padding: 0;
+margin: 0;
+
+}
+
+#login-panel {
+
+margin: 0px;
+width: 100%;
+padding: 0;
+height: 300px;
+
+position: fixed;
+z-index: 1;
+
+/* IE10 Consumer Preview */
+background-image: -ms-linear-gradient(top, #EA5709 0%, #000000 100%);
+
+/* Mozilla Firefox */
+background-image: -moz-linear-gradient(top, #EA5709 0%, #000000 100%);
+
+/* Opera */
+background-image: -o-linear-gradient(top, #EA5709 0%, #000000 100%);
+
+/* Webkit (Safari/Chrome 10) */
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #EA5709), color-stop(1, #000000));
+
+/* Webkit (Chrome 11+) */
+background-image: -webkit-linear-gradient(top, #EA5709 0%, #000000 100%);
+
+/* W3C Markup, IE10 Release Preview */
+background-image: linear-gradient(to bottom, #EA5709 0%, #000000 100%);
+
+}
+
+#login-logo {
+	margin-left: auto;
+	margin-right: auto;
+	width: 88px;
+	height: 20px;
+	margin-top: 60px;
+}
+
+#box {
+	margin-left: auto;
+	margin-right: auto;
+	width: 350px;
+	background: white;
+	padding: 25px;
+	margin-top: 20px;
+	border: 1px solid #4A1C04;
+	margin-bottom: 30px;
+}
+
+.login-label {
+	width: 120px;
+	margin-right: 10px;
+	margin-bottom: 5px;
+	text-align: right;
+	font-weight: bold;
+	float: left;
+}
+
+.btn-login {
+	margin-left: 130px;
+}
 
 .nav {
    a {

@@ -3,15 +3,15 @@ class JobQueue
 	attr_accessor :active_job, :active_thread, :queue, :queue_thread
 
 	require "thread"
-	
+
 	def initialize
-		@mutex = ::Mutex.new	
+		@mutex = ::Mutex.new
 		@queue = []
 		@queue_thread = Thread.new{ manage_queue }
-		
+
 		super
 	end
-	
+
 	def scheduled?(klass, job_id)
 		@mutex.synchronize do
 			[@active_job, *(@queue)].each do |c|
@@ -21,7 +21,7 @@ class JobQueue
 		end
 		false
 	end
-	
+
 	def schedule(klass, job_id)
 		begin
 		return false if scheduled?(klass, job_id)
@@ -31,7 +31,23 @@ class JobQueue
 			false
 		end
 	end
-	
+
+	def stop(job_id)
+		@mutex.synchronize do
+			[@active_job, *(@queue)].each do |c|
+				next if not c
+				if c.name == job_id
+					# Actively running
+					if @active_job == c
+
+					else
+
+					end
+				end
+			end
+		end
+	end
+
 	def manage_queue
 		begin
 		while(true)
@@ -53,7 +69,7 @@ class JobQueue
 			$stderr.puts "QUEUE MANAGER:#{$!.class} #{$!}"
 			$stderr.flush
 		end
-	end	
+	end
 
 end
 end

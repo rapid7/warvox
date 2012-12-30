@@ -23,7 +23,7 @@
     <td><%=h dial_job.created_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
 
     <td>
-	    <a class="btn btn-mini" href="<%= run_dial_job_path(dial_job) %>" data-confirm="Launch this job?" rel="nofollow tooltip" title="Launch Job"><i class="icon-play"></i></a>
+	    <a class="btn btn-mini" href="<%= run_dial_job_path(@project, dial_job) %>" data-confirm="Launch this job?" rel="nofollow tooltip" title="Launch Job"><i class="icon-play"></i></a>
 		<a class="btn btn-mini" href="<%= dial_job %>" data-confirm="Remove this job?" data-method="delete" rel="nofollow tooltip" title="Remove Job"><i class="icon-trash"></i></a>
 	</td>
   </tr>
@@ -60,7 +60,7 @@
     <td><%=h dial_job.progress %>%</td>
     <td><%=h dial_job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
     <td>
-		<a class="btn btn-mini" href="<%= stop_dial_job(dial_job) %>" data-confirm="Terminate this job?" rel="nofollow tooltip" title="Terminate Job"><i class="icon-stop"></i></a>
+		<a class="btn btn-mini" href="<%= stop_dial_job_path(@project, dial_job) %>" data-confirm="Terminate this job?" rel="nofollow tooltip" title="Terminate Job"><i class="icon-stop"></i></a>
 	</td>
   </tr>
 <% end %>
@@ -76,6 +76,6 @@
 <% if (@active_jobs.length + @submitted_jobs.length == 0) %>
 <h1 class='title'>No Active Jobs</h1>
 <br/>
-<a class="btn" href="<%= new_dial_job_path %>"><i class="icon-plus"></i> Start Job </a>
+<a class="btn" href="<%= new_dial_job_path(@project) %>"><i class="icon-plus"></i> Start Job </a>
 
 <% end %>

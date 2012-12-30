@@ -17,4 +17,8 @@ module ApplicationHelper
 	  _html << %{</select>}
 	  raw(_html)
 	end
+
+	def set_focus(element_id)
+		javascript_tag(" $elem = $(\"#{element_id}\"); if (null !== $elem && $elem.length > 0){$elem.focus()}")
+	end
 end
