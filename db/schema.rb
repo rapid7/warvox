@@ -15,22 +15,8 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
 
   add_extension "intarray"
 
-  create_table "dial_jobs", :force => true do |t|
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-    t.text     "range"
-    t.integer  "seconds"
-    t.integer  "lines"
-    t.text     "status"
-    t.integer  "progress"
-    t.datetime "started_at"
-    t.datetime "completed_at"
-    t.boolean  "processed"
-    t.text     "cid_mask"
-  end
-
-  create_table "dial_result_media", :force => true do |t|
-    t.integer "dial_result_id"
+  create_table "call_media", :force => true do |t|
+    t.integer "call_id",      :null => false
     t.binary  "audio"
     t.binary  "mp3"
     t.binary  "png_big"
@@ -40,26 +26,60 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
     t.binary  "png_sig_freq"
   end
 
-  create_table "dial_results", :force => true do |t|
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.text     "number"
-    t.integer  "dial_job_id"
-    t.integer  "provider_id"
-    t.boolean  "completed"
+  create_table "calls", :force => true do |t|
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
+    t.text     "number",                :null => false
+    t.integer  "project_id",            :null => false
+    t.integer  "job_id",                :null => false
+    t.integer  "provider_id",           :null => false
+    t.boolean  "answered"
     t.boolean  "busy"
-    t.integer  "seconds"
-    t.integer  "ringtime"
-    t.boolean  "processed"
-    t.datetime "processed_at"
-    t.text     "cid"
+    t.integer  "audio_length"
+    t.integer  "ring_length"
+    t.text     "caller_id"
+    t.integer  "analysis_job_id"
+    t.boolean  "analysis_started_at"
+    t.boolean  "analysis_completed_at"
     t.float    "peak_freq"
     t.text     "peak_freq_data"
-    t.text     "sig_data"
     t.text     "line_type"
+    t.integer  "fprint",                                :array => true
+  end
+
+  create_table "jobs", :force => true do |t|
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+    t.integer  "project_id",                  :null => false
+    t.string   "name",                        :null => false
+    t.string   "locked_by"
+    t.datetime "locked_at"
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.string   "created_by"
+    t.string   "task",                        :null => false
+    t.binary   "args"
+    t.string   "status"
+    t.text     "error"
+    t.integer  "progress",     :default => 0
+  end
+
+  create_table "line_attributes", :force => true do |t|
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.integer  "line_id",                          :null => false
+    t.text     "name",                             :null => false
+    t.binary   "value",                            :null => false
+    t.string   "content_type", :default => "text"
+  end
+
+  create_table "lines", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.text     "number",     :null => false
+    t.integer  "project_id", :null => false
+    t.text     "type"
     t.text     "notes"
-    t.text     "signatures"
-    t.integer  "fprint",                         :array => true
   end
 
   create_table "projects", :force => true do |t|
@@ -73,15 +93,15 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
   end
 
   create_table "providers", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.text     "name"
-    t.text     "host"
-    t.integer  "port"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+    t.text     "name",                         :null => false
+    t.text     "host",                         :null => false
+    t.integer  "port",                         :null => false
     t.text     "user"
     t.text     "pass"
-    t.integer  "lines"
-    t.boolean  "enabled"
+    t.integer  "lines",      :default => 1,    :null => false
+    t.boolean  "enabled",    :default => true
   end
 
   create_table "settings", :force => true do |t|
@@ -94,6 +114,22 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
   end
 
   add_index "settings", ["thing_type", "thing_id", "var"], :name => "index_settings_on_thing_type_and_thing_id_and_var", :unique => true
+
+  create_table "signature_fp", :force => true do |t|
+    t.integer "signature_id", :null => false
+    t.integer "fprint",                       :array => true
+  end
+
+  create_table "signatures", :force => true do |t|
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.text     "name",        :null => false
+    t.string   "source"
+    t.text     "description"
+    t.string   "category"
+    t.string   "line_type"
+    t.integer  "risk"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "login",                                 :null => false
