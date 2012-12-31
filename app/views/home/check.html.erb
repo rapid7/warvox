@@ -1,0 +1,104 @@
+
+<h1>Getting Started Checklist</h1>
+
+<!--
+		@has_project  = ( Project.count > 0 )
+		@has_provider = ( Provider.count > 0 )
+		@has_job      = ( DialJob.count > 0 )
+		@has_result   = ( DialResult.where(:completed => true ).count > 0 )
+		@has_analysis = ( DialResult.where(:processed => true ).count > 0 )
+-->
+
+<br/>
+
+<div class="check-item">1. Create a project to encapsulate your work</div>
+<div class="check-result">
+	<% if @has_project %>
+		<div class="alert alert-success">
+			<strong>Looks good!</strong>
+			<p>You have created a new project.</p>
+		</div>
+	<% else %>
+		<div class="alert alert-error">
+			<strong>Woops!</strong>
+			<p>You need to <a href="<%= new_project_path %>">create a project</a> first.</p>
+		</div>
+	<% end %>
+</div>
+
+
+<div class="check-item">2. Configure at least one VoIP Provider</div>
+<div class="check-result">
+	<% if @has_provider %>
+		<div class="alert alert-success">
+			<strong>Perfect!</strong>
+			<p>You have a VoIP provider configured.</p>
+		</div>
+	<% else %>
+		<div class="alert alert-error">
+			<strong>This is the hard one</strong>
+			<p>You need to <a href="<%= providers_path %>">configure a valid VoIP provider</a> first.</p>
+		</div>
+	<% end %>
+</div>
+
+
+<div class="check-item">3. Dial a list of telephone numbers</div>
+<div class="check-result">
+	<% if @has_job %>
+		<div class="alert alert-success">
+			<strong>Congratulations!</strong>
+			<p>You have already launched a dialer job.</p>
+		</div>
+	<% else  %>
+		<div class="alert alert-error">
+			<strong>Ring Ring!</strong>
+			<% if @has_project %>
+				<p>You need to <a href="<%= new_dial_job_path(Project.last) %>">dial your target range</a> to gather audio data.</p>
+			<% else %>
+				<p>You need to <a href="<%= new_project_path %>">create a project</a>.</p>
+			<% end %>
+		</div>
+	<% end %>
+</div>
+
+
+<div class="check-item">4. Gather an audio sample from at least one line</div>
+<div class="check-result">
+	<% if @has_result %>
+		<div class="alert alert-success">
+			<strong>Woohoo!</strong>
+			<p>You have already captured some audio data.</p>
+		</div>
+	<% else %>
+		<div class="alert alert-error">
+			<strong>Sad Trombone!</strong>
+			<% if @has_project %>
+				<p>You need to dial some numbers that answer.
+				Double check your VoIP settings and make sure the target numbers are picking up.</p>
+			<% else %>
+				<p>You need to <a href="<%= new_project_path %>">create a project</a> first.</p>
+			<% end %>
+		</div>
+	<% end %>
+</div>
+
+
+<div class="check-item">5. Analyze captured audio samples and extract signatures</div>
+<div class="check-result">
+	<% if @has_analysis %>
+		<div class="alert alert-success">
+			<strong>Dayum!</strong>
+			<p>You are good to go.</p>
+		</div>
+	<% else %>
+		<div class="alert alert-error">
+			<strong>Crunch Time</strong>
+			<% if @has_project and @has_result %>
+				<p>Access the <a href="<%= analyze_path(Project.last) %>">Analysis</a> tab and start crunching audio samples.</p>
+			<% else %>
+				<p>You need to create a project and successfully dial some numbers first.</p>
+			<% end %>
+		</div>
+	<% end %>
+</div>
