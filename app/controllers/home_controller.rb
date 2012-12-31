@@ -12,4 +12,16 @@ class HomeController < ApplicationController
 		rescue ::LoadError
 		end
 	end
+
+	def help
+	end
+
+	def check
+		@has_project  = ( Project.count > 0 )
+		@has_provider = ( Provider.count > 0 )
+		@has_job      = ( DialJob.count > 0 )
+		@has_result   = ( DialResult.where(:completed => true ).count > 0 )
+		@has_analysis = ( DialResult.where(:processed => true ).count > 0 )
+	end
+
 end
