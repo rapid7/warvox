@@ -38,6 +38,9 @@ Web::Application.routes.draw do
   match '/projects/:project_id/settings'    => 'settings#index', :as => :project_settings
   match '/about'               => 'home#about'
   match '/home/about'          => 'home#about'
+  match '/help'                => 'home#help'
+  match '/check'               => 'home#check', :as => :check
+
 
   root :to => "projects#index"
 end

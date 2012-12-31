@@ -32,7 +32,7 @@
 
 			<%= menu_group :pull => :right  do %>
 			<% if @project and @project.id %>
-				<li class="project-title"><%= truncate(@project.name, :length => 25) %></li>
+				<li class="project-title"><%= truncate(@project.name, :length => 20) %></li>
 				<%= menu_item "Dial", new_dial_job_path(@project) %>
 				<%= menu_item "Jobs", dial_jobs_path(@project) %>
 				<%= menu_item "Results", dial_results_path(@project) %>
@@ -49,14 +49,16 @@
 					<% end %>
 				<% end %>
 
-				<%= drop_down "Administration" do %>
+				<%= drop_down "Admin" do %>
 					<%= menu_item raw('<i class="icon-user"></i> My Account'), user_path(current_user) %>
 					<%= menu_item raw('<i class="icon-globe"></i> Providers'), providers_path %>
 					<%= menu_item raw('<i class="icon-wrench"></i> Config'), settings_path %>
 					<%= menu_item raw('<i class="icon-info-sign"></i> About'), about_path %>
 				<% end %>
 
-				<%= menu_item "Logout", logout_path %>
+				<%= menu_item raw('<div class="help-icon"><i class="icon-off icon-white" rel="tooltip" title="Logout"></i></div>'), logout_path %>
+
+				<%= menu_item raw('<div class="help-icon"><i class="icon-question-sign icon-white" rel="tooltip" title="Help!"></i></div>'), check_path %>
 			<% end %>
 		<% end %>
 
