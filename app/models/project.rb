@@ -3,5 +3,7 @@ class Project < ActiveRecord::Base
 
 	attr_accessible :name, :description, :included, :excluded
 
-	has_many :lines, :calls, :jobs
+	has_many :lines
+	has_many :calls
+	has_many :jobs
 end
