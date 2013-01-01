@@ -87,6 +87,7 @@ class InitialSchema < ActiveRecord::Migration
 			t.integer		"provider_id", :null => false
 			t.boolean		"answered"
 			t.boolean		"busy"
+			t.text			"error"
 			t.integer		"audio_length"
 			t.integer		"ring_length"
 			t.text			"caller_id"

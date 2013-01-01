@@ -6,12 +6,7 @@ class Analysis < Base
 	require 'tempfile'
 	require 'open3'
 
-	@@kissfft_loaded = false
-	begin
-		require 'kissfft'
-		@@kissfft_loaded = true
-	rescue ::LoadError
-	end
+	require 'kissfft'
 
 	class Classifier
 
@@ -39,59 +34,91 @@ class Analysis < Base
 		'analysis'
 	end
 
-	def initialize(job_id)
-		@name = job_id
-		if(not @@kissfft_loaded)
-			raise RuntimeError, "The KissFFT module is not available, analysis failed"
-		end
+	def initialize(job_id, conf)
+		@job_id = job_id
+		@conf   = conf
+		@tasks  = []
+		@calls  = []
 	end
 
-	def get_job
-		::DialJob.find(@name)
+	def stop
+		@calls = []
+		@tasks.each do |t|
+			t.kill rescue nil
+		end
+		@tasks = []
 	end
 
 	def start
 
-		@status = 'active'
+		@calls = []
 
-		begin
-		start_processing()
+		query = nil
 
-		model = get_job
-		model.processed = true
+		::ActiveRecord::Base.connection_pool.with_connection {
 
-		db_save(model)
-
-		stop()
-
-		rescue ::Exception => e
-			$stderr.puts "Exception in the job queue: #{e.class} #{e} #{e.backtrace}"
+		job = Job.find(@job_id)
+		if not job
+			raise RuntimeError, "The parent job no longer exists"
 		end
-	end
 
-	def stop
-		@status = 'completed'
-	end
+		case @conf[:scope]
+		when 'job'
+			if @conf[:force]
+				query = {:job_id => job.id, :answered => true, :busy => false}
+			else
+				query = {:job_id => job.id, :answered => true, :busy => false, :analysis_started_at => nil}
+			end
+		when 'project'
+			if @conf[:force]
+				query = {:project_id => job.project_id, :answered => true, :busy => false}
+			else
+				query = {:project_id => job.project_id, :answered => true, :busy => false, :analysis_started_at => nil}
+			end
+		when 'global'
+			if @conf[:force]
+				query = {:answered => true, :busy => false}
+			else
+				query = {:answered => true, :busy => false, :analysis_started_at => nil}
+			end
+		end
 
-	def start_processing
-		jobs = ::DialResult.where(:dial_job_id => @name, :processed => false, :completed => true, :busy => false).all
 		max_threads = WarVOX::Config.analysis_threads
+		last_update = Time.now
 
-		while(not jobs.empty?)
-			threads = []
-			output  = []
-			1.upto(max_threads) do
-				j = jobs.shift || break
-				output  << j
-				threads << Thread.new { run_analyze_call(j) }
+		@total_calls     = Call.count(:conditions => query)
+		@completed_calls = 0
+
+		Call.find_each(:conditions => query) do |call|
+			while @tasks.length < max_threads
+				call.analysis_started_at = Time.now.utc
+				call.analysis_job_id = job.id
+				@tasks << Thread.new(call) { |c| ::ActiveRecord::Base.connection_pool.with_connection { run_analyze_call(c) }}
+			end
+			clear_stale_tasks
+
+			# Update progress every 10 seconds or so
+			if Time.now.to_f - last_update.to_f > 10
+				update_progress((@completed_calls / @total_calls.to_f) * 100)
+				last_update = Time.now
 			end
 
-			# Wait for the threads to complete
-			threads.each {|t| t.join}
-
-			# Save the results to the database
-			output.each  {|r| db_save(r) if r.processed }
+			clear_zombies()
 		end
+
+		}
+	end
+
+	def clear_stale_tasks
+		# Remove dead threads from the task list
+		@tasks = @tasks.select{ |x| x.status }
+		IO.select(nil, nil, nil, 0.25)
+	end
+
+	def update_progress(pct)
+		::ActiveRecord::Base.connection_pool.with_connection {
+			Job.update({ :progress => pct }, { :id => @job_id })
+		}
 	end
 
 	def run_analyze_call(dr)
@@ -121,8 +148,7 @@ class Analysis < Base
 			end
 		end
 
-		dr.processed_at = Time.now
-		dr.processed    = true
+		dr.analysis_completed_at = Time.now.utc
 
 		rescue ::Interrupt
 		ensure
@@ -131,8 +157,9 @@ class Analysis < Base
 		end
 
 		mr.save
+		dr.save
 
-		true
+		@completed_calls += 1
 	end
 
 	# Takes the raw file path as an argument, returns a hash
@@ -340,53 +367,6 @@ class Analysis < Base
 	end
 end
 
-
-class CallAnalysis < Analysis
-
-	@@kissfft_loaded = false
-	begin
-		require 'kissfft'
-		@@kissfft_loaded = true
-	rescue ::LoadError
-	end
-
-	def type
-		'call_analysis'
-	end
-
-	def initialize(result_id)
-		@name = result_id
-		if(not @@kissfft_loaded)
-			raise RuntimeError, "The KissFFT module is not available, analysis failed"
-		end
-	end
-
-	def get_job
-		::DialResult.find(@name)
-	end
-
-	def start
-		@status = 'active'
-
-		begin
-			start_processing()
-			stop()
-		rescue ::Exception => e
-			$stderr.puts "Exception in the job queue: #{e.class} #{e} #{e.backtrace}"
-		end
-	end
-
-	def stop
-		@status = 'completed'
-	end
-
-	def start_processing
-		r = get_job()
-		return if not r.completed
-		return if r.busy
-		analyze_call(r)
-	end
-end
 
 end
 end
