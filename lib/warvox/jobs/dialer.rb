@@ -8,18 +8,21 @@ class Dialer < Base
 		'dialer'
 	end
 
-	def initialize(job_id)
-		@name    = job_id
-		@job     = get_job
-		@range   = @job.range
-		@seconds = @job.seconds
-		@lines   = @job.lines
+	def initialize(job_id, conf)
+		@job_id  = job_id
+		@conf    = conf
+		@range   = @conf[:range]
+		@seconds = @conf[:seconds]
+		@lines   = @conf[:lines]
 		@nums    = shuffle_a(WarVOX::Phone.crack_mask(@range))
 
+		@tasks   = []
+		@provs   = get_providers
+
 		# CallerID modes (SELF or a mask)
-		@cid_self = @job.cid_mask == 'SELF'
+		@cid_self = @conf[:cid_mask] == 'SELF'
 		if(not @cid_self)
-			@cid_range = WarVOX::Phone.crack_mask(@job.cid_mask)
+			@cid_range = WarVOX::Phone.crack_mask(@conf[:cid_mask])
 		end
 	end
 
@@ -44,52 +47,34 @@ class Dialer < Base
 	def get_providers
 		res = []
 
-		::Provider.where(:enabled => true).all.each do |prov|
-			info = {
-				:name  => prov.name,
-				:id    => prov.id,
-				:port  => prov.port,
-				:host  => prov.host,
-				:user  => prov.user,
-				:pass  => prov.pass,
-				:lines => prov.lines
-			}
-			1.upto(prov.lines) {|i| res.push(info) }
-		end
+		::ActiveRecord::Base.connection_pool.with_connection {
+			::Provider.where(:enabled => true).all.each do |prov|
+				info = {
+					:name  => prov.name,
+					:id    => prov.id,
+					:port  => prov.port,
+					:host  => prov.host,
+					:user  => prov.user,
+					:pass  => prov.pass,
+					:lines => prov.lines
+				}
+				1.upto(prov.lines) {|i| res.push(info) }
+			end
+		}
 
 		shuffle_a(res)
 	end
 
-	def get_job
-		::DialJob.find(@name)
+
+	def stop
+		@nums = []
+		@tasks.each do |t|
+			t.kill rescue nil
+		end
+		@tasks = []
 	end
 
 	def start
-		begin
-
-		model = get_job
-		model.status = 'active'
-		model.started_at = Time.now
-		db_save(model)
-
-		start_dialing()
-
-		stop()
-
-		rescue ::Exception => e
-			$stderr.puts "Exception in the job queue: #{$e.class} #{e} #{e.backtrace}"
-		end
-	end
-
-	def stop
-		@status = 'completed'
-		model = get_job
-		model.status = 'completed'
-		model.completed_at = Time.now
-		db_save(model)
-	end
-
-	def start_dialing
 		# Scrub all numbers matching the blacklist
 		list = WarVOX::Config.blacklist_load
 		list.each do |b|
@@ -102,24 +87,19 @@ class Dialer < Base
 			end
 		end
 
+		last_update = Time.now
 		@nums_total = @nums.length
+
+		max_tasks = [@provs.length, @lines].min
+
 		while(@nums.length > 0)
-			@calls    = []
-			@provs    = get_providers
-			tasks     = []
-			max_tasks = [@provs.length, @lines].min
+			while( @tasks.length < max_tasks ) do
+				tnum  = @nums.shift
+				break unless tnum
 
-			1.upto(max_tasks) do
-				tasks << Thread.new do
+				tprov = allocate_provider
 
-					Thread.current.kill if @nums.length == 0
-					Thread.current.kill if @provs.length == 0
-
-					num  = @nums.shift
-					prov = @provs.shift
-
-					Thread.current.kill if not num
-					Thread.current.kill if not prov
+				@tasks << Thread.new(tnum,tprov) do |num,prov|
 
 					out_fd = Tempfile.new("rawfile")
 					out    = out_fd.path
@@ -165,30 +145,36 @@ class Dialer < Base
 						end
 					end
 
-					res = ::DialResult.new
-					res.number = num
-					res.cid = cid
-					res.dial_job_id = @name
-					res.provider_id = prov[:id]
-					res.completed = (fail == 0) ? true : false
-					res.busy = (busy == 1) ? true : false
-					res.seconds = (byte / 16000)  # 8khz @ 16-bit
-					res.ringtime = ring
-					res.processed = false
-					res.save
-
-					if(File.exists?(out))
-						File.open(out, "rb") do |fd|
-							med = res.media
-							med.audio = fd.read(fd.stat.size)
-							med.save
+					:ActiveRecord::Base.connection_pool.with_connection do
+						job = Job.find(@job_id)
+						if not job
+							raise RuntimeError, "The parent job is not available"
 						end
+
+						res = ::Call.new
+						res.number        = num
+						res.job_id        = job.id
+						res.project_id    = job.project_id
+						res.provider_id   = prov[:id]
+						res.answered      = (fail == 0) ? true : false
+						res.busy          = (busy == 1) ? true : false
+						res.audio_seconds = (byte / 16000)  # 8khz @ 16-bit
+						res.ring_seconds  = ring
+						res.caller_id     = cid
+
+						res.save
+
+						if(File.exists?(out))
+							File.open(out, "rb") do |fd|
+								med = res.media
+								med.audio = fd.read(fd.stat.size)
+								med.save
+							end
+						end
+
+						out_fd.close
+						::FileUtils.rm_f(out)
 					end
-
-					out_fd.close
-					::FileUtils.rm_f(out)
-
-					@calls << res
 
 					rescue ::Exception => e
 						$stderr.puts "ERROR: #{e.class} #{e} #{e.backtrace} #{num} #{prov.inspect}"
@@ -198,22 +184,42 @@ class Dialer < Base
 				# END NEW THREAD
 			end
 			# END SPAWN THREADS
-			tasks.map{|t| t.join if t}
 
-			# Iterate through the results
-			@calls.each do |r|
-				db_save(r)
+			clear_stale_tasks
+
+			# Update progress every 10 seconds or so
+			if Time.now.to_f - last_update.to_f > 10
+				update_progress(((@nums_total - @nums.length) / @nums_total.to_f) * 100)
+				last_update = Time.now.to_f
 			end
-
-			# Update the progress bar
-			model = get_job
-			model.progress = ((@nums_total - @nums.length) / @nums_total.to_f) * 100
-			db_save(model)
 
 			clear_zombies()
 		end
 
+		while @tasks.length > 0
+			clear_stale_tasks
+		end
+
 		# ALL DONE
+	end
+
+	def clear_stale_tasks
+		# Remove dead threads from the task list
+		@tasks = @tasks.select{ |x| x.status }
+		IO.select(nil, nil, nil, 0.25)
+	end
+
+	def update_progress(pct)
+		::ActiveRecord::Base.connection_pool.with_connection {
+			Job.update({ :progress => pct }, { :id => @job_id })
+		}
+	end
+
+	def allocate_provider
+		@prov_idx ||= 0
+		prov = @provs[ @prov_idx % @provs.length ]
+		@prov_idx  += 1
+		prov
 	end
 
 end
