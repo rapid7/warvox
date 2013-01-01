@@ -2,7 +2,7 @@
 ###################
 
 require 'getoptlong'
-
+require 'open3'
 
 #
 # Load the library path
@@ -12,10 +12,17 @@ while File.symlink?(base)
 	base = File.expand_path(File.readlink(base), File.dirname(base))
 end
 
-voxroot = File.join(File.dirname(base), '..')
-voxserv = File.join(File.expand_path(voxroot), 'script', 'rails')
+voxroot = File.expand_path(File.join(File.dirname(base), '..'))
+voxserv = File.expand_path(File.join(File.expand_path(voxroot), 'script', 'rails'))
+manager = File.expand_path(File.join(File.dirname(base), 'worker_manager.rb'))
 
 Dir.chdir(voxroot)
+
+def stop
+	$stderr.puts "[-] Interrupt received, shutting down workers and web server..."
+	Process.kill("TERM", @manager_pid) if @manager_pid
+	exit(0)
+end
 
 def usage
 	$stderr.puts "#{$0} [--address IP] [--port PORT] --background"
@@ -60,11 +67,24 @@ if opts['Background']
 	args.push("-d")
 end
 
+
+trap("SIGINT") { stop() }
+
 $browser_url   = "http://#{opts['ServerHost']}:#{opts['ServerPort']}/"
 
 $stderr.puts ""
 $stderr.puts "[*] Starting WarVOX on #{$browser_url}"
 $stderr.puts ""
+
+
+@manager_pid = Process.fork()
+if not @manager_pid
+	while (ARGV.shift) { }
+	load(manager)
+	exit(0)
+end
+
+@webserver_pid = $$
 
 while(ARGV.length > 0); ARGV.shift; end
 args.each {|arg| ARGV.push(arg) }

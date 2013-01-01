@@ -14,10 +14,7 @@ require 'warvox'
 require 'csv'
 
 ENV['RAILS_ENV'] ||= 'production'
-
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..'))
-require 'config/boot'
-require 'config/environment'
 
 def usage
 	$stderr.puts "Usage: #{$0} [Job ID] <Type>"
@@ -28,36 +25,38 @@ end
 # Script
 #
 
-job = ARGV.shift
-typ = ARGV.shift
+project_id = ARGV.shift
+line_type  = ARGV.shift
 
-if(job and job == "-h")
+if(project_id and project_id == "-h")
 	usage()
 end
 
-if(not job)
-	$stderr.puts "Listing all available jobs"
-	$stderr.puts "=========================="
-	DialJob.find(:all).each do |j|
-		puts "#{j.id}\t#{j.started_at} --> #{j.completed_at}"
+require 'config/boot'
+require 'config/environment'
+
+if(not project_id)
+	$stderr.puts "Listing all projects"
+	$stderr.puts "===================="
+	Project.find(:all).each do |j|
+		puts "#{j.id}\t#{j.name}\t#{j.created_at}"
 	end
 	exit
 end
 
-fields = %W{ number line_type cid completed busy seconds ringtime peak_freq notes signatures }
+fields = %W{ number line_type caller_id answered busy audio_length ring_length peak_freq }
 begin
 	$stdout.puts fields.to_csv
-	DialResult.where(:dial_job_id => job.to_i).find(:order => :number) do |r|
-		next if not r.number
-		if(not typ or typ.downcase == (r.line_type||"").downcase)
-			out = []
-			fields.each do |f|
-				out << r[f].to_s
-			end
-			$stdout.puts out.to_csv
-		end
+	cond = { :project_id => project_id.to_i }
+	if line_type
+		cond[:line_type] = line_type.downcase
 	end
-rescue ActiveRecord::RecordNotFound
-	$stderr.puts "Job not found"
-	exit
+
+	Call.where(cond).find(:order => :number) do |r|
+		out = []
+		fields.each do |f|
+			out << r[f].to_s
+		end
+		$stdout.puts out.to_csv
+	end
 end
