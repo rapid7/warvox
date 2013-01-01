@@ -49,7 +49,7 @@ project  = nil
 provider = nil
 
 if project_id
-	project = Project.find(pid)
+	project = Project.where(:id => project_id).first
 	unless project
 		$stderr.puts "Error: Specified Project ID not found"
 		exit(1)
@@ -57,7 +57,7 @@ if project_id
 end
 
 if provider_id
-	provider = Provider.find(pid)
+	provider = Provider.where(:id => provider_id).first
 	unless provider
 		$stderr.puts "Error: Specified Provider ID not found"
 		exit(1)
