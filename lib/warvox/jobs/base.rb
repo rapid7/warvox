@@ -22,6 +22,10 @@ class Base
 	end
 
 	def clear_zombies
+		self.class.clear_zombies
+	end
+
+	def self.clear_zombies
 		begin
 			# Clear zombies just in case...
 			while(Process.waitpid(-1, Process::WNOHANG))

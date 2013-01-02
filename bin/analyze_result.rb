@@ -20,12 +20,16 @@ num = ARGV.shift || exit(0)
 
 $0  = "warvox(analyzer): #{inp} #{num}"
 
+begin
+
 $stdout.write(
 	Marshal.dump(
-		WarVOX::Jobs::CallAnalysis.new(
-			0
-		).analyze_call(
+		WarVOX::Jobs::Analysis.analyze_call(
 			inp, num
 		)
 	)
 )
+
+rescue ::Errno::EPIPE
+	# Hide pipe errors (parent is killed when task was cancelled)
+end

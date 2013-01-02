@@ -30,14 +30,14 @@ class AnalyzeController < ApplicationController
 			:page => params[:page],
 			:order => 'number ASC',
 			:per_page => 10,
-			:conditions => [ 'completed = ? and processed = ? and busy = ? and line_type = ?', true, true, false, @shown ]
+			:conditions => [ 'answered = ? and analysis_completed_at IS NOT NULL and busy = ? and line_type = ?', true, false, @shown ]
 		)
 	else
 		@results = Call.where(:job_id => @job_id).paginate(
 			:page => params[:page],
 			:order => 'number ASC',
 			:per_page => 10,
-			:conditions => [ 'completed = ? and processed = ? and busy = ?', true, true, false ]
+			:conditions => [ 'answered = ? and analysis_completed_at IS NOT NULL and busy = ?', true, false ]
 		)
 	end
 

@@ -1,0 +1,64 @@
+<% if @jobs.length > 0 %>
+<h1 class='title'>Completed Jobs</h1>
+
+<%= will_paginate @jobs, :renderer => BootstrapPagination::Rails %>
+<table class='table table-striped table-bordered' width='90%'>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Range</th>
+	<th>CallerID</th>
+    <th>Connected</th>
+    <th>Date</th>
+    <th>User</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+
+<% @jobs.each do |job|
+
+	cnt_dialed   = job.calls.count.to_i
+	cnt_answered = job.calls.where("answered = ? and busy = ?", true, false).count.to_i
+	pct_answered = 0
+	unless cnt_dialed == 0
+		pct_answered = ((cnt_answered.to_f / cnt_dialed.to_f) * 100).to_i
+	end
+%>
+  <tr>
+    <td><%= job.id %></td>
+    <td><%= job.details[:range].to_s %></td>
+    <td><%= job.details[:cid_mask].to_s %></td>
+    <td><span rel="tooltip" title="<%= pct_answered %>% answered"><%= cnt_answered %> / <%= cnt_dialed %></span></td>
+
+
+	<td><%= job.created_at.strftime("%Y-%m-%d %H:%M:%s") %></td>
+	<td><%= job.created_by %></td>
+    <td>
+        <a class="btn btn-mini" href="<%= view_results_path(@project,job) %>" rel="tooltip" title="View Call Connections" ><i class="icon-zoom-in"></i></a>
+
+		<% if job.calls.where("analysis_completed_at IS NOT NULL").count > 0 %>
+			<a class="btn btn-mini" href="<%= view_analyze_path(@project,job) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
+			<a class="btn btn-mini" href="<%= reanalyze_job_path(@project,job) %>" data-confirm="Reprocess this job?" rel="nofollow tooltip" title="Rerun Call Analysis"><i class="icon-refresh"></i></a>
+		<% else %>
+			<a class="btn btn-mini" href="<%= analyze_job_path(@project,job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-cog"></i></a>
+		<% end %>
+
+    	<a class="btn btn-mini" href="<%= job_path(job) %>" data-confirm="Delete all data for this job?" data-method="delete" rel="nofollow tooltip" title="Delete Call Data"><i class="icon-trash"></i></a>
+	</td>
+  </tr>
+
+<% end %>
+</tbody>
+</table>
+
+<%= will_paginate @jobs, :renderer => BootstrapPagination::Rails %>
+
+<% else %>
+
+<h1 class='title'>No Completed Jobs</h1>
+<br/>
+
+<% end %>
+
+<a class="btn" href="<%= new_dialer_job_path %>"><i class="icon-plus"></i> Start Job </a>
