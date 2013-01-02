@@ -29,7 +29,6 @@ class ProjectsController < ApplicationController
   # GET /projects/new.xml
   def new
     @new_project = Project.new
-
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @new_project }
@@ -44,17 +43,17 @@ class ProjectsController < ApplicationController
   # POST /projects
   # POST /projects.xml
   def create
-    @project = Project.new(params[:project])
-    @project.created_by = current_user.login
+    @new_project = Project.new(params[:project])
+    @new_project.created_by = current_user.login
 
     respond_to do |format|
-      if @project.save
+      if @new_project.save
         flash[:notice] = 'Project was successfully created.'
-        format.html { redirect_to(project_path(@project)) }
-        format.xml  { render :xml => @project, :status => :created, :location => @project }
+        format.html { redirect_to(project_path(@new_project)) }
+        format.xml  { render :xml => @project, :status => :created, :location => @new_project }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @project.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @new_project.errors, :status => :unprocessable_entity }
       end
     end
   end

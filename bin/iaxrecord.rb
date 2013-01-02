@@ -2,23 +2,31 @@
 
 $:.unshift(::File.join(::File.dirname(__FILE__), "..", "lib"))
 
+
+def stop
+	exit(0)
+end
+
+trap("SIGINT")  { stop() }
+trap("SIGTERM") { stop() }
+
 require 'rubygems'
 require "rex/proto/iax2"
 require "optparse"
 
 parser = OptionParser.new
-opts   = { 
-	:recording_time => 52 
+opts   = {
+	:recording_time => 52
 }
 
 parser.banner = "Usage: #{$0} [options]"
 parser.on("-s server") do |v|
 	opts[:server_host] = v
 end
-	
+
 parser.on("-u user") do |v|
 	opts[:username] = v
-end	
+end
 
 parser.on("-p pass") do |v|
 	opts[:password] = v
@@ -26,34 +34,34 @@ end
 
 parser.on("-o output") do |v|
 	opts[:output] = v
-end	
+end
 
 parser.on("-n number") do |v|
-	opts[:called_number] = v 
+	opts[:called_number] = v
 end
 
 parser.on("-c cid") do |v|
-	opts[:caller_number] = v 
-end	
+	opts[:caller_number] = v
+end
 
 parser.on("-l seconds") do |v|
 	opts[:recording_time] = v.to_i
-end	
+end
 
 parser.on("-d") do |v|
 	opts[:debugging] = true
-end	
+end
 
 parser.on("-h") do
 	$stderr.puts parser
 	exit(1)
 end
-		
+
 parser.parse!(ARGV)
 
 if not (opts[:server_host] and opts[:username] and opts[:password] and opts[:called_number] and opts[:output])
 	$stderr.puts parser
-	exit(1)	
+	exit(1)
 end
 
 
@@ -61,7 +69,7 @@ cli = Rex::Proto::IAX2::Client.new(opts)
 
 reg = cli.create_call
 r   = reg.register
-if not r 
+if not r
 	$stderr.puts "ERROR: Unable to register with the IAX server"
 	exit(0)
 end
@@ -75,7 +83,7 @@ end
 
 begin
 
-::Timeout.timeout( opts[:recording_time] ) do 
+::Timeout.timeout( opts[:recording_time] ) do
 	while (c.state != :hangup)
 		case c.state
 		when :ringing
@@ -102,4 +110,3 @@ end
 fd.close
 
 $stdout.puts "COMPLETED: BYTES=#{cnt} RINGTIME=#{c.ring_time} FILE=#{ ::File.expand_path( opts[:output] ) } BUSY=#{c.busy ? 1 : 0} FAIL=#{cnt == 0 ? 1 : 0}"
-

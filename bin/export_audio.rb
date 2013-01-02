@@ -12,16 +12,13 @@ $:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
 
 require 'warvox'
 require 'fileutils'
-
+require 'yaml'
 
 ENV['RAILS_ENV'] ||= 'production'
-
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..'))
-require 'config/boot'
-require 'config/environment'
 
 def usage
-	$stderr.puts "Usage: #{$0} [Output Dir] [Job ID] <Type>"
+	$stderr.puts "Usage: #{$0} [Output Dir] [Project ID] <Line Type>"
 	exit
 end
 
@@ -29,41 +26,66 @@ end
 # Script
 #
 
-dir = ARGV.shift
-job = ARGV.shift
-typ = ARGV.shift
+output     = ARGV.shift
+project_id = ARGV.shift
+line_type  = ARGV.shift
 
-if(job and job == "-h")
+if(output and output == "-h") or (! output)
 	usage()
 end
 
-if(not job)
-	$stderr.puts "Listing all available jobs"
-	$stderr.puts "=========================="
-	DialJob.all.each do |j|
-		puts "#{j.id}\t#{j.started_at} --> #{j.completed_at}"
+require 'config/boot'
+require 'config/environment'
+
+if(not project_id)
+	$stderr.puts "Listing all projects"
+	$stderr.puts "===================="
+	Project.find(:all).each do |j|
+		puts "#{j.id}\t#{j.name}\t#{j.created_at}"
 	end
 	exit
 end
 
-
-::FileUtils.mkdir_p(dir)
+FileUtils.mkdir_p(output)
 
 begin
-	cnt = 0
-	DialResult.where(:dial_job_id => job.to_i).find_each do |r|
-		next if not r.number
-		m = r.media
-		next if not m
-		next if m.audio.to_s.length == 0
-		out = ::File.join(dir, "#{r.number}.raw")
-		::File.open(out, "wb") do |fd|
-			fd.write( m.audio )
-		end
-		cnt += 1
+	cond = { :project_id => project_id.to_i, :answered => true, :busy => false }
+	if line_type
+		cond[:line_type] = line_type.downcase
 	end
-	$stderr.puts "Wrote #{cnt} audio files to #{dir}"
-rescue ActiveRecord::RecordNotFound
-	$stderr.puts "Job not found"
-	exit
+
+	Call.where(cond).find(:order => :number) do |r|
+		m = r.media
+		if m and m.audio
+
+			::File.open(File.join(output, "#{r.number}.raw"), "wb") do |fd|
+				fd.write(m.audio)
+			end
+
+			::File.open(File.join(output, "#{r.number}.yml"), "wb") do |fd|
+				fd.write(r.to_yaml)
+			end
+
+			if m.mp3
+				::File.open(File.join(output, "#{r.number}.mp3"), "wb") do |fd|
+					fd.write(m.mp3)
+				end
+			end
+
+			if m.png_big
+				::File.open(File.join(output, "#{r.number}_wave.png"), "wb") do |fd|
+					fd.write(m.png_big)
+				end
+			end
+
+			if m.png_big_freq
+				::File.open(File.join(output, "#{r.number}_freq.png"), "wb") do |fd|
+					fd.write(m.png_big_freq)
+				end
+			end
+
+			$stderr.puts "[*] Exported #{r.number}..."
+
+		end
+	end
 end

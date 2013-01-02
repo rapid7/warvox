@@ -49,7 +49,6 @@ class InitialSchema < ActiveRecord::Migration
 		create_table "jobs" do |t|
 			t.timestamps
 			t.integer	"project_id", :null => false
-			t.string	"name", :null => false
 			t.string	"locked_by"
 			t.timestamp	"locked_at"
 			t.timestamp	"started_at"
@@ -73,6 +72,7 @@ class InitialSchema < ActiveRecord::Migration
 		create_table "line_attributes" do |t|
 			t.timestamps
 			t.integer		"line_id", :null => false
+			t.integer		"project_id", :null => false
 			t.text			"name", :null => false
 			t.binary		"value", :null => false
 			t.string		"content_type", :default => "text"
@@ -104,6 +104,7 @@ class InitialSchema < ActiveRecord::Migration
 
 		create_table "call_media" do |t|
 			t.integer		"call_id", :null => false
+			t.integer		"project_id", :null => false
 			t.binary		"audio"
 			t.binary		"mp3"
 			t.binary		"png_big"

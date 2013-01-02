@@ -145,7 +145,7 @@ class Dialer < Base
 						end
 					end
 
-					:ActiveRecord::Base.connection_pool.with_connection do
+					::ActiveRecord::Base.connection_pool.with_connection do
 						job = Job.find(@job_id)
 						if not job
 							raise RuntimeError, "The parent job is not available"
@@ -158,8 +158,8 @@ class Dialer < Base
 						res.provider_id   = prov[:id]
 						res.answered      = (fail == 0) ? true : false
 						res.busy          = (busy == 1) ? true : false
-						res.audio_seconds = (byte / 16000)  # 8khz @ 16-bit
-						res.ring_seconds  = ring
+						res.audio_length = (byte / 16000)  # 8khz @ 16-bit
+						res.ring_length  = ring
 						res.caller_id     = cid
 
 						res.save
@@ -211,7 +211,7 @@ class Dialer < Base
 
 	def update_progress(pct)
 		::ActiveRecord::Base.connection_pool.with_connection {
-			Job.update({ :progress => pct }, { :id => @job_id })
+			Job.update_all({ :progress => pct }, { :id => @job_id })
 		}
 	end
 

@@ -27,7 +27,7 @@ class Call < ActiveRecord::Base
 
 
 	def media
-		CallMedium.find_or_create_by_call_id(self[:id])
+		CallMedium.find_or_create_by_call_id_and_project_id(self[:id], self[:project_id])
 	end
 
 	def media_fields

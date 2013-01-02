@@ -83,6 +83,14 @@ module Config
 		File.expand_path(info['classifiers'].gsub('%BASE%', WarVOX::Base))
 	end
 
+	def self.log_file
+		STDOUT
+	end
+
+	def self.log_level
+		Logger::DEBUG
+	end
+
 	def self.classifiers_load
 		path = classifiers_path
 		sigs = []

@@ -43,21 +43,21 @@ and research purposes only. The latest version of WarVOX can be found in <i clas
 	<td>
 		Active Jobs
 	</td>
-	<td><%= DialJob.count(:conditions => ['status = ?', 'active']) %></td>
+	<td><%= Job.count(:conditions => { :completed_at => nil }) %></td>
 </tr>
 
 <tr>
 	<td>
 		Total Jobs
 	</td>
-	<td><%= DialJob.count %></td>
+	<td><%= Job.count %></td>
 </tr>
 
 <tr>
 	<td>
-		Results
+		Calls
 	</td>
-	<td><%= DialResult.count %></td>
+	<td><%= Call.count %></td>
 </tr>
 </table>
 </div>
