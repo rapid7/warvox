@@ -1,0 +1,46 @@
+.help-block {
+	font-size: 13px;
+	font-style: italic;
+}
+
+.control-label {
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.formtastic .stringish input
+{
+  width: auto;
+}
+
+.formtastic .numeric input {
+	width: 5em;
+}
+
+.formtastic .stringish input#project_name
+{
+  width: 500px;
+}
+
+.formtastic .text textarea.project_description {
+  width: 500px;
+}
+
+.formtastic .text textarea.project_includes {
+  width: 200px;
+}
+
+.formtastic input {
+	padding: 4px;
+}
+
+.formtastic textarea {
+	padding: 4px;
+}
+
+.formtastic input.btn {
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}

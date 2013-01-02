@@ -1,0 +1,48 @@
+<p>
+  <b>Number:</b>
+  <%=h @call.number %>
+</p>
+
+<p>
+  <b>CallerID:</b>
+  <%=h @call.cid %>
+</p>
+
+<p>
+  <b>Dial job:</b>
+  <%=h @call.job_id %>
+</p>
+
+<p>
+  <b>Provider:</b>
+  <%=h @call.provider %>
+</p>
+
+<p>
+  <b>Completed:</b>
+  <%=h @call.completed %>
+</p>
+
+<p>
+  <b>Busy:</b>
+  <%=h @call.busy %>
+</p>
+
+<p>
+  <b>Seconds:</b>
+  <%=h @call.seconds %>
+</p>
+
+<p>
+  <b>Ringtime:</b>
+  <%=h @call.ringtime %>
+</p>
+
+<p>
+  <b>Rawfile:</b>
+  <%=h @call.rawfile %>
+</p>
+
+
+<%= link_to 'Edit', edit_call_path(@project, @call) %> |
+<%= link_to 'Back', calls_path(@project) %>

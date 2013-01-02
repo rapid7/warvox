@@ -1,0 +1,35 @@
+<h1 class='title'>Submit a New Job</h1>
+
+<%= form_for(@job, :html => { :multipart => true }) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :range, 'Specify target telephone range(s) (1-123-456-7890 or 1-123-456-XXXX or 1-123-300-1000:1-123-400-2000)' %><br />
+    <%= f.text_area :range, :size => "35x5" %>
+  </p>
+
+  <p>
+    <%= f.label :range_file, 'Or upload a file containing the target ranges' %><br />
+    <%= f.file_field :range_file %>
+  </p>
+
+  <p>
+    <%= f.label :seconds, 'Seconds of audio to capture' %><br />
+    <%= f.text_field :seconds, :value => 53 %>
+  </p>
+
+  <p>
+    <%= f.label :lines, 'Maximum number of outgoing lines' %><br />
+    <%= f.text_field :lines, :value => 10 %>
+  </p>
+
+  <p>
+    <%= f.label :lines, 'The source Caller ID range (1-555-555-55XX or SELF)' %><br />
+    <%= f.text_field :cid_mask, :value => '1-123-456-XXXX' %>
+  </p>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', jobs_path %>
