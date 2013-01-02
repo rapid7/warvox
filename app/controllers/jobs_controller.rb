@@ -17,7 +17,7 @@ class JobsController < ApplicationController
 
   def results
 
-    @jobs = @project.jobs.where('task = ? AND completed_at IS NOT NULL', 'dialer').paginate(
+    @jobs = @project.jobs.where('(task = ? OR task = ?) AND completed_at IS NOT NULL', 'dialer', 'import').paginate(
 		:page => params[:page],
 		:order => 'id DESC',
 		:per_page => 30

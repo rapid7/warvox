@@ -47,7 +47,7 @@
 		<%= render :partial => 'shared/lightbox_sig', :locals => { :call => call } %>
 		<%= render :partial => 'shared/lightbox_freq', :locals => { :call => call } %>
 		<% if call.fprint and call.fprint.length > 0 %>
-			<a href="<%=view_matches_path(@project, call.id)%>">View Matches</a>
+			<a href="<%=view_matches_path(@project, call.job_id, call.id)%>">View Matches</a>
 		<% end %>
 	</td>
   </tr>

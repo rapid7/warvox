@@ -26,10 +26,10 @@ class Job < ActiveRecord::Base
 				unless ['job', 'project', 'global'].include?(record.scope)
 					record.errors[:scope] << "Scope must be job, project, or global"
 				end
-				if record.scope == "job" and Job.where(:id => record.target_id.to_i, :task => 'dialer').count == 0
+				if record.scope == "job" and Job.where(:id => record.target_id.to_i, :task => ['import', 'dialer']).count == 0
 					record.errors[:job_id] << "The job_id is not valid"
 				end
-				if record.scope == "project" and Job.where(:id => record.target_id.to_i, :task => 'dialer').count == 0
+				if record.scope == "project" and Project.where(:id => record.target_id.to_i).count == 0
 					record.errors[:project_id] << "The project_id is not valid"
 				end
 			when 'import'
