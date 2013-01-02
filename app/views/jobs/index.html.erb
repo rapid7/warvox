@@ -1,0 +1,104 @@
+<% if(@submitted_jobs.length > 0) %>
+
+<h1 class='title'>Submitted Jobs</h1>
+
+<table class='table table-striped table-bordered' width='90%'>
+  <tr>
+    <th>ID</th>
+    <th>Task</th>
+    <th>Status</th>
+    <th>Submitted Time</th>
+    <th>Actions</th>
+  </tr>
+
+<% @submitted_jobs.each do |job| %>
+  <tr>
+    <td><%= job.id %></td>
+    <td><%= format_job_details(job) %></td>
+	<td><%= format_job_status(job) %></td>
+    <td><%= job.created_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
+
+    <td>
+		<a class="btn btn-mini" href="<%= job_path(job) %>" data-confirm="Remove this job?" data-method="delete" rel="nofollow tooltip" title="Remove Job"><i class="icon-trash"></i></a>
+	</td>
+  </tr>
+<% end %>
+</table>
+<br />
+<% end %>
+
+<% if(@active_jobs.length > 0) %>
+
+<h1 class='title'>Active Jobs</h1>
+
+<table class='table table-striped table-bordered' width='90%'>
+  <tr>
+    <th>ID</th>
+    <th>Task</th>
+    <th>Progress</th>
+    <th>Submitted Time</th>
+    <th>Actions</th>
+  </tr>
+
+<% @active_jobs.each do |job| %>
+  <tr class='active_job_row'>
+    <td><%= job.id %></td>
+    <td><%= format_job_details(job) %></td>
+    <td valign='center'>
+		<div class="progress progress-success progress-striped">
+			<div class="bar" style="width: <%= job.progress %>%">
+				<span class='progress_pct'><%= job.progress %>%</span>
+			</div>
+		</div>
+	</td>
+    <td><%= job.created_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
+    <td>
+		<a class="btn btn-mini" href="<%= stop_job_path(job) %>" data-confirm="Terminate this job?" rel="nofollow tooltip" title="Terminate Job"><i class="icon-stop"></i></a>
+	</td>
+  </tr>
+<% end %>
+</table>
+<br />
+
+<% end %>
+
+<% if (@active_jobs.length + @submitted_jobs.length == 0) %>
+<h1 class='title'>No Active Jobs</h1>
+<% end %>
+
+<a class="btn" href="<%= new_dialer_job_path %>"><i class="icon-plus"></i> Start Job </a>
+
+<% if(@inactive_jobs.length > 0) %>
+<br/><br/>
+<h1 class='title'>Inactive Jobs</h1>
+
+<%= raw(will_paginate @inactive_jobs) %>
+<table class='table table-striped table-bordered' width='90%'>
+  <tr>
+    <th>ID</th>
+    <th>Task</th>
+    <th>Status</th>
+    <th>Created</th>
+    <th>Completed</th>
+    <th>Project</th>
+  </tr>
+
+<% @inactive_jobs.each do |job| %>
+  <tr class='active_job_row'>
+    <td><%= job.id %></td>
+    <td><%= format_job_details(job) %></td>
+	<td><%= format_job_status(job) %></td>
+    <td><%= job.created_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
+    <td><%= job.completed_at ? job.completed_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") : "incomplete" %></td>
+    <td><%= link_to( truncate(job.project.name, :length => 25).html_safe, project_path(job.project)) %></td>
+  </tr>
+<% end %>
+</table>
+<%= raw(will_paginate @inactive_jobs) %>
+<br />
+
+<script language="javascript">
+	setTimeout("location.reload(true);", 20000);
+</script>
+
+<% end %>

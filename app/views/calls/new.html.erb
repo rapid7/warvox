@@ -1,0 +1,43 @@
+<h1>New call</h1>
+
+<%= form_for(@call) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :number %><br />
+    <%= f.text_field :number %>
+  </p>
+  <p>
+    <%= f.label :job_id %><br />
+    <%= f.text_field :job_id %>
+  </p>
+  <p>
+    <%= f.label :provider %><br />
+    <%= f.text_field :provider %>
+  </p>
+  <p>
+    <%= f.label :completed %><br />
+    <%= f.check_box :completed %>
+  </p>
+  <p>
+    <%= f.label :busy %><br />
+    <%= f.check_box :busy %>
+  </p>
+  <p>
+    <%= f.label :seconds %><br />
+    <%= f.text_field :seconds %>
+  </p>
+  <p>
+    <%= f.label :ringtime %><br />
+    <%= f.text_field :ringtime %>
+  </p>
+  <p>
+    <%= f.label :rawfile %><br />
+    <%= f.text_field :rawfile %>
+  </p>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', calls_path(@project) %>

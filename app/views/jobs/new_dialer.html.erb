@@ -1,0 +1,21 @@
+<h1 class='title'>Dialer Job</h1>
+
+<%= semantic_form_for(@job, :url => dialer_job_path, :html => { :multipart => true, :method => :put }) do |f| %>
+	<%= f.input :project, :as => :select %>
+
+	<%= f.input :range, :as => :text,
+		:label => 'Target telephone range(s)',
+		:hint => 'Examples: 1-123-456-7890 / 1-123-456-XXXX / 1-123-300-1000:1-123-400-2000',
+		:input_html => { :rows => 3, :cols => 80, :autofocus => true }
+	%>
+	<%= f.input :range_file, :as => :file, :label => 'Or upload a file containing the target ranges' %>
+	<%= f.input :seconds,  :as => :number, :label => 'Seconds of audio to capture', :input_html => { :value => 53 } %>
+	<%= f.input :lines,  :as => :number, :label => 'Maximum number of outgoing lines', :input_html => { :value => 1 } %>
+	<%= f.input :cid_mask,  :as => :string, :label => 'The source Caller ID range (1-555-555-55XX or SELF)', :input_html => { :value => '1-123-456-XXXX' } %>
+
+	<%= f.action :submit, :label => 'Create', :button_html => { :class => 'btn btn-large fbtn' }  %>
+
+	<a class="btn btn-link" href="<%= jobs_path %>" rel="tooltip" title="Return to jobs"><i class="icon-return"></i>Cancel</a>
+<% end %>
+
+<%= set_focus('job_range') %>

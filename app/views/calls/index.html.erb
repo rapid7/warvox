@@ -1,0 +1,57 @@
+<% if @jobs.length > 0 %>
+<h1 class='title'>Completed Jobs</h1>
+
+<%= raw(will_paginate @jobs) %>
+<table class='table table-striped table-bordered' width='90%'>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Range</th>
+	<th>CallerID</th>
+    <th>Connected</th>
+    <th>Date</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+
+<% @jobs.sort{|a,b| b.id <=> a.id}.each do |job|  %>
+  <tr>
+    <td><%=h job.id %></td>
+    <td><%=h job.range %></td>
+    <td><%=h job.cid_mask %></td>
+    <td><%=h (
+		Call.count(:conditions => ['job_id = ? and processed = ?', job.id, true]).to_s +
+		"/" +
+		Call.count(:conditions => ['job_id = ?', job.id]).to_s
+	)%></td>
+    <td><%=h job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S") %></td>
+
+    <td>
+        <a class="btn btn-mini" href="<%= view_call_path(@project,job) %>" rel="tooltip" title="View Call Connections" ><i class="icon-bar-chart"></i></a>
+
+		<% if(job.analysis_completed_at) %>
+			<a class="btn btn-mini" href="<%= analyze_call_path(@project,job) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
+			<a class="btn btn-mini" href="<%= reanalyze_call_path(@project,job) %>" data-confirm="Reprocess this job?" rel="nofollow tooltip" title="Rerun Call Analysis"><i class="icon-refresh"></i></a>
+		<% else %>
+			<a class="btn btn-mini" href="<%= analyze_call_path(@project,job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-bolt"></i></a>
+		<% end %>
+
+    	<a class="btn btn-mini" href="<%= call_path(@project,job) %>" data-confirm="Delete all data for this job?" data-method="delete" rel="nofollow tooltip" title="Delete Call Data"><i class="icon-trash"></i></a>
+	</td>
+  </tr>
+
+<% end %>
+</tbody>
+</table>
+
+<%= raw(will_paginate @jobs) %>
+
+<% else %>
+
+<h1 class='title'>No Completed Jobs</h1>
+<br/>
+
+<% end %>
+
+<a class="btn" href="<%= new_dialer_job_path %>"><i class="icon-plus"></i> Start Job </a>
