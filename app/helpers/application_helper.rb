@@ -28,11 +28,11 @@ module ApplicationHelper
 
 			ttip = raw("<div class='task_args_formatted'>")
 			info.each_pair do |k,v|
-				ttip << raw("<div class='task_args_var'>") + k.to_s.html_safe + raw(": </div> ")
-				ttip << raw("<div class='task_args_val'>") + v.to_s.html_safe + raw("&nbsp;</div>")
+				ttip << raw("<div class='task_args_var'>") + h(k.to_s) + raw(": </div> ")
+				ttip << raw("<div class='task_args_val'>") + h(v.to_s) + raw("&nbsp;</div>")
 			end
 			ttip << raw("</div>\n")
-			outp = raw("<a href='#' rel='tooltip' title=\"#{ttip}\" data-html='true'>#{job.task.capitalize.html_safe}</a>")
+			outp = raw("<a href='#' rel='tooltip' title=\"#{ttip}\" data-html='true'>#{h job.task.capitalize}</a>")
 			outp
 		rescue ::Exception => e
 			job.status.to_s.capitalize
@@ -42,8 +42,8 @@ module ApplicationHelper
 	def format_job_status(job)
 		case job.status
 		when 'error'
-			ttip = job.error.to_s.html_safe
-			outp = raw("<a href='#' rel='tooltip' title=\"#{ttip}\" data-html='true'>#{job.status.capitalize.html_safe}</a>")
+			ttip = h(job.error.to_s)
+			outp = raw("<a href='#' rel='tooltip' title=\"#{ttip}\" data-html='true'>#{h job.status.capitalize}</a>")
 			outp
 		else
 			job.status.to_s.capitalize
