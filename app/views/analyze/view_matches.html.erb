@@ -1,6 +1,6 @@
-<%  dial_result = @result %>
+<%  call = @result %>
 
-<h1 class='title'><%= @result.number %> (<a href="<%=view_analyze_path(dial_result.dial_job_id)%>">Back to Job</a>)</h1>
+<h1 class='title'><%= @result.number %> (<a href="<%=view_analyze_path(call.job_id)%>">Back to Job</a>)</h1>
 <table class='table table-striped table-bordered' width='90%'>
   <tr>
     <th>Number</th>
@@ -12,27 +12,27 @@
 
 		<object
 			type="application/x-shockwave-flash"
-			data="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id, dial_result.id, "mp3")%>"
+			data="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id, call.id, "mp3")%>"
 			width="20"
 			height="17"
 			style="margin-bottom: -5px;"
 			>
-			<param name="movie" value="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id, dial_result.id, "mp3")%>"></param>
+			<param name="movie" value="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id, call.id, "mp3")%>"></param>
 			<param name="wmode" value="transparent"></param>
 		</object>
 
-		<b><%= dial_result.number %></b>
+		<b><%= call.number %></b>
 		<hr width='100%' size='1'/>
-		CallerID: <%= dial_result.cid%><br/>
-		Provider: <%=h dial_result.provider.name %><br/>
-		Audio: <%=h dial_result.seconds %> Seconds<br/>
-		Ringer: <%=h dial_result.ringtime %> Seconds<br/>
+		CallerID: <%= call.cid%><br/>
+		Provider: <%=h call.provider.name %><br/>
+		Audio: <%=h call.seconds %> Seconds<br/>
+		Ringer: <%=h call.ringtime %> Seconds<br/>
 	</td>
   	<td align='center'>
-		<b><%=h dial_result.line_type.upcase %></b><br/>
-		<a href="<%=resource_analyze_path(@job_id, dial_result.id, "big_sig_dots")%>" rel="lightbox"><img src="<%=resource_analyze_path(@job_id, dial_result.id, "small_sig")%>" /></a>
-		<a href="<%=resource_analyze_path(@job_id, dial_result.id, "big_freq")%>" rel="lightbox"><img src="<%=resource_analyze_path(@job_id, dial_result.id, "small_freq")%>" /></a><br/>
-		<% (dial_result.signatures||"").split("\n").each do |s|
+		<b><%=h call.line_type.upcase %></b><br/>
+		<a href="<%=resource_analyze_path(@job_id, call.id, "big_sig_dots")%>" rel="lightbox"><img src="<%=resource_analyze_path(@job_id, call.id, "small_sig")%>" /></a>
+		<a href="<%=resource_analyze_path(@job_id, call.id, "big_freq")%>" rel="lightbox"><img src="<%=resource_analyze_path(@job_id, call.id, "small_freq")%>" /></a><br/>
+		<% (call.signatures||"").split("\n").each do |s|
 			sid,mat,name = s.split(':', 3)
 			str = [mat.to_i * 6.4, 255].min
 			col = ("%.2x" % (255 - str)) * 3
@@ -55,43 +55,43 @@
   </thead>
   <tbody>
 
-<%  @results.each do |dial_result| %>
+<%  @results.each do |call| %>
   <tr>
     <td align='center'>
 
-		<br/><%= raw(fwd_match_html(dial_result.matchscore)) %><br/><br/>
+		<br/><%= raw(fwd_match_html(call.matchscore)) %><br/><br/>
 
 		<object
 			type="application/x-shockwave-flash"
-			data="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id, dial_result.id, "mp3")%>"
+			data="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id, call.id, "mp3")%>"
 			width="20"
 			height="17"
 			style="margin-bottom: -5px;"
 			>
-			<param name="movie" value="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id, dial_result.id, "mp3")%>"></param>
+			<param name="movie" value="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(@job_id, call.id, "mp3")%>"></param>
 			<param name="wmode" value="transparent"></param>
 		</object>
 
-		<b><%= dial_result.number %></b>
+		<b><%= call.number %></b>
 		<hr width='100%' size='1'/>
-		CallerID: <%= dial_result.cid%><br/>
-		Provider: <%=h dial_result.provider.name %><br/>
-		Audio: <%=h dial_result.seconds %> Seconds<br/>
-		Ringer: <%=h dial_result.ringtime %> Seconds<br/>
+		CallerID: <%= call.cid%><br/>
+		Provider: <%=h call.provider.name %><br/>
+		Audio: <%=h call.seconds %> Seconds<br/>
+		Ringer: <%=h call.ringtime %> Seconds<br/>
 	</td>
   	<td align='center'>
-		<b><%=h dial_result.line_type.upcase %></b><br/>
-		<a href="<%=resource_analyze_path(@job_id, dial_result.id, "big_sig_dots")%>" class="lightbox"><img src="<%=resource_analyze_path(@job_id, dial_result.id, "small_sig")%>" /></a>
-		<a href="<%=resource_analyze_path(@job_id, dial_result.id, "big_freq")%>" class="lightbox"><img src="<%=resource_analyze_path(@job_id, dial_result.id, "small_freq")%>" /></a><br/>
-		<% (dial_result.signatures||"").split("\n").each do |s|
+		<b><%=h call.line_type.upcase %></b><br/>
+		<a href="<%=resource_analyze_path(@job_id, call.id, "big_sig_dots")%>" class="lightbox"><img src="<%=resource_analyze_path(@job_id, call.id, "small_sig")%>" /></a>
+		<a href="<%=resource_analyze_path(@job_id, call.id, "big_freq")%>" class="lightbox"><img src="<%=resource_analyze_path(@job_id, call.id, "small_freq")%>" /></a><br/>
+		<% (call.signatures||"").split("\n").each do |s|
 			sid,mat,name = s.split(':', 3)
 			str = [mat.to_i * 6.4, 255].min
 			col = ("%.2x" % (255 - str)) * 3
 		%>
 			<div style="color: #<%= col%>;"><%=h name%> (<%=h sid %>@<%=h mat %>)</div>
 		<% end %>
-		<% if dial_result.fprint %>
-			<a href="<%=view_matches_path(dial_result.id)%>">View Matches</a>
+		<% if call.fprint %>
+			<a href="<%=view_matches_path(call.id)%>">View Matches</a>
 		<% end %>
 	</td>
   </tr>

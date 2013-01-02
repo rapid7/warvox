@@ -1,18 +1,10 @@
 <h1 class='title'>New Project</h1>
 
-<div class='fconstrained'>
-
 <%= semantic_form_for(@new_project) do |f| %>
-	<%= f.input :name, :as => :string, :label => 'Name' %>
+	<%= f.input :name, :as => :string, :label => 'Name', :input_html => { :autofocus => true }  %>
 	<%= f.input :description, :as => :text, :input_html => { :class => 'project_description' } %>
-	<%= f.input :included,  :as => :text, :label => 'Default phone numbers to include', :input_html => { :class => 'project_includes' } %>
-	<%= f.input :excluded,  :as => :text, :label => 'Default phone numbers to exclude', :input_html => { :class => 'project_includes' } %>
-
 	<%= f.action :submit, :label => 'Create', :button_html => { :class => 'btn btn-large fbtn' }  %>
-
 	<a class="btn btn-link" href="<%= projects_path %>"rel="tooltip" title="Return to projects"><i class="icon-return"></i>Cancel</a>
 <% end %>
-</div>
-
 
 <%= set_focus('project_name') %>

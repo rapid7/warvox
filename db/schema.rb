@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
 
   create_table "call_media", :force => true do |t|
     t.integer "call_id",      :null => false
+    t.integer "project_id",   :null => false
     t.binary  "audio"
     t.binary  "mp3"
     t.binary  "png_big"
@@ -35,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
     t.integer  "provider_id",           :null => false
     t.boolean  "answered"
     t.boolean  "busy"
+    t.text     "error"
     t.integer  "audio_length"
     t.integer  "ring_length"
     t.text     "caller_id"
@@ -51,7 +53,6 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
     t.datetime "created_at",                  :null => false
     t.datetime "updated_at",                  :null => false
     t.integer  "project_id",                  :null => false
-    t.string   "name",                        :null => false
     t.string   "locked_by"
     t.datetime "locked_at"
     t.datetime "started_at"
@@ -68,6 +69,7 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
     t.integer  "line_id",                          :null => false
+    t.integer  "project_id",                       :null => false
     t.text     "name",                             :null => false
     t.binary   "value",                            :null => false
     t.string   "content_type", :default => "text"
@@ -85,7 +87,7 @@ ActiveRecord::Schema.define(:version => 20121228171549) do
   create_table "projects", :force => true do |t|
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.text     "name"
+    t.text     "name",        :null => false
     t.text     "description"
     t.text     "included"
     t.text     "excluded"

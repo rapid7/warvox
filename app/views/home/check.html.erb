@@ -4,9 +4,9 @@
 <!--
 		@has_project  = ( Project.count > 0 )
 		@has_provider = ( Provider.count > 0 )
-		@has_job      = ( DialJob.count > 0 )
-		@has_result   = ( DialResult.where(:completed => true ).count > 0 )
-		@has_analysis = ( DialResult.where(:processed => true ).count > 0 )
+		@has_job      = ( Job.count > 0 )
+		@has_result   = ( Call.where(:completed => true ).count > 0 )
+		@has_analysis = ( Call.where(:processed => true ).count > 0 )
 -->
 
 <br/>
@@ -54,7 +54,7 @@
 		<div class="alert alert-error">
 			<strong>Ring Ring!</strong>
 			<% if @has_project %>
-				<p>You need to <a href="<%= new_dial_job_path(Project.last) %>">dial your target range</a> to gather audio data.</p>
+				<p>You need to <a href="<%= new_job_path(Project.last) %>">dial your target range</a> to gather audio data.</p>
 			<% else %>
 				<p>You need to <a href="<%= new_project_path %>">create a project</a>.</p>
 			<% end %>

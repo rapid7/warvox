@@ -17,8 +17,6 @@ require 'fileutils'
 ENV['RAILS_ENV'] ||= 'production'
 
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..'))
-require 'config/boot'
-require 'config/environment'
 
 def usage
 	$stderr.puts "Usage: #{$0} [Input Directory] <Project ID> <Provider ID>"
@@ -34,6 +32,8 @@ if (dir and dir =="-h") or (! dir)
 	usage()
 end
 
+require 'config/boot'
+require 'config/environment'
 
 project_id  = ARGV.shift
 provider_id = ARGV.shift
@@ -66,7 +66,7 @@ end
 
 unless project
 	project = Project.create(
-		:name       => "Import from #{dir}",
+		:name       => "Import from #{dir} at #{Time.now.utc.to_s}",
 		:created_by => "importer"
 	)
 end
@@ -87,7 +87,6 @@ end
 
 job = Job.new
 job.project_id   = project.id
-job.name         = "Import Audio Job"
 job.locked_by    = "importer"
 job.locked_at    = Time.now.utc
 job.started_at   = Time.now.utc
@@ -95,7 +94,7 @@ job.created_by   = "importer"
 job.task         = "import"
 job.args         = Marshal.dump({ :directory => dir, :project_id => project.id, :provider_id => provider.id })
 job.status       = "running"
-job.save
+job.save!
 
 pct  = 0
 cnt  = 0

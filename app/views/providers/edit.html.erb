@@ -1,38 +1,13 @@
-<h1 class='title'>Edit Provider</h1>
+<h1 class='title'>Update Provider</h1>
 
-<%= form_for(@provider) do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label :enabled %><br />
-    <%= f.check_box :enabled %>
-  </p>
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :host %><br />
-    <%= f.text_field :host %>
-  </p>
-  <p>
-    <%= f.label :port %><br />
-    <%= f.text_field :port %>
-  </p>
-  <p>
-    <%= f.label :user %><br />
-    <%= f.text_field :user %>
-  </p>
-  <p>
-    <%= f.label :pass %><br />
-    <%= f.text_field :pass %>
-  </p>
-  <p>
-    <%= f.label :lines %><br />
-    <%= f.text_field :lines %>
-  </p>
-  <p>
-    <%= f.submit "Update" %>
-  </p>
+<%= semantic_form_for(@provider) do |f| %>
+	<%= f.input :name, :as => :string, :label => 'Name', :hint => 'A friendly name for this provider', :autofocus => true %>
+	<%= f.input :host, :as => :string, :label => 'IAX2 Server', :hint => 'The IP address or hostname of the IAX2 service' %>
+	<%= f.input :port, :as => :number, :label => 'IAX2 Port', :hint => 'The port of the IAX2 service' %>
+	<%= f.input :user, :as => :string, :label => 'Username' %>
+	<%= f.input :pass, :as => :string, :label => 'Password', :input_html => { :autocomplete => false }  %>
+	<%= f.input :lines, :as => :number, :label => 'Maximum Lines', :hint => 'Maximum concurrent outbound lines' %>
+
+	<%= f.action :submit, :label => 'Update', :button_html => { :class => 'btn btn-large fbtn' }  %>
+	<a class="btn btn-link" href="<%= providers_path %>" rel="tooltip" title="Return to providers"><i class="icon-return"></i>Cancel</a>
 <% end %>
-
-<%= link_to 'Back', providers_path %>

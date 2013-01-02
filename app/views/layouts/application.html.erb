@@ -32,20 +32,29 @@
 
 			<%= menu_group :pull => :right  do %>
 			<% if @project and @project.id %>
-				<li class="project-title"><%= truncate(@project.name, :length => 20) %></li>
-				<%= menu_item "Dial", new_dial_job_path(@project) %>
-				<%= menu_item "Jobs", dial_jobs_path(@project) %>
-				<%= menu_item "Results", dial_results_path(@project) %>
+				<li>
+					<%= link_to(
+						raw(
+							'<i class="icon-chevron-left icon-white"></i> ' +
+							truncate(@project.name, :length => 20).html_safe +
+							' <i class="icon-chevron-right icon-white"></i>'), project_path(@project), :class => 'project-title') %>
+				</li>
+				<%= menu_item "Results", calls_path(@project) %>
 				<%= menu_item "Analysis", analyze_path(@project)%>
 			<% end %>
 
+				<%= menu_item "Jobs", jobs_path %>
 				<%= drop_down "Projects" do %>
-					<%= menu_item raw('<i class="icon-list"></i> Browse Projects'),projects_path %>
+					<% if Project.count > 0 %>
+						<%= menu_item raw('<i class="icon-list"></i> Browse Projects'),projects_path %>
+					<% end %>
 					<%= menu_item raw('<i class="icon-plus"></i> Create Project'), new_project_path %>
-					<%= drop_down_divider %>
-					<%= drop_down_header "Recent Projects" %>
-					<% Project.find(:all, :order => 'ID DESC', :limit => 5).each do |project| %>
-						<%= menu_item raw('<i class="icon-chevron-right"></i> ' + truncate(project.name, :length => 15).html_safe),project_path(project) %>
+					<% if Project.count > 0 %>
+						<%= drop_down_divider %>
+						<%= drop_down_header "Recent Projects" %>
+						<% Project.find(:all, :order => 'ID DESC', :limit => 5).each do |project| %>
+							<%= menu_item raw('<i class="icon-chevron-right"></i> ' + truncate(project.name, :length => 15).html_safe),project_path(project) %>
+						<% end %>
 					<% end %>
 				<% end %>
 
@@ -65,13 +74,9 @@
 
       <div class="row">
         <div class="span12 content">
-<% # render_breadcrumbs %>
           <div class="content">
 
-
-
-<p style="color: green"><%= flash[:notice] %></p>
-
+          <p style="color: green"><%= flash[:notice] %></p>
           <%= yield %>
           </div>
 

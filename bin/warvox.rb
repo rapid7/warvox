@@ -12,9 +12,14 @@ while File.symlink?(base)
 	base = File.expand_path(File.readlink(base), File.dirname(base))
 end
 
+$:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
+
 voxroot = File.expand_path(File.join(File.dirname(base), '..'))
 voxserv = File.expand_path(File.join(File.expand_path(voxroot), 'script', 'rails'))
 manager = File.expand_path(File.join(File.dirname(base), 'worker_manager.rb'))
+
+require 'warvox'
+
 
 Dir.chdir(voxroot)
 
@@ -77,14 +82,21 @@ $stderr.puts "[*] Starting WarVOX on #{$browser_url}"
 $stderr.puts ""
 
 
+WarVOX::Log.info("WarVOX is starting up...")
+
 @manager_pid = Process.fork()
 if not @manager_pid
-	while (ARGV.shift) { }
+	while ARGV.shift do
+	end
 	load(manager)
 	exit(0)
 end
 
+WarVOX::Log.info("Worker Manager has PID #{@manager_pid}")
+
 @webserver_pid = $$
+
+WarVOX::Log.info("Web Server has PID #{@manager_pid}")
 
 while(ARGV.length > 0); ARGV.shift; end
 args.each {|arg| ARGV.push(arg) }

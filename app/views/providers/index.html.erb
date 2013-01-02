@@ -1,27 +1,29 @@
 <% if @providers.length > 0 %>
 <h1 class='title'>VoIP Providers (IAX)</h1>
+
+<%= will_paginate @providers, :renderer => BootstrapPagination::Rails %>
 <table class='table table-striped table-bordered' width='90%'>
   <tr>
     <th>Active</th>
     <th>Provider Name</th>
-    <th>IAX Server</th>
-    <th>IAX Port</th>
+    <th>IAX2 Server</th>
+    <th>IAX2 Port</th>
     <th>Username</th>
     <th>Lines</th>
     <th>Actions</th>
 
   </tr>
 
-<% for provider in @providers %>
+<% @providers.each do |provider|  %>
   <tr>
     <td>
     <i class="icon-<%= provider.enabled  ? "ok" : "remove" %>"></i>
     </td>
-    <td><%=h provider.name %></td>
-    <td><%=h provider.host %></td>
-    <td><%=h provider.port %></td>
-    <td><%=h provider.user %></td>
-    <td><%=h provider.lines %></td>
+    <td><%= provider.name %></td>
+    <td><%= provider.host %></td>
+    <td><%= provider.port %></td>
+    <td><%= provider.user %></td>
+    <td><%= provider.lines %></td>
     <td>
     	<a class="btn btn-mini" href="<%= edit_provider_path(provider) %>"rel="tooltip" title="Update Provider Information"><i class="icon-pencil"></i></a>
     	<a class="btn btn-mini" href="<%= provider_path(provider) %>" data-confirm="Remove this provider?" data-method="delete" rel="nofollow tooltip" title="Remove Provider"><i class="icon-trash"></i></a>
@@ -29,18 +31,10 @@
   </tr>
 <% end %>
 </table>
-
-<br />
-
-
-<a class="btn" href="<%= new_provider_path %>"><i class="icon-plus"></i> Add Provider </a>
-
+<%= will_paginate @providers, :renderer => BootstrapPagination::Rails %>
 <% else %>
-
 <h1 class='title'>No Configured Providers</h1>
-<br/>
-
-<a class="btn" href="<%= new_provider_path %>"><i class="icon-plus"></i> Add Provider </a>
-
-
 <% end %>
+
+<br/>
+<a class="btn" href="<%= new_provider_path %>"><i class="icon-plus"></i> Add Provider </a>
