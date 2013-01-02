@@ -93,7 +93,6 @@ class Analysis < Base
 
 		Call.find_each(:conditions => query) do |call|
 			if @tasks.length < max_threads
-				WarVOX::Log.debug("Spawning job for Call #{call.inspect}")
 				@tasks << Thread.new(call.id, job.id) { |c,j| ::ActiveRecord::Base.connection_pool.with_connection { run_analyze_call(c,j) }}
 			else
 				clear_stale_tasks
@@ -123,7 +122,7 @@ class Analysis < Base
 
 	def update_progress(pct)
 		::ActiveRecord::Base.connection_pool.with_connection {
-			Job.update({ :progress => pct }, { :id => @job_id })
+			Job.update_all({ :progress => pct }, { :id => @job_id })
 		}
 	end
 

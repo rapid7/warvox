@@ -45,7 +45,7 @@ class Job < ActiveRecord::Base
 
 	belongs_to :project
 
-	attr_accessible :task, :status
+	attr_accessible :task, :status, :progress
 
 	validates_presence_of :project_id
 
