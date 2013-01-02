@@ -90,7 +90,7 @@
 	<td><%= format_job_status(job) %></td>
     <td><%= job.created_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
     <td><%= job.completed_at ? job.completed_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") : "incomplete" %></td>
-    <td><%= link_to( truncate(job.project.name, :length => 25).html_safe, project_path(job.project)) %></td>
+    <td><%= link_to( h(truncate(job.project.name, :length => 25)), project_path(job.project)) %></td>
   </tr>
 <% end %>
 </table>

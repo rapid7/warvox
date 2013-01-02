@@ -36,7 +36,7 @@
 					<%= link_to(
 						raw(
 							'<i class="icon-chevron-left icon-white"></i> ' +
-							truncate(@project.name, :length => 20).html_safe +
+							h(truncate(@project.name, :length => 20)) +
 							' <i class="icon-chevron-right icon-white"></i>'), project_path(@project), :class => 'project-title') %>
 				</li>
 				<%= menu_item "Results", calls_path(@project) %>
@@ -53,7 +53,7 @@
 						<%= drop_down_divider %>
 						<%= drop_down_header "Recent Projects" %>
 						<% Project.find(:all, :order => 'ID DESC', :limit => 5).each do |project| %>
-							<%= menu_item raw('<i class="icon-chevron-right"></i> ' + truncate(project.name, :length => 15).html_safe),project_path(project) %>
+							<%= menu_item raw('<i class="icon-chevron-right"></i> ' + h(truncate(project.name, :length => 15))),project_path(project) %>
 						<% end %>
 					<% end %>
 				<% end %>
