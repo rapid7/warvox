@@ -15,6 +15,28 @@ class JobsController < ApplicationController
     end
   end
 
+  def results
+
+    @jobs = @project.jobs.where('task = ? AND completed_at IS NOT NULL', 'dialer').paginate(
+		:page => params[:page],
+		:order => 'id DESC',
+		:per_page => 30
+	)
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @calls }
+    end
+  end
+
+  def view_results
+  	@job   = Job.find(params[:id])
+  	@calls = @job.calls.paginate(
+		:page => params[:page],
+		:order => 'id DESC',
+		:per_page => 30
+	)
+  end
 
   def new_dialer
     @job = Job.new
@@ -53,53 +75,49 @@ class JobsController < ApplicationController
     end
   end
 
+  def reanalyze_job
+	@job = Job.find(params[:id])
+	@new = Job.new({
+		:task => 'analysis', :scope => 'job', :target_id => @job.id, :force => true,
+		:project_id => @project.id, :status => 'submitted'
+	})
+    respond_to do |format|
+      if @new.schedule
+        flash[:notice] = 'Analysis job was successfully created.'
+	    format.html { redirect_to jobs_path }
+        format.xml  { render :xml => @job, :status => :created }
+      else
+      	flash[:notice] = 'Analysis job could not run: ' + @new.errors.inspect
+        format.html { redirect_to results_path(@project) }
+        format.xml  { render :xml => @job.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  def analyze_job
+	@job = Job.find(params[:id])
+	@new = Job.new({
+		:task => 'analysis', :scope => 'job', :target_id => @job.id,
+		:project_id => @project.id, :status => 'submitted'
+	})
+    respond_to do |format|
+      if @new.schedule
+        flash[:notice] = 'Analysis job was successfully created.'
+	    format.html { redirect_to jobs_path }
+        format.xml  { render :xml => @job, :status => :created }
+      else
+      	flash[:notice] = 'Analysis job could not run: ' + @new.errors.inspect
+        format.html { redirect_to results_path(@project) }
+        format.xml  { render :xml => @job.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
   def stop
     @job = Job.find(params[:id])
 	@job.stop
 	flash[:notice] = "Job has been cancelled"
     redirect_to :action => 'index'
-  end
-
-  def create
-
-	@job = Job.new(params[:job])
-
-    if(Provider.find_all_by_enabled(true).length == 0)
-		@job.errors.add(:base, "No providers have been configured or enabled, this job cannot be run")
-		respond_to do |format|
-			format.html { render :action => "new" }
-			format.xml  { render :xml => @job.errors, :status => :unprocessable_entity }
-		end
-		return
-	end
-
-	@job.status       = 'submitted'
-	@job.progress     = 0
-	@job.started_at   = nil
-	@job.completed_at = nil
-	@job.range        = @job_range.gsub(/[^0-9X:,\n]/m, '')
-	@job.cid_mask     = @cid_mask.gsub(/[^0-9X]/m, '') if @job.cid_mask != "SELF"
-
-	if(@job.range_file.to_s != "")
-		@job.range = @job.range_file.read.gsub(/[^0-9X:,\n]/m, '')
-	end
-
-    respond_to do |format|
-      if @job.save
-        flash[:notice] = 'Job was successfully created.'
-
-		res = @job.schedule(:dialer)
-		unless res
-			flash[:error] = "Unable to launch dialer job"
-		end
-
-	    format.html { redirect_to :action => 'index' }
-        format.xml  { render :xml => @job, :status => :created, :location => @job }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @job.errors, :status => :unprocessable_entity }
-      end
-    end
   end
 
   def destroy

@@ -1,0 +1,13 @@
+<%
+	lid = "call_#{call.id}_freq"
+%>
+<div id="<%= lid %>" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class='lightbox-header'>
+		<button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
+	</div>
+	<div class='lightbox-content'>
+		<img src="<%=resource_analyze_path(call.id, "big_freq")%>">
+	</div>
+</div>
+
+<a data-toggle="lightbox" href="#<%= lid %>"><img src="<%=resource_analyze_path(call.id, "small_freq")%>"  alt="<%= call.number %> frequency graph"/></a>

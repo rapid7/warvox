@@ -65,15 +65,15 @@ class Analysis < Base
 		case @conf[:scope]
 		when 'job'
 			if @conf[:force]
-				query = {:job_id => job.id, :answered => true, :busy => false}
+				query = {:job_id => @conf[:target_id], :answered => true, :busy => false}
 			else
-				query = {:job_id => job.id, :answered => true, :busy => false, :analysis_started_at => nil}
+				query = {:job_id => @conf[:target_id], :answered => true, :busy => false, :analysis_started_at => nil}
 			end
 		when 'project'
 			if @conf[:force]
-				query = {:project_id => job.project_id, :answered => true, :busy => false}
+				query = {:project_id => @conf[:target_id], :answered => true, :busy => false}
 			else
-				query = {:project_id => job.project_id, :answered => true, :busy => false, :analysis_started_at => nil}
+				query = {:project_id => @conf[:target_id], :answered => true, :busy => false, :analysis_started_at => nil}
 			end
 		when 'global'
 			if @conf[:force]
@@ -89,22 +89,28 @@ class Analysis < Base
 		@total_calls     = Call.count(:conditions => query)
 		@completed_calls = 0
 
+		WarVOX::Log.debug("Conditions are #{query.inspect}")
+
 		Call.find_each(:conditions => query) do |call|
-			while @tasks.length < max_threads
-				call.analysis_started_at = Time.now.utc
-				call.analysis_job_id = job.id
-				@tasks << Thread.new(call) { |c| ::ActiveRecord::Base.connection_pool.with_connection { run_analyze_call(c) }}
-			end
-			clear_stale_tasks
+			if @tasks.length < max_threads
+				WarVOX::Log.debug("Spawning job for Call #{call.inspect}")
+				@tasks << Thread.new(call.id, job.id) { |c,j| ::ActiveRecord::Base.connection_pool.with_connection { run_analyze_call(c,j) }}
+			else
+				clear_stale_tasks
 
-			# Update progress every 10 seconds or so
-			if Time.now.to_f - last_update.to_f > 10
-				update_progress((@completed_calls / @total_calls.to_f) * 100)
-				last_update = Time.now
-			end
+				# Update progress every 10 seconds or so
+				if Time.now.to_f - last_update.to_f > 10
+					update_progress((@completed_calls / @total_calls.to_f) * 100)
+					last_update = Time.now
+				end
 
-			clear_zombies()
+				clear_zombies()
+			end
 		end
+
+		@tasks.map {|t| t.join }
+		clear_stale_tasks
+		clear_zombies
 
 		}
 	end
@@ -121,8 +127,14 @@ class Analysis < Base
 		}
 	end
 
-	def run_analyze_call(dr)
-		$stderr.puts "DEBUG: Processing audio for #{dr.number}..."
+	def run_analyze_call(cid, jid)
+
+		dr = Call.find(cid)
+		dr.analysis_started_at = Time.now.utc
+		dr.analysis_job_id = jid
+		dr.save
+
+		WarVOX::Log.debug("Worker processing audio for #{dr.number}...")
 
 		bin = File.join(WarVOX::Base, 'bin', 'analyze_result.rb')
 		tmp = Tempfile.new("Analysis")
@@ -163,7 +175,7 @@ class Analysis < Base
 	end
 
 	# Takes the raw file path as an argument, returns a hash
-	def analyze_call(input, num=nil)
+	def self.analyze_call(input, num=nil)
 
 		return if not input
 		return if not File.exist?(input)

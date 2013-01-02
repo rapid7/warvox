@@ -23,6 +23,15 @@ class Job < ActiveRecord::Base
 					record.errors[:lines] << "Lines should be between 1 and 10,000"
 				end
 			when 'analysis'
+				unless ['job', 'project', 'global'].include?(record.scope)
+					record.errors[:scope] << "Scope must be job, project, or global"
+				end
+				if record.scope == "job" and Job.where(:id => record.target_id.to_i, :task => 'dialer').count == 0
+					record.errors[:job_id] << "The job_id is not valid"
+				end
+				if record.scope == "project" and Job.where(:id => record.target_id.to_i, :task => 'dialer').count == 0
+					record.errors[:project_id] << "The project_id is not valid"
+				end
 			when 'import'
 			else
 				record.errors[:base] << "Invalid task specified"
@@ -31,22 +40,12 @@ class Job < ActiveRecord::Base
 	end
 
 
-	has_many :calls
+	# XXX: Purging a single job will be slow, but deleting the project is fast
+	has_many :calls, :dependent => :destroy
+
 	belongs_to :project
-	validates_with JobValidator
 
-	def stop
-		self.class.update_all({ :status => 'cancelled'}, { :id => self.id })
-	end
-
-	def update_progress(pct)
-		if pct >= 100
-			self.class.update_all({ :progress => pct, :completed_at => Time.now.utc, :status => 'completed' }, { :id => self.id })
-		else
-			self.class.update_all({ :progress => pct }, { :id => self.id })
-		end
-	end
-
+	attr_accessible :task, :status
 
 	validates_presence_of :project_id
 
@@ -62,6 +61,30 @@ class Job < ActiveRecord::Base
 
 	attr_accessible :range, :seconds, :lines, :cid_mask
 
+	attr_accessor :scope
+	attr_accessor :force
+	attr_accessor :target_id
+
+	attr_accessible :scope, :force, :target_id
+
+
+	validates_with JobValidator
+
+	def stop
+		self.class.update_all({ :status => 'cancelled'}, { :id => self.id })
+	end
+
+	def update_progress(pct)
+		if pct >= 100
+			self.class.update_all({ :progress => pct, :completed_at => Time.now.utc, :status => 'completed' }, { :id => self.id })
+		else
+			self.class.update_all({ :progress => pct }, { :id => self.id })
+		end
+	end
+
+	def details
+		Marshal.load(self.args) rescue {}
+	end
 
 	def schedule
 		case task
@@ -75,7 +98,13 @@ class Job < ActiveRecord::Base
 			})
 			return self.save
 		when 'analysis'
-			#
+			self.status = 'submitted'
+			self.args = Marshal.dump({
+				:scope      => self.scope,          # job / project/ global
+				:force      => !!(self.force),      # true / false
+				:target_id  => self.target_id.to_i  # job_id or project_id or nil
+			})
+			return self.save
 		else
 			raise ::RuntimeError, "Unsupported Job type"
 		end
