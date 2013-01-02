@@ -30,7 +30,7 @@ Web::Application.routes.draw do
   match '/calls/:result_id/:type'                   => 'analyze#resource', :as => :resource_analyze
   match '/projects/:project_id/analyze/:id/view'    => 'analyze#view', :as => :view_analyze
 
-  match '/projects/:project_id/analyze/:call_id/matches'    => 'analyze#view_matches', :as => :view_matches
+  match '/projects/:project_id/analyze/:job_id/:call_id/matches'    => 'analyze#view_matches', :as => :view_matches
 
   resources :settings
   resources :providers
