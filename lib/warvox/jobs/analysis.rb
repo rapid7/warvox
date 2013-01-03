@@ -57,6 +57,8 @@ class Analysis < Base
 
 		::ActiveRecord::Base.connection_pool.with_connection {
 
+		begin
+
 		job = Job.find(@job_id)
 		if not job
 			raise RuntimeError, "The parent job no longer exists"
@@ -83,17 +85,20 @@ class Analysis < Base
 			end
 		end
 
+
+
+		# Build a list of call IDs, as find_each() gets confused if the DB changes mid-iteration
+		calls = Call.where(query).map{|c| c.id }
+
+		@total_calls     = calls.length
+		@completed_calls = 0
+
 		max_threads = WarVOX::Config.analysis_threads
 		last_update = Time.now
 
-		@total_calls     = Call.count(:conditions => query)
-		@completed_calls = 0
-
-		WarVOX::Log.debug("Conditions are #{query.inspect}")
-
-		Call.find_each(:conditions => query) do |call|
+		while(calls.length > 0)
 			if @tasks.length < max_threads
-				@tasks << Thread.new(call.id, job.id) { |c,j| ::ActiveRecord::Base.connection_pool.with_connection { run_analyze_call(c,j) }}
+				@tasks << Thread.new(calls.shift, job.id) { |c,j| ::ActiveRecord::Base.connection_pool.with_connection { run_analyze_call(c,j) }}
 			else
 				clear_stale_tasks
 
@@ -103,7 +108,7 @@ class Analysis < Base
 					last_update = Time.now
 				end
 
-				clear_zombies()
+				clear_zombies
 			end
 		end
 
@@ -111,11 +116,14 @@ class Analysis < Base
 		clear_stale_tasks
 		clear_zombies
 
+		rescue ::Exception => e
+			WarVOX::Log.error("Exception: #{e.class} #{e} #{e.backtrace}")
+		end
+
 		}
 	end
 
 	def clear_stale_tasks
-		# Remove dead threads from the task list
 		@tasks = @tasks.select{ |x| x.status }
 		IO.select(nil, nil, nil, 0.25)
 	end
