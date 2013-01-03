@@ -2,7 +2,7 @@
 
 <h1 class='title'>Submitted Jobs</h1>
 
-<table class='table table-striped table-bordered' width='90%'>
+<table class='table table-striped table-condensed' width='90%'>
   <tr>
     <th>ID</th>
     <th>Task</th>
@@ -31,7 +31,7 @@
 
 <h1 class='title'>Active Jobs</h1>
 
-<table class='table table-striped table-bordered' width='90%'>
+<table class='table table-striped table-condensed' width='90%'>
   <tr>
     <th>ID</th>
     <th>Task</th>
@@ -66,14 +66,14 @@
 <h1 class='title'>No Active Jobs</h1>
 <% end %>
 
-<a class="btn" href="<%= new_dialer_job_path %>"><i class="icon-plus"></i> Start Job </a>
+<a class="btn" href="<%= new_dialer_job_path %>"><i class="icon-plus"></i> New Scan </a>
 
 <% if(@inactive_jobs.length > 0) %>
 <br/><br/>
 <h1 class='title'>Inactive Jobs</h1>
 
 <%= raw(will_paginate @inactive_jobs) %>
-<table class='table table-striped table-bordered' width='90%'>
+<table class='table table-striped table-condensed' width='90%'>
   <tr>
     <th>ID</th>
     <th>Task</th>

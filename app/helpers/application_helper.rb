@@ -32,7 +32,7 @@ module ApplicationHelper
 				ttip << raw("<div class='task_args_val'>") + h(v.to_s) + raw("&nbsp;</div>")
 			end
 			ttip << raw("</div>\n")
-			outp = raw("<a href='#' rel='tooltip' title=\"#{ttip}\" data-html='true'>#{h job.task.capitalize}</a>")
+			outp = raw("<span rel='tooltip' title=\"#{ttip}\" data-html='true' class='stooltip'>#{h job.task.capitalize}</span>")
 			outp
 		rescue ::Exception => e
 			job.status.to_s.capitalize
@@ -43,7 +43,7 @@ module ApplicationHelper
 		case job.status
 		when 'error'
 			ttip = h(job.error.to_s)
-			outp = raw("<a href='#' rel='tooltip' title=\"#{ttip}\" data-html='true'>#{h job.status.capitalize}</a>")
+			outp = raw("<span rel='tooltip' title=\"#{ttip}\" data-html='true' class='stooltip'>#{h job.status.capitalize}</span>")
 			outp
 		else
 			job.status.to_s.capitalize

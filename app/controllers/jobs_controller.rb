@@ -30,12 +30,19 @@ class JobsController < ApplicationController
   end
 
   def view_results
-  	@job   = Job.find(params[:id])
-  	@calls = @job.calls.paginate(
+  	@job     = Job.find(params[:id])
+  	@results = @job.calls.paginate(
 		:page => params[:page],
-		:order => 'id DESC',
+		:order => 'number ASC',
 		:per_page => 30
 	)
+
+	@call_results = {
+		:Timeout  => @job.calls.count(:conditions => { :answered => false }),
+		:Busy     => @job.calls.count(:conditions => { :busy     => true }),
+		:Answered => @job.calls.count(:conditions => { :answered => true }),
+	}
+
   end
 
   def new_dialer
