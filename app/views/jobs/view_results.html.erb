@@ -1,0 +1,52 @@
+<% if @results.length > 0 %>
+
+
+<h1 class='title'>Dial Results for Job <%=@job.id%></h1>
+
+
+<table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
+<tr>
+	<td align='center'>
+		<%= render :partial => 'shared/graphs/call_results' %>
+	</td>
+</tr>
+</table>
+
+<br/>
+
+<%= will_paginate @results, :renderer => BootstrapPagination::Rails %>
+
+<table class='table table-striped table-bordered' width='90%' id='results'>
+  <thead>
+  <tr>
+    <th>Number</th>
+    <th>CallerID</th>
+    <th>Provider</th>
+    <th>Completed</th>
+    <th>Busy</th>
+    <th>Seconds</th>
+	<th>Ring Time</th>
+  </tr>
+  </thead>
+  <tbody>
+<% @results.each do |call| %>
+  <tr>
+    <td><%= call.number %></td>
+    <td><%= call.caller_id %></td>
+    <td><%= call.provider.name %></td>
+    <td><%= call.answered %></td>
+    <td><%= call.busy %></td>
+    <td><%= call.audio_length %></td>
+    <td><%= call.ring_length %></td>
+  </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @results, :renderer => BootstrapPagination::Rails %>
+
+<% else %>
+
+<h1 class='title'>No Results</h1>
+
+<% end %>
