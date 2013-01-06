@@ -25,8 +25,8 @@
     <td><%= provider.user %></td>
     <td><%= provider.lines %></td>
     <td>
-    	<a class="btn btn-mini" href="<%= edit_provider_path(provider) %>"rel="tooltip" title="Update Provider Information"><i class="icon-pencil"></i></a>
-    	<a class="btn btn-mini" href="<%= provider_path(provider) %>" data-confirm="Remove this provider?" data-method="delete" rel="nofollow tooltip" title="Remove Provider"><i class="icon-trash"></i></a>
+    	<a class="btn" href="<%= edit_provider_path(provider) %>"rel="tooltip" title="Update Provider Information"><i class="icon-pencil"></i></a>
+    	<a class="btn" href="<%= provider_path(provider) %>" data-confirm="Remove this provider?" data-method="delete" rel="nofollow tooltip" title="Remove Provider"><i class="icon-trash"></i></a>
     </td>
   </tr>
 <% end %>

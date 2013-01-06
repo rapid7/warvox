@@ -9,6 +9,7 @@
     <th>Status</th>
     <th>Launched</th>
     <th>Actions</th>
+    <th>Project</th>
   </tr>
 
 <% @submitted_jobs.each do |job| %>
@@ -19,8 +20,9 @@
     <td><%= job.created_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
 
     <td>
-		<a class="btn btn-mini" href="<%= job_path(job) %>" data-confirm="Remove this job?" data-method="delete" rel="nofollow tooltip" title="Remove Job"><i class="icon-trash"></i></a>
+		<a class="btn" href="<%= job_path(job) %>" data-confirm="Remove this job?" data-method="delete" rel="nofollow tooltip" title="Remove Job"><i class="icon-trash"></i></a>
 	</td>
+    <td><%= link_to( h(truncate(job.project.name, :length => 25)), project_path(job.project)) %></td>
   </tr>
 <% end %>
 </table>
@@ -38,6 +40,7 @@
     <th>Progress</th>
     <th>Launched</th>
     <th>Actions</th>
+    <th>Project</th>
   </tr>
 
 <% @active_jobs.each do |job| %>
@@ -54,13 +57,14 @@
     <td><%= job.created_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
     <td>
     	<% if job.task == "dialer" %>
-    		<a class="btn btn-mini" href="<%= view_results_path(job.project,job) %>" rel="tooltip" title="View Current Stats" ><i class="icon-zoom-in"></i></a>
+    		<a class="btn" href="<%= view_results_path(job.project,job) %>" rel="tooltip" title="View Current Stats" ><i class="icon-zoom-in"></i></a>
     	<% end %>
     	<% if job.task == "analysis" %>
-    		<a class="btn btn-mini" href="<%= view_analyze_path(job.project,job.details[:target_id]||job.id) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
+    		<a class="btn" href="<%= view_analyze_path(job.project,job.details[:target_id]||job.id) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
     	<% end %>
-		<a class="btn btn-mini" href="<%= stop_job_path(job) %>" data-confirm="Terminate this job?" rel="nofollow tooltip" title="Terminate Job"><i class="icon-stop"></i></a>
+		<a class="btn" href="<%= stop_job_path(job) %>" data-confirm="Terminate this job?" rel="nofollow tooltip" title="Terminate Job"><i class="icon-stop"></i></a>
 	</td>
+    <td><%= link_to( h(truncate(job.project.name, :length => 25)), project_path(job.project)) %></td>
   </tr>
 <% end %>
 </table>

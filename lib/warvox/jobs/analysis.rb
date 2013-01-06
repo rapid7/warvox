@@ -65,6 +65,12 @@ class Analysis < Base
 		end
 
 		case @conf[:scope]
+		when 'call'
+			if @conf[:force]
+				query = {:id => @conf[:target_id], :answered => true, :busy => false}
+			else
+				query = {:id => @conf[:target_id], :answered => true, :busy => false, :analysis_started_at => nil}
+			end
 		when 'job'
 			if @conf[:force]
 				query = {:job_id => @conf[:target_id], :answered => true, :busy => false}
@@ -84,8 +90,6 @@ class Analysis < Base
 				query = {:answered => true, :busy => false, :analysis_started_at => nil}
 			end
 		end
-
-
 
 		# Build a list of call IDs, as find_each() gets confused if the DB changes mid-iteration
 		calls = Call.where(query).map{|c| c.id }
@@ -152,7 +156,7 @@ class Analysis < Base
 			fd.write(mr.audio)
 		end
 
-		pfd = IO.popen("#{bin} '#{tmp.path}' '#{ dr.number.gsub(/[^0-9a-zA-Z\-\+]+/, '') }'")
+		pfd = IO.popen("nice #{bin} '#{tmp.path}' '#{ dr.number.gsub(/[^0-9a-zA-Z\-\+]+/, '') }'")
 		out = Marshal.load(pfd.read) rescue nil
 		pfd.close
 
@@ -315,6 +319,9 @@ class Analysis < Base
 		# Plot samples to a graph
 		plotter = Tempfile.new("gnuplot")
 
+
+		plotter.puts("set autoscale")
+		plotter.puts("set yrange [-15000:15000]")
 		plotter.puts("set ylabel \"Signal\"")
 		plotter.puts("set xlabel \"Seconds\"")
 		plotter.puts("set terminal png medium size 640,480 transparent")
@@ -323,6 +330,10 @@ class Analysis < Base
 		plotter.puts("set output \"#{png_big_dots.path}\"")
 		plotter.puts("plot \"#{datfile.path}\" using 1:2 title \"#{num}\" with dots")
 
+
+		plotter.puts("unset yrange")
+		plotter.puts("set autoscale")
+		plotter.puts("set xrange [0:4000]")
 		plotter.puts("set terminal png medium size 640,480 transparent")
 		plotter.puts("set ylabel \"Power\"")
 		plotter.puts("set xlabel \"Frequency\"")
@@ -330,6 +341,9 @@ class Analysis < Base
 		plotter.puts("plot \"#{frefile.path}\" using 1:2 title \"#{num} - Peak #{maxf.round}hz\" with lines")
 
 
+		plotter.puts("unset xrange")
+		plotter.puts("set autoscale")
+		plotter.puts("set yrange [-15000:15000]")
 		plotter.puts("unset border")
 		plotter.puts("unset xtics")
 		plotter.puts("unset ytics")
@@ -339,9 +353,11 @@ class Analysis < Base
 		plotter.puts("set format x ''")
 		plotter.puts("set format y ''")
 		plotter.puts("set output \"#{png_sig.path}\"")
-		plotter.puts("set style line 1 lt 1 lw 3 pt 3 linecolor rgb \"gray\"")
 		plotter.puts("plot \"#{datfile.path}\" using 1:2 notitle with lines")
 
+		plotter.puts("unset yrange")
+		plotter.puts("set autoscale")
+		plotter.puts("set xrange [0:4000]")
 		plotter.puts("unset border")
 		plotter.puts("unset xtics")
 		plotter.puts("unset ytics")
@@ -351,7 +367,6 @@ class Analysis < Base
 		plotter.puts("set format x ''")
 		plotter.puts("set format y ''")
 		plotter.puts("set output \"#{png_sig_freq.path}\"")
-		plotter.puts("set style line 1 lt 1 lw 3 pt 3 linecolor rgb \"gray\"")
 		plotter.puts("plot \"#{frefile.path}\" using 1:2 notitle with lines")
 		plotter.flush
 
