@@ -36,17 +36,17 @@
     <td><%= format_job_details(job) %></td>
     <td>
     	<% if job.task == "dialer" %>
-			<%= job.details[:range].to_s  %> /
+			<%= truncate(job.details[:range].to_s, :length => 15)  %> /
 			<%= job.details[:cid_mask].to_s  %>
     	<% end %>
-	    	<span rel="tooltip" class="stooltip" title="<%= job.details[:directory].to_s %>">
+	    	<span rel="tooltip" class="xtooltip" title="<%= job.details[:directory].to_s %>">
 			<%= truncate(job.details[:directory].to_s, :length => 15) %>
     	<% if job.task == "importer" %>
 
     	<% end %>
     </td>
-    <td><span rel="tooltip" class="stooltip" title="<%= pct_answered %>% answered"><%= cnt_answered %> / <%= cnt_dialed %></span></td>
-    <td><span rel="tooltip" class="stooltip" title="<%= pct_analyzed %>% analyzed"><%= cnt_analyzed%></span></td>
+    <td><span rel="tooltip" class="xtooltip" title="<%= pct_answered %>% answered"><%= cnt_answered %> / <%= cnt_dialed %></span></td>
+    <td><span rel="tooltip" class="xtooltip" title="<%= pct_analyzed %>% analyzed"><%= cnt_analyzed%></span></td>
 
 
 	<td><%= job.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
@@ -62,7 +62,9 @@
 				<a class="btn btn-mini" href="<%= analyze_job_path(@project,job) %>" data-confirm="Continue to process this job?" rel="nofollow tooltip" title="Finish Call Analysis"><i class="icon-cog"></i></a>
 			<% end %>
 		<% else %>
+			<% if cnt_answered > 0 %>
 			<a class="btn btn-mini" href="<%= analyze_job_path(@project,job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-cog"></i></a>
+			<% end %>
 		<% end %>
 
     	<a class="btn btn-mini" href="<%= job_path(job) %>" data-confirm="Delete all data for this job?" data-method="delete" rel="nofollow tooltip" title="Delete Call Data"><i class="icon-trash"></i></a>

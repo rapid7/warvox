@@ -20,14 +20,11 @@ Web::Application.routes.draw do
 
   match  '/projects/:project_id/results'          => 'jobs#results', :as => :results
   match  '/projects/:project_id/results/:id'      => 'jobs#view_results', :as => :view_results
-  match  '/projects/:project_id/results/:id/analyze'  => 'jobs#analyze_job', :as => :analyze_job
+  match  '/projects/:project_id/results/:id/analyze'    => 'jobs#analyze_job', :as => :analyze_job
   match  '/projects/:project_id/results/:id/reanalyze'  => 'jobs#reanalyze_job', :as => :reanalyze_job
 
-
-
-
   match '/projects/:project_id/analyze'             => 'analyze#index', :as => :analyze
-  match '/calls/:result_id/:type'                   => 'analyze#resource', :as => :resource_analyze
+  match '/call/:result_id.:type'                   => 'analyze#resource', :as => :resource_analyze
   match '/projects/:project_id/analyze/:id/view'    => 'analyze#view', :as => :view_analyze
 
   match '/projects/:project_id/analyze/:job_id/:call_id/matches'    => 'analyze#view_matches', :as => :view_matches
@@ -42,7 +39,6 @@ Web::Application.routes.draw do
   match '/about'               => 'home#about', :as => :about
   match '/help'                => 'home#help',  :as => :help
   match '/check'               => 'home#check', :as => :check
-
 
   root :to => "projects#index"
 end

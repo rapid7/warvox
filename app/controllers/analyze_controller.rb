@@ -53,7 +53,15 @@ class AnalyzeController < ApplicationController
   def view_matches
   	@result = Call.find(params[:call_id])
   	@job_id = @result.job_id
-	@results = @result.matches.select{|x| x.matchscore.to_f > 10.0 }
+  	@match_scopes = [
+  		{ :scope => 'job', :label => 'This Job' },
+  		{ :scope => 'project', :label => 'This Project' },
+  		{ :scope => 'global', :label => 'All Projects' }
+  	]
+
+  	@match_scope = params[:match_scope] || "job"
+
+	@results = @result.paginate_matches(@match_scope, 30.0, params[:page], 30)
   end
 
   def resource

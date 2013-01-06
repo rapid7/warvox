@@ -7,7 +7,7 @@
     <th>ID</th>
     <th>Task</th>
     <th>Status</th>
-    <th>Submitted Time</th>
+    <th>Launched</th>
     <th>Actions</th>
   </tr>
 
@@ -36,7 +36,7 @@
     <th>ID</th>
     <th>Task</th>
     <th>Progress</th>
-    <th>Submitted Time</th>
+    <th>Launched</th>
     <th>Actions</th>
   </tr>
 
@@ -44,8 +44,8 @@
   <tr class='active_job_row'>
     <td><%= job.id %></td>
     <td><%= format_job_details(job) %></td>
-    <td valign='center'>
-		<div class="progress progress-success progress-striped">
+    <td>
+		<div class="progress progress-success progress-striped progress-bar">
 			<div class="bar" style="width: <%= job.progress %>%">
 				<span class='progress_pct'><%= job.progress %>%</span>
 			</div>
@@ -53,6 +53,12 @@
 	</td>
     <td><%= job.created_at.localtime.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
     <td>
+    	<% if job.task == "dialer" %>
+    		<a class="btn btn-mini" href="<%= view_results_path(job.project,job) %>" rel="tooltip" title="View Current Stats" ><i class="icon-zoom-in"></i></a>
+    	<% end %>
+    	<% if job.task == "analysis" %>
+    		<a class="btn btn-mini" href="<%= view_analyze_path(job.project,job) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
+    	<% end %>
 		<a class="btn btn-mini" href="<%= stop_job_path(job) %>" data-confirm="Terminate this job?" rel="nofollow tooltip" title="Terminate Job"><i class="icon-stop"></i></a>
 	</td>
   </tr>
@@ -72,7 +78,7 @@
 <br/><br/>
 <h1 class='title'>Inactive Jobs</h1>
 
-<%= raw(will_paginate @inactive_jobs) %>
+<%= will_paginate @inactive_jobs, :renderer => BootstrapPagination::Rails %>
 <table class='table table-striped table-condensed' width='90%'>
   <tr>
     <th>ID</th>
@@ -83,8 +89,16 @@
     <th>Project</th>
   </tr>
 
-<% @inactive_jobs.each do |job| %>
-  <tr class='active_job_row'>
+<% @inactive_jobs.each do |job|
+	special = ""
+	case job.status
+	when "error"
+		special = "error"
+	when "stopped"
+		special = "warning"
+	end
+%>
+  <tr class='<%= special %>'>
     <td><%= job.id %></td>
     <td><%= format_job_details(job) %></td>
 	<td><%= format_job_status(job) %></td>
@@ -94,7 +108,7 @@
   </tr>
 <% end %>
 </table>
-<%= raw(will_paginate @inactive_jobs) %>
+<%= will_paginate @inactive_jobs, :renderer => BootstrapPagination::Rails %>
 <br />
 
 <script language="javascript">

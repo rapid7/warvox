@@ -38,9 +38,111 @@ body {
 @navbarBackground: #ea5709;
 @navbarBackgroundHighlight: #4A1C04;
 
+.call-detail {
+	font-size: 10px;
+}
 
-.stooltip {
+
+// Start Ubaplayer
+.audio-player {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#fallback {
+	display: none;
+}
+
+.audioButton {
+	background: url("/assets/ubaplayer-btn.png") no-repeat 0 7px;
+	display: block;
+	cursor: pointer;
+	margin-left: 10px;
+	padding: 7px 10px 15px 25px;
+	color: @darkGray;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.audioButton:hover {
+	background-position: 0 -33px;
+	color: @darkGray;
+	text-decoration: none;
+}
+
+.audioButton.playing {
+	background-position: 0 -73px;
+	color: @darkGray;
+}
+
+.audioButton.playing:hover {
+	background-position: 0 -113px;
+	color: @darkGray;
+}
+
+.audioButton.loading,
+.audioButton.loading:hover {
+	background: url("/assets/ubaplayer-loading.gif") no-repeat 0 7px;
+	text-indent: 0!important;
+}
+
+#player {
+	display: none;
+}
+
+// End of Ubaplayer
+
+
+.fwd_match_span {
+	width: 100px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	font-weight: bold;
+	color: white;
+	text-align: center;
+}
+
+.filter-label {
+	line-height: 16px;
+	font-size: 16px;
+	margin-right: 5px;
+	padding-top: 5px;
+	font-weight: bold;
+}
+
+.filter-select {
+	line-height: 14px;
+	font-size: 14px;
+	width: 120px;
+	font-weight: bold;
+}
+
+.popover-title {
+	line-height: 12px;
+	font-size: 12px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.popover-content {
+
+}
+
+.xtooltip {
 	border-bottom: 1px dotted @blue;
+	cursor: help;
+}
+
+.xpopover {
+	border-bottom: 1px dotted @blue;
+	cursor: help;
+}
+
+.progress-bar {
+	margin-bottom: -2px;
 }
 
 .progress_pct {
@@ -49,21 +151,20 @@ body {
 }
 
 .task_args_formatted {
-	width: 400px;
-	margin: 5px;
+	padding:10px;
 }
 
 .task_args_var {
-	font-size: 14px;
+	font-size: 12px;
 	float: left;
-	width: 100px;
-	overflow: hidden;
 	font-weight: bold;
 	text-align: right;
 }
 .task_args_val {
 	font-size: 14px;
 	text-align: left;
+	padding-left: 5px;
+	float: auto;
 }
 .check-item {
 	font-size: 18px;
