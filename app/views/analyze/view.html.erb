@@ -1,7 +1,5 @@
 <h1 class='title'>Analysis of Job ID <%= @job_id %></h1>
 
-<%= select_tag_for_filter(@filters, params) %>
-
 <table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
 <tr>
 	<td align='center'>
@@ -12,42 +10,35 @@
 
 <%= will_paginate @results, :renderer => BootstrapPagination::Rails %>
 
-<table class='table table-striped table-bordered' width='90%'>
+<div class='pull-right'>
+	<%= select_tag_for_filter(@filters, params) %>
+</div>
+
+<table class='table table-striped table-condensed'>
   <thead>
   <tr>
     <th>Number</th>
+    <th>Type</th>
   	<th>Signal</th>
+  	<th>Actions</th>
   </tr>
   </thead>
   <tbody>
-
 <%  @results.each do |call| %>
   <tr>
     <td align='center'>
-
-		<object
-			type="application/x-shockwave-flash"
-			data="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(call.id, "mp3")%>"
-			width="20"
-			height="17"
-			style="margin-bottom: -5px;"
-			>
-			<param name="movie" value="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(call.id, "mp3")%>"></param>
-			<param name="wmode" value="transparent"></param>
-		</object>
-		<b><%= call.number %></b>
-		<hr width='100%' size='1'/>
-		CallerID: <%= call.caller_id%><br/>
-		Provider: <%=h call.provider.name %><br/>
-		Audio: <%=h call.audio_length %> Seconds<br/>
-		Ringer: <%=h call.ring_length %> Seconds<br/>
+		<%= render :partial => 'shared/call_info', :locals => { :call => call } %>
+	</td>
+	<td align='center'>
+		<%= format_call_type_details(call) %>
 	</td>
   	<td align='center'>
-		<b><%=h call.line_type.upcase %></b><br/>
-		<%= render :partial => 'shared/lightbox_sig', :locals => { :call => call } %>
+		<span class='pull-left'><%= render :partial => 'shared/lightbox_sig', :locals => { :call => call } %></span>
 		<%= render :partial => 'shared/lightbox_freq', :locals => { :call => call } %>
+	</td>
+	<td>
 		<% if call.fprint and call.fprint.length > 0 %>
-			<a href="<%=view_matches_path(@project, call.job_id, call.id)%>">View Matches</a>
+			<a class="btn btn-mini" href="<%= view_matches_path(@project, call.job_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="icon-search"></i></a>
 		<% end %>
 	</td>
   </tr>

@@ -1,86 +1,96 @@
 <%  call = @result %>
 
 <h1 class='title'><%= @result.number %> (<a href="<%=view_analyze_path(@project.id, call.job_id)%>">Back to Job Analysis</a>)</h1>
-<table class='table table-striped table-bordered' width='90%'>
-  <tr>
-    <th>Number</th>
-  	<th>Signal</th>
-  </tr>
-
-  <tr>
-    <td align='center'>
-
-		<object
-			type="application/x-shockwave-flash"
-			data="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(call.id, "mp3")%>"
-			width="20"
-			height="17"
-			style="margin-bottom: -5px;"
-			>
-			<param name="movie" value="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(call.id, "mp3")%>"></param>
-			<param name="wmode" value="transparent"></param>
-		</object>
-
-		<b><%= call.number %></b>
-		<hr width='100%' size='1'/>
-		CallerID: <%= call.caller_id%><br/>
-		Provider: <%= call.provider.name %><br/>
-		Audio: <%= call.audio_length %> Seconds<br/>
-		Ringer: <%= call.ring_length %> Seconds<br/>
-	</td>
-  	<td align='center'>
-		<b><%=h call.line_type.upcase %></b><br/>
-		<%= render :partial => 'shared/lightbox_sig', :locals => { :call => call } %>
-		<%= render :partial => 'shared/lightbox_freq', :locals => { :call => call } %>
-	</td>
-  </tr>
-
-</table><br/><br/>
-
-<h1 class='title'>Matches for <%= @result.number %></h1>
-
-<table class='table table-striped table-bordered' width='90%'>
+<table class='table table-striped table-condensed'>
   <thead>
   <tr>
     <th>Number</th>
+    <th>Type</th>
   	<th>Signal</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+    <td align='center'>
+		<%= render :partial => 'shared/call_info', :locals => { :call => call } %>
+	</td>
+	<td align='center'>
+		<%= format_call_type_details(call) %>
+	</td>
+  	<td align='center'>
+		<span class='pull-left'><%= render :partial => 'shared/lightbox_sig', :locals => { :call => call } %></span>
+		<%= render :partial => 'shared/lightbox_freq', :locals => { :call => call } %>
+	</td>
+  </tr>
+ </tbody>
+</table><br/><br/>
+
+<% if @results.length > 0 %>
+
+
+
+<h1 class='title'><%= pluralize(@results.total_entries, 'Possible Match') %> for <%= @result.number %></h1>
+
+
+<div class='pull-right'>
+	<%= select_match_scope(@match_scopes, params) %>
+</div>
+
+<%= will_paginate @results, :renderer => BootstrapPagination::Rails %>
+
+<table class='table table-striped table-condensed'>
+  <thead>
+  <tr>
+  	<th>Score</th>
+    <th>Number</th>
+<% case @match_scope %>
+<% when 'project' %>
+    <th>Job</th>
+<% when 'global' %>
+    <th>Project</th>
+<% end %>
+    <th>Type</th>
+  	<th>Signal</th>
+  	<th>Actions</th>
   </tr>
   </thead>
   <tbody>
-
 <%  @results.each do |call| %>
   <tr>
     <td align='center'>
-
-		<br/><%= raw(fwd_match_html(call.matchscore)) %><br/><br/>
-
-		<object
-			type="application/x-shockwave-flash"
-			data="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(call.id, "mp3")%>"
-			width="20"
-			height="17"
-			style="margin-bottom: -5px;"
-			>
-			<param name="movie" value="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(call.id, "mp3")%>"></param>
-			<param name="wmode" value="transparent"></param>
-		</object>
-
-		<b><%= call.number %></b>
-		<hr width='100%' size='1'/>
-		CallerID: <%= call.caller_id%><br/>
-		Provider: <%=h call.provider.name %><br/>
-		Audio: <%=h call.audio_length %> Seconds<br/>
-		Ringer: <%=h call.ring_length %> Seconds<br/>
+	    <%= raw(fwd_match_html(call.matchscore)) %>
+    </td>
+    <td align='center'>
+		<%= render :partial => 'shared/call_info', :locals => { :call => call } %>
+	</td>
+<% case @match_scope %>
+<% when 'project' %>
+    <td align='center'><%= call.job.id %></td>
+<% when 'global' %>
+    <td align='center'><%= link_to h(call.project.name), project_path(call.project) %></td>
+<% end %>
+	<td align='center'>
+		<%= format_call_type_details(call) %>
 	</td>
   	<td align='center'>
-		<b><%=h call.line_type.upcase %></b><br/>
-		<%= render :partial => 'shared/lightbox_sig', :locals => { :call => call } %>
+		<span class='pull-left'><%= render :partial => 'shared/lightbox_sig', :locals => { :call => call } %></span>
 		<%= render :partial => 'shared/lightbox_freq', :locals => { :call => call } %>
-		<% if call.fprint %>
-			<a href="<%=view_matches_path(call.project_id, call.job_id, call.id)%>">View Matches</a>
+	</td>
+	<td>
+		<% if call.fprint and call.fprint.length > 0 %>
+			<a class="btn btn-mini" href="<%= view_matches_path(@project, call.job_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="icon-search"></i></a>
 		<% end %>
 	</td>
   </tr>
 <% end %>
 </tbody>
 </table>
+
+<%= will_paginate @results, :renderer => BootstrapPagination::Rails %>
+
+
+<% else %>
+
+<h1 class='title'>No Matches for <%= @result.number %> (<%= @result.created_at.strftime("%Y-%m-%d") %>)</h1>
+
+<% end %>
