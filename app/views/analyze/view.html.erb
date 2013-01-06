@@ -1,4 +1,4 @@
-<h1 class='title'>Analysis of Job ID <%= @job_id %></h1>
+<h1 class='title'>Analysis of Scan #<%= @job_id %></h1>
 
 <table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
 <tr>
@@ -38,7 +38,7 @@
 	</td>
 	<td>
 		<% if call.fprint and call.fprint.length > 0 %>
-			<a class="btn btn-mini" href="<%= view_matches_path(@project, call.job_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="icon-search"></i></a>
+			<a class="btn btn-mini" href="<%= view_matches_path(call.project_id, call.job_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="icon-search"></i></a>
 		<% end %>
 	</td>
   </tr>

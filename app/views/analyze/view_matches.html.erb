@@ -78,7 +78,7 @@
 	</td>
 	<td>
 		<% if call.fprint and call.fprint.length > 0 %>
-			<a class="btn btn-mini" href="<%= view_matches_path(@project, call.job_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="icon-search"></i></a>
+			<a class="btn btn-mini" href="<%= view_matches_path(call.project_id, call.job_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="icon-search"></i></a>
 		<% end %>
 	</td>
   </tr>
