@@ -52,22 +52,22 @@
 	<td><%= job.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
 	<td><%= job.created_by %></td>
     <td>
-        <a class="btn btn-mini" href="<%= view_results_path(@project,job) %>" rel="tooltip" title="View Call Connections" ><i class="icon-zoom-in"></i></a>
+        <a class="btn" href="<%= view_results_path(@project,job) %>" rel="tooltip" title="View Call Connections" ><i class="icon-zoom-in"></i></a>
 
 		<% if cnt_analyzed > 0 %>
-			<a class="btn btn-mini" href="<%= view_analyze_path(@project,job) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
+			<a class="btn" href="<%= view_analyze_path(@project,job) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
 			<% if pct_analyzed == 100 %>
-				<a class="btn btn-mini" href="<%= reanalyze_job_path(@project,job) %>" data-confirm="Reprocess this job?" rel="nofollow tooltip" title="Rerun Call Analysis"><i class="icon-refresh"></i></a>
+				<a class="btn" href="<%= reanalyze_job_path(@project,job) %>" data-confirm="Reprocess this job?" rel="nofollow tooltip" title="Rerun Call Analysis"><i class="icon-refresh"></i></a>
 			<% else %>
-				<a class="btn btn-mini" href="<%= analyze_job_path(@project,job) %>" data-confirm="Continue to process this job?" rel="nofollow tooltip" title="Finish Call Analysis"><i class="icon-cog"></i></a>
+				<a class="btn" href="<%= analyze_job_path(@project,job) %>" data-confirm="Continue to process this job?" rel="nofollow tooltip" title="Finish Call Analysis"><i class="icon-cog"></i></a>
 			<% end %>
 		<% else %>
 			<% if cnt_answered > 0 %>
-			<a class="btn btn-mini" href="<%= analyze_job_path(@project,job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-cog"></i></a>
+			<a class="btn" href="<%= analyze_job_path(@project,job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-cog"></i></a>
 			<% end %>
 		<% end %>
 
-    	<a class="btn btn-mini" href="<%= job_path(job) %>" data-confirm="Delete all data for this job?" data-method="delete" rel="nofollow tooltip" title="Delete Call Data"><i class="icon-trash"></i></a>
+    	<a class="btn" href="<%= job_path(job) %>" data-confirm="Delete all data for this job?" data-method="delete" rel="nofollow tooltip" title="Delete Call Data"><i class="icon-trash"></i></a>
 	</td>
   </tr>
 
