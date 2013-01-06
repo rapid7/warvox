@@ -57,7 +57,7 @@
     		<a class="btn btn-mini" href="<%= view_results_path(job.project,job) %>" rel="tooltip" title="View Current Stats" ><i class="icon-zoom-in"></i></a>
     	<% end %>
     	<% if job.task == "analysis" %>
-    		<a class="btn btn-mini" href="<%= view_analyze_path(job.project,job) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
+    		<a class="btn btn-mini" href="<%= view_analyze_path(job.project,job.details[:target_id]||job.id) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
     	<% end %>
 		<a class="btn btn-mini" href="<%= stop_job_path(job) %>" data-confirm="Terminate this job?" rel="nofollow tooltip" title="Terminate Job"><i class="icon-stop"></i></a>
 	</td>
@@ -112,7 +112,7 @@
 <br />
 
 <script language="javascript">
-	setTimeout("location.reload(true);", 20000);
+	setTimeout("location.reload(true);", <%= @reload_interval %>);
 </script>
 
 <% end %>

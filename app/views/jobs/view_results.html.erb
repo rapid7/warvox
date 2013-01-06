@@ -1,7 +1,7 @@
 <% if @results.length > 0 %>
 
 
-<h1 class='title'>Dial Results for Job <%=@job.id%></h1>
+<h1 class='title'>Call Results for Scan #<%=@job.id%></h1>
 
 
 <table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
@@ -20,7 +20,7 @@
   <thead>
   <tr>
     <th>Number</th>
-    <th>CallerID</th>
+    <th>Source CID</th>
     <th>Provider</th>
     <th>Answered</th>
     <th>Busy</th>
@@ -34,7 +34,7 @@
     <td><%= call.number %></td>
     <td><%= call.caller_id %></td>
     <td><%= call.provider.name %></td>
-    <td><%= call.answered %></td>
+    <td><%= call.answered ? "Yes" : "No" %></td>
     <td><%= call.busy %></td>
     <td><%= call.audio_length %></td>
     <td><%= call.ring_length %></td>

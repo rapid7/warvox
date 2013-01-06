@@ -1,9 +1,5 @@
 Web::Application.routes.draw do
 
-
-
-
-
   match "login" => "user_sessions#new", :as => "login"
   match "logout" => "user_sessions#destroy", :as => "logout"
 
@@ -18,10 +14,10 @@ Web::Application.routes.draw do
   match  '/jobs/analyzer'       => 'jobs#analyzer', :as => :analyzer_job
   match  '/jobs/:id/stop'          => 'jobs#stop', :as => :stop_job
 
-  match  '/projects/:project_id/results'          => 'jobs#results', :as => :results
-  match  '/projects/:project_id/results/:id'      => 'jobs#view_results', :as => :view_results
-  match  '/projects/:project_id/results/:id/analyze'    => 'jobs#analyze_job', :as => :analyze_job
-  match  '/projects/:project_id/results/:id/reanalyze'  => 'jobs#reanalyze_job', :as => :reanalyze_job
+  match  '/projects/:project_id/scans'          => 'jobs#results', :as => :results
+  match  '/projects/:project_id/scans/:id'      => 'jobs#view_results', :as => :view_results
+  match  '/projects/:project_id/scans/:id/analyze'    => 'jobs#analyze_job', :as => :analyze_job
+  match  '/projects/:project_id/scans/:id/reanalyze'  => 'jobs#reanalyze_job', :as => :reanalyze_job
 
   match '/projects/:project_id/analyze'             => 'analyze#index', :as => :analyze
   match '/call/:result_id.:type'                   => 'analyze#resource', :as => :resource_analyze

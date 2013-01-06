@@ -1,6 +1,9 @@
 class JobsController < ApplicationController
 
   def index
+
+	@reload_interval = 20000
+
   	@submitted_jobs = Job.where(:status => ['submitted', 'scheduled'], :completed_at => nil)
 	@active_jobs    = Job.where(:status => 'running', :completed_at => nil)
 	@inactive_jobs = Job.where('status NOT IN (?) OR completed_at IS NULL', ['submitted', 'scheduled', 'running']).paginate(
@@ -8,6 +11,14 @@ class JobsController < ApplicationController
 		:order => 'id DESC',
 		:per_page => 30
 	)
+
+	if @active_jobs.length > 0
+		@reload_interval = 5000
+	end
+
+	if @submitted_jobs.length > 0
+		@reload_interval = 1000
+	end
 
     respond_to do |format|
       format.html # index.html.erb
