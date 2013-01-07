@@ -72,7 +72,10 @@ class JobsController < ApplicationController
 
 	respond_to do |format|
       format.html
-      format.json { render :partial => 'view_results', :results => @results, :call_results => @call_results }
+
+     format.json {
+      	render :content_type => 'application/json', :json => render_to_string(:partial => 'view_results', :results => @results, :call_results => @call_results )
+      }
     end
   end
 
