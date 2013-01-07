@@ -17,7 +17,7 @@ jQuery ($) ->
         "sAjaxSource":      resultsPath
         "aaSorting":      [[1, 'asc']]
         "aoColumns": [
-          {"mDataProp": "checkbox", "bSortable": false}
+          {"mDataProp": "checkbox", "bSortable": false, "sWidth": "22px"}
           {"mDataProp": "number"}
           {"mDataProp": "line_type"}
           {"mDataProp": "signal"}

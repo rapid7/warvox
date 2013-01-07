@@ -26,6 +26,16 @@ jQuery ($) ->
           {"mDataProp": "audio_length"}
           {"mDataProp": "ring_length"}
         ]
+        "fnServerData": ( sSource, aoData, fnCallback ) ->
+          $.getJSON sSource, aoData, (json) ->
+            fnCallback(json)
+            $(".xtooltip").tooltip('fixTitle')
+            $(".xpopover").popover
+              html: true
+              placement: 'right'
+              trigger: 'hover'
+              delay: { show: 300, hide: 300 }
+              animation: false
 
     # Gray out the table during loads.
     $("#results-table_processing").watch 'visibility', ->
