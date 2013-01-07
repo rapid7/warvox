@@ -109,61 +109,9 @@ module ApplicationHelper
 		end
 	end
 
-
 	def escape_javascript_dq(str)
 		escape_javascript(str.strip).gsub("\\'", "'").gsub("\t", "    ")
 	end
-
-  #
-  # Generate pagination links
-  #
-  # Parameters:
-  #   :name:: the kind of the items we're paginating
-  #   :items:: the collection of items currently on the page
-  #   :count:: total count of items to paginate
-  #   :offset:: offset from the beginning where +items+ starts within the total
-  #   :page:: current page
-  #   :num_pages:: total number of pages
-  #
-  def page_links(opts={})
-    link_method = opts[:link_method]
-    if not link_method or not respond_to? link_method
-      raise RuntimeError.new("Need a method for generating links")
-    end
-    name      = opts[:name] || ""
-    items     = opts[:items] || []
-    count     = opts[:count] || 0
-    offset    = opts[:offset] || 0
-    page      = opts[:page] || 1
-    num_pages = opts[:num_pages] || 1
-
-    page_list = ""
-    1.upto(num_pages) do |p|
-      if p == page
-        page_list << content_tag(:span, :class=>"current") { h page }
-      else
-        page_list << self.send(link_method, p, { :page => p })
-      end
-    end
-    content_tag(:div, :id => "page_links") do
-      content_tag(:span, :class => "index") do
-        if items.size > 0
-          "#{offset + 1}-#{offset + items.size} of #{h pluralize(count, name)}" + "&nbsp;"*3
-        else
-          h(name.pluralize)
-        end.html_safe
-      end +
-        if num_pages > 1
-          self.send(link_method, '', { :page => 0 }, { :class => 'start' }) +
-            self.send(link_method, '', { :page => page-1 }, {:class => 'prev' }) +
-            page_list +
-            self.send(link_method, '', { :page => [page+1,num_pages].min }, { :class => 'next' }) +
-            self.send(link_method, '', { :page => num_pages }, { :class => 'end' })
-        else
-          ""
-        end
-    end
-  end
 
 	def submit_checkboxes_to(name, path, html={})
 		if html[:confirm]
