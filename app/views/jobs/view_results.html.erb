@@ -1,10 +1,9 @@
-<% if @results.length > 0 %>
-
+<% include_view_javascript %>
 
 <h1 class='title'>Call Results for Scan #<%=@job.id%></h1>
 
 
-<table width='100%' align='center' border=0 cellspacing=0 cellpadding=6>
+<table class='table table-striped table-condensed'>
 <tr>
 	<td align='center'>
 		<%= render :partial => 'shared/graphs/call_results' %>
@@ -12,13 +11,35 @@
 </tr>
 </table>
 
-<br/>
 
-<%= will_paginate @results, :renderer => BootstrapPagination::Rails %>
 
-<table class='table table-striped table-condensed' width='90%' id='results'>
+
+<%= form_tag do %>
+<div class="control-bar">
+<table width='100%' border=0 cellpadding=6>
+<tbody><tr>
+<td>
+	<%= submit_checkboxes_to(raw('<i class="icon-refresh"></i> Scan'), new_dialer_job_path, { :class => "btn btn-mini any" }) %>
+</td><td>
+	<%= submit_checkboxes_to(raw('<i class="icon-cog"></i> Analyze'), analyze_job_path, { :class => "btn btn-mini any" }) %>
+</td><td>
+	<%= submit_checkboxes_to(raw('<i class="icon-trash"></i> Delete'), purge_calls_job_path, { :class => "btn btn-mini any", :confirm => 'Purge selected calls?' }) %>
+</td><td>
+	<a class="btn btn-mini any" href="#"><i class="icon-trash"></i> Purge</button>
+</td>
+</tr></tbody></table>
+
+</div>
+
+
+<div class="analysis-control-bar"> </div>
+
+<span id="results-path" class="invisible"><%= view_results_path(@project, @job.id, :format => :json) %></span>
+
+<table id='results-table' class='table table-striped table-condensed sortable list' >
   <thead>
   <tr>
+	<th><%= check_box_tag "all_results", false %></th>
     <th>Number</th>
     <th>Source CID</th>
     <th>Provider</th>
@@ -28,25 +49,10 @@
 	<th>Ring Time</th>
   </tr>
   </thead>
-  <tbody>
-<% @results.each do |call| %>
-  <tr>
-    <td><%= call.number %></td>
-    <td><%= call.caller_id %></td>
-    <td><%= call.provider.name %></td>
-    <td><%= call.answered ? "Yes" : "No" %></td>
-    <td><%= call.busy %></td>
-    <td><%= call.audio_length %></td>
-    <td><%= call.ring_length %></td>
-  </tr>
-<% end %>
+  <tbody id="results-list">
   </tbody>
 </table>
 
-<%= will_paginate @results, :renderer => BootstrapPagination::Rails %>
-
-<% else %>
-
-<h1 class='title'>No Results</h1>
+</div>
 
 <% end %>

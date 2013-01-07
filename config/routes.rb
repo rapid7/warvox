@@ -8,11 +8,12 @@ Web::Application.routes.draw do
   match  '/projects/:project_id/all'                    => 'projects#index', :as => :all_projects
 
 
-  match  '/jobs/dial'          => 'jobs#new_dialer', :as => :new_dialer_job
-  match  '/jobs/dialer'          => 'jobs#dialer', :as => :dialer_job
-  match  '/jobs/analyze'       => 'jobs#new_analyzer', :as => :new_analyzer_job
-  match  '/jobs/analyzer'       => 'jobs#analyzer', :as => :analyzer_job
-  match  '/jobs/:id/stop'          => 'jobs#stop', :as => :stop_job
+  match  '/jobs/dial'            => 'jobs#new_dialer',   :as => :new_dialer_job
+  match  '/jobs/dialer'          => 'jobs#dialer',       :as => :dialer_job
+  match  '/jobs/analyze'         => 'jobs#new_analyzer', :as => :new_analyzer_job
+  match  '/jobs/analyzer'        => 'jobs#analyzer',     :as => :analyzer_job
+  match  '/jobs/:id/stop'        => 'jobs#stop',         :as => :stop_job
+  match  '/jobs/:id/calls/purge' => "jobs#purge_calls",  :as => :purge_calls_job
 
   match  '/projects/:project_id/scans'          => 'jobs#results', :as => :results
   match  '/projects/:project_id/scans/:id'      => 'jobs#view_results', :as => :view_results

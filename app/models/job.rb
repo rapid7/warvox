@@ -23,14 +23,17 @@ class Job < ActiveRecord::Base
 					record.errors[:lines] << "Lines should be between 1 and 10,000"
 				end
 			when 'analysis'
-				unless ['job', 'project', 'global'].include?(record.scope)
-					record.errors[:scope] << "Scope must be job, project, or global"
+				unless ['calls', 'job', 'project', 'global'].include?(record.scope)
+					record.errors[:scope] << "Scope must be calls, job, project, or global"
 				end
 				if record.scope == "job" and Job.where(:id => record.target_id.to_i, :task => ['import', 'dialer']).count == 0
 					record.errors[:job_id] << "The job_id is not valid"
 				end
 				if record.scope == "project" and Project.where(:id => record.target_id.to_i).count == 0
 					record.errors[:project_id] << "The project_id is not valid"
+				end
+				if record.scope == "calls" and (record.target_ids.nil? or record.target_ids.length == 0)
+					record.errors[:target_ids] << "The target_ids list is empty"
 				end
 			when 'import'
 			else
@@ -64,8 +67,9 @@ class Job < ActiveRecord::Base
 	attr_accessor :scope
 	attr_accessor :force
 	attr_accessor :target_id
+	attr_accessor :target_ids
 
-	attr_accessible :scope, :force, :target_id
+	attr_accessible :scope, :force, :target_id, :target_ids
 
 
 	validates_with JobValidator
@@ -102,7 +106,8 @@ class Job < ActiveRecord::Base
 			self.args = Marshal.dump({
 				:scope      => self.scope,          # job / project/ global
 				:force      => !!(self.force),      # true / false
-				:target_id  => self.target_id.to_i  # job_id or project_id or nil
+				:target_id  => self.target_id.to_i, # job_id or project_id or nil
+				:target_ids => self.target_ids.map{|x| x.to_i }
 			})
 			return self.save
 		else

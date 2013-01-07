@@ -1,0 +1,20 @@
+{
+  "sEcho": <%= echo_data_tables %>,
+  "iTotalRecords": <%= @results_total_count.to_json %>,
+  "iTotalDisplayRecords": <%= @results_total_display_count.to_json %>,
+  "aaData": [
+  <% @results.each_with_index do |result, index| -%>
+    {
+      "DT_RowId":   <%= dom_id(result).to_json.html_safe%>,
+      "checkbox":   <%= call_checkbox_tag(result) %>,
+      "number":    <%= call_number_html(result) %>,
+      "caller_id":    <%= call_caller_id_html(result) %>,
+      "provider":    <%= call_provider_html(result) %>,
+      "answered":    <%= call_answered_html(result) %>,
+      "busy":    <%= call_busy_html(result) %>,
+      "audio_length":    <%= call_audio_length_html(result) %>,
+      "ring_length":    <%= call_audio_length_html(result) %>
+    }<%= ',' unless index == (@results.size - 1) %>
+  <% end -%>
+  ]
+}
