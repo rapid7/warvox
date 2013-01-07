@@ -1,0 +1,74 @@
+/*
+ *= require bootstrap_and_overrides
+ */
+
+/*
+ *= require_self
+ *= require formtastic
+ *= require formtastic-bootstrap
+ *= require formtastic-overrides
+ *= require bootstrap-lightbox
+ *= require dataTables/jquery.dataTables.bootstrap
+*/
+
+
+table.list {
+  td.actions {
+    vertical-align: middle;
+  }
+
+  td.dataTables_empty {
+    text-shadow: none !important;
+  }
+
+  td a.datatables-search {
+    color: blue;
+
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+  thead tr {
+    background-size: 100% 100%;
+    background-color: #eeeeee;
+  }
+}
+
+.dataTables_filter {
+  padding: 0px;
+  width: auto !important;
+
+  input {
+  background-image: url(<%= asset_path 'search.png' %>);
+    background-position: 160px 6px;
+    background-repeat: no-repeat;
+    height: 18px;
+    padding-left: 5px;
+    width: 170px;
+  }
+}
+
+.dataTables_info {
+	font-size: 11px;
+	font-color: #666666;
+}
+
+.dataTables_length label {
+	font-weight: bold;
+}
+
+.dataTables_length select {
+	font-weight: bold;
+}
+
+.control-bar {
+	padding: 5px;
+	text-align: center;
+}
+
+.control-bar table {
+	width: 320px;
+	border: 0;
+	margin-left: auto;
+	margin-right: auto;
+}

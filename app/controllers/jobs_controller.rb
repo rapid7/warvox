@@ -1,5 +1,7 @@
 class JobsController < ApplicationController
 
+  require 'shellwords'
+
   def index
 
 	@reload_interval = 20000
@@ -42,11 +44,6 @@ class JobsController < ApplicationController
 
   def view_results
   	@job     = Job.find(params[:id])
-  	@results = @job.calls.paginate(
-		:page => params[:page],
-		:order => 'number ASC',
-		:per_page => 30
-	)
 
 	@call_results = {
 		:Timeout  => @job.calls.count(:conditions => { :answered => false }),
@@ -54,6 +51,78 @@ class JobsController < ApplicationController
 		:Answered => @job.calls.count(:conditions => { :answered => true }),
 	}
 
+    sort_by  = params[:sort_by] || 'number'
+    sort_dir = params[:sort_dir] || 'asc'
+
+    @results = []
+    @results_total_count = @job.calls.count()
+
+    if request.format.json?
+      if params[:iDisplayLength] == '-1'
+        @results_per_page = nil
+      else
+        @results_per_page = (params[:iDisplayLength] || 20).to_i
+      end
+      @results_offset = (params[:iDisplayStart] || 0).to_i
+
+	  calls_search
+      @results = @job.calls.includes(:provider).where(@search_conditions).limit(@results_per_page).offset(@results_offset).order(calls_sort_option)
+      @results_total_display_count = @job.calls.includes(:provider).where(@search_conditions).count()
+    end
+
+	respond_to do |format|
+      format.html
+      format.json { render :partial => 'view_results', :results => @results, :call_results => @call_results }
+    end
+  end
+
+  # Generate a SQL sort by option based on the incoming DataTables paramater.
+  #
+  # Returns the SQL String.
+  def calls_sort_option
+    column = case params[:iSortCol_0].to_s
+             when '1'
+               'number'
+             when '2'
+               'caller_id'
+             when '3'
+               'providers.name'
+             when '4'
+               'answered'
+             when '5'
+               'busy'
+             when '6'
+               'audio_length'
+             when '7'
+               'ring_length'
+             end
+    column + ' ' + (params[:sSortDir_0] =~ /^A/i ? 'asc' : 'desc') if column
+  end
+
+  def calls_search
+  	@search_conditions = []
+  	terms = params[:sSearch].to_s
+  	terms = Shellword.shellwords(terms) rescue terms.split(/\s+/)
+	where = ""
+	param = []
+	glue  = ""
+	terms.each do |w|
+		where << glue
+		case w
+			when 'answered'
+				where << "answered = ? "
+				param << true
+			when 'busy'
+				where << "busy = ? "
+				param << true
+			else
+				where << "( number ILIKE ? OR caller_id ILIKE ? ) "
+				param << "%#{w}%"
+				param << "%#{w}%"
+		end
+		glue = "AND " if glue.empty?
+		@search_conditions = [ where, *param ]
+	end
   end
 
   def new_dialer
@@ -64,10 +133,27 @@ class JobsController < ApplicationController
     	@job.project = Project.last
     end
 
+    if params[:result_ids]
+    	nums = ""
+    	Call.find_each(:conditions => { :id => params[:result_ids] }) do |call|
+    		nums << call.number + "\n"
+    	end
+    	@job.range = nums
+    end
+
+
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @job }
     end
+  end
+
+  def purge_calls
+  	@job = Job.find(params[:id])
+	Call.delete_all(:id => params[:result_ids])
+	CallMedium.delete_all(:call_id => params[:result_ids])
+	flash[:notice] = "Purged #{params[:result_ids].length} calls"
+	redirect_to view_results_path(@job.project_id, @job.id)
   end
 
   def dialer
@@ -114,10 +200,21 @@ class JobsController < ApplicationController
 
   def analyze_job
 	@job = Job.find(params[:id])
-	@new = Job.new({
-		:task => 'analysis', :scope => 'job', :target_id => @job.id,
-		:project_id => @project.id, :status => 'submitted'
-	})
+
+	# Handle analysis of specific call IDs via checkbox submission
+	if params[:result_ids]
+		@new = Job.new({
+			:task => 'analysis', :scope => 'calls', :target_ids => params[:result_ids],
+			:project_id => @project.id, :status => 'submitted'
+		})
+	else
+	# Otherwise analyze the entire Job
+		@new = Job.new({
+			:task => 'analysis', :scope => 'job', :target_id => @job.id,
+			:project_id => @project.id, :status => 'submitted'
+		})
+	end
+
     respond_to do |format|
       if @new.schedule
         flash[:notice] = 'Analysis job was successfully created.'
