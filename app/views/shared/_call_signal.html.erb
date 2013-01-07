@@ -1,2 +1,6 @@
 <span class='pull-left'><%= render :partial => 'shared/lightbox_sig', :locals => { :call => call } %></span>
 <%= render :partial => 'shared/lightbox_freq', :locals => { :call => call } %>
+
+<% if call.fprint and call.fprint.length > 0 and call != @result %>
+	<a class="btn" href="<%= view_matches_path(call.project_id, call.job_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="icon-search"></i></a>
+<% end %>

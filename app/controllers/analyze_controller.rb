@@ -131,6 +131,7 @@ class AnalyzeController < ApplicationController
 	param = [ @job_id ]
 	glue  = "AND "
 	terms.each do |w|
+		next if w == "undefined"
 		where << glue
 		case w
 			when /^F(\d+)$/i   # F2100 = peak frequency between 2095hz and 2105hz
