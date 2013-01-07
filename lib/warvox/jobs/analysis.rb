@@ -65,7 +65,7 @@ class Analysis < Base
 		end
 
 		case @conf[:scope]
-		when 'calls':
+		when 'calls'
 			if @conf[:force]
 				query = {:id => @conf[:target_ids], :answered => true, :busy => false}
 			else
@@ -91,7 +91,7 @@ class Analysis < Base
 			end
 		else
 			# Bail if we don't have a valid scope
-			return	
+			return
 		end
 
 		# Build a list of call IDs, as find_each() gets confused if the DB changes mid-iteration

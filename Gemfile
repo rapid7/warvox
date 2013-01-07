@@ -31,7 +31,7 @@ gem 'formtastic'
 gem 'formtastic-bootstrap'
 gem 'rails_bootstrap_navbar'
 
-gem "therubyracer", :group => :assets, :platform => :ruby
+# gem "therubyracer", :group => :assets, :platform => :ruby
 
 gem 'will_paginate', '~> 3.0'
 gem 'will_paginate-bootstrap'

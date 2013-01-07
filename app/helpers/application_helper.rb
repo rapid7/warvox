@@ -56,33 +56,6 @@ module ApplicationHelper
 		end
 	end
 
-	def format_call_type_details(call)
-			ttip = raw("<div class='task_args_formatted'>")
-
-
-			ttip << raw("<div class='task_args_var'>Call Time:</div> ")
-			ttip << raw("<div class='task_args_val'>") + h(call.created_at.strftime("%Y-%m-%d %H:%M:%S %Z")) + raw("&nbsp;</div>")
-
-			ttip << raw("<div class='task_args_var'>CallerID:</div> ")
-			ttip << raw("<div class='task_args_val'>") + h(call.caller_id) + raw("&nbsp;</div>")
-
-			ttip << raw("<div class='task_args_var'>Provider:</div> ")
-			ttip << raw("<div class='task_args_val'>") + h(call.provider.name) + raw("&nbsp;</div>")
-
-
-			ttip << raw("<div class='task_args_var'>Audio:</div> ")
-			ttip << raw("<div class='task_args_val'>") + h(call.audio_length.to_s) + raw("&nbsp;</div>")
-
-
-			ttip << raw("<div class='task_args_var'>Ring:</div> ")
-			ttip << raw("<div class='task_args_val'>") + h(call.ring_length.to_s) + raw("&nbsp;</div>")
-
-			ttip << raw("</div>\n")
-			outp = raw("<span class='xpopover' rel='popover' data-title=\"#{h call.number.to_s }\" data-content=\"#{ttip}\"><strong>#{h call.line_type.upcase }</strong></span>")
-			outp
-	end
-
-
 	def format_job_status(job)
 		case job.status
 		when 'error'
@@ -137,6 +110,9 @@ module ApplicationHelper
 	end
 
 
+	def escape_javascript_dq(str)
+		escape_javascript(str.strip).gsub("\\'", "'").gsub("\t", "    ")
+	end
 
   #
   # Generate pagination links

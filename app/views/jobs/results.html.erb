@@ -45,8 +45,8 @@
 
     	<% end %>
     </td>
-    <td><span rel="tooltip" class="xtooltip" title="<%= pct_answered %>% answered"><%= cnt_answered %> / <%= cnt_dialed %></span></td>
-    <td><span rel="tooltip" class="xtooltip" title="<%= pct_analyzed %>% analyzed"><%= cnt_analyzed%></span></td>
+    <td><span rel="tooltip" class="xtooltip" title="<%= pct_answered %>% answered"><%= number_with_delimiter(cnt_answered) %> / <%= number_with_delimiter(cnt_dialed) %></span></td>
+    <td><span rel="tooltip" class="xtooltip" title="<%= pct_analyzed %>% analyzed"><%= number_with_delimiter(cnt_analyzed) %></span></td>
 
 
 	<td><%= job.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>

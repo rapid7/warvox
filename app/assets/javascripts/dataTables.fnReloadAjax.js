@@ -20,18 +20,18 @@ jQuery.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnC
   oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aData, function(json) {
     /* Clear the old information from the table */
     that.oApi._fnClearTable( oSettings );
-      
+
     /* Got the data - add it to the table */
     var aData =  (oSettings.sAjaxDataProp !== "") ?
       that.oApi._fnGetObjectDataFn( oSettings.sAjaxDataProp )( json ) : json;
-      
+
     for ( var i=0 ; i<aData.length ; i++ )
     {
       that.oApi._fnAddData( oSettings, aData[i] );
     }
 
     oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-      
+
     if ( typeof bStandingRedraw != 'undefined' && bStandingRedraw === true )
     {
       oSettings._iDisplayStart = iStart;

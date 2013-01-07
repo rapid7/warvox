@@ -25,30 +25,33 @@ class AnalyzeController < ApplicationController
 
 	@lines_by_type = res_types
 
-	if(@shown and @shown != 'all')
-		@results = Call.where(:job_id => @job_id).paginate(
-			:page => params[:page],
-			:order => 'number ASC',
-			:per_page => 10,
-			:conditions => [ 'answered = ? and analysis_completed_at IS NOT NULL and busy = ? and line_type = ?', true, false, @shown ]
-		)
-	else
-		@results = Call.where(:job_id => @job_id).paginate(
-			:page => params[:page],
-			:order => 'number ASC',
-			:per_page => 10,
-			:conditions => [ 'answered = ? and analysis_completed_at IS NOT NULL and busy = ?', true, false ]
-		)
-	end
+    sort_by  = params[:sort_by] || 'number'
+    sort_dir = params[:sort_dir] || 'asc'
 
-	@filters = []
-	@filters << { :scope => "all", :label => "All" }
-	res_types.keys.each do |t|
-		@filters << { :scope => t.to_s.downcase, :label => t.to_s }
-	end
+    @results = []
+    @results_total_count = @job.calls.where("job_id = ? AND analysis_completed_at IS NOT NULL", @job_id).count()
+
+    if request.format.json?
+      if params[:iDisplayLength] == '-1'
+        @results_per_page = nil
+      else
+        @results_per_page = (params[:iDisplayLength] || 20).to_i
+      end
+      @results_offset = (params[:iDisplayStart] || 0).to_i
+
+	  calls_search
+      @results = @job.calls.includes(:provider).where(@search_conditions).limit(@results_per_page).offset(@results_offset).order(calls_sort_option)
+      @results_total_display_count = @job.calls.includes(:provider).where(@search_conditions).count()
+    end
+
+	respond_to do |format|
+      format.html
+      format.json {
+      	render :content_type => 'application/json', :json => render_to_string(:partial => 'view', :results => @results, :lines_by_type => @lines_by_type )
+      }
+    end
 
   end
-
 
   def view_matches
   	@result = Call.find(params[:call_id])
@@ -101,6 +104,49 @@ class AnalyzeController < ApplicationController
 	end
 
     send_data(cdata, :type => ctype, :disposition => 'inline')
+  end
+
+
+
+  # Generate a SQL sort by option based on the incoming DataTables paramater.
+  #
+  # Returns the SQL String.
+  def calls_sort_option
+    column = case params[:iSortCol_0].to_s
+             when '1'
+               'number'
+             when '2'
+               'line_type'
+             when '3'
+               'peak_freq'
+             end
+    column + ' ' + (params[:sSortDir_0] =~ /^A/i ? 'asc' : 'desc') if column
+  end
+
+  def calls_search
+  	@search_conditions = []
+  	terms = params[:sSearch].to_s
+  	terms = Shellword.shellwords(terms) rescue terms.split(/\s+/)
+	where = "job_id = ? AND analysis_completed_at IS NOT NULL "
+	param = [ @job_id ]
+	glue  = "AND "
+	terms.each do |w|
+		where << glue
+		case w
+			when /^F(\d+)$/i   # F2100 = peak frequency between 2095hz and 2105hz
+				freq = $1.to_i
+				where << "( peak_freq > ? AND peak_freq < ? ) "
+				param << freq - 5.0
+				param << freq + 5.0
+			else
+				where << "( number ILIKE ? OR caller_id ILIKE ? OR line_type ILIKE ? ) "
+				param << "%#{w}%"
+				param << "%#{w}%"
+				param << "%#{w}%"
+		end
+		glue = "AND " if glue.empty?
+		@search_conditions = [ where, *param ]
+	end
   end
 
 

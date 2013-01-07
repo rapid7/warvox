@@ -1,1 +1,6 @@
-<%= render :partial => 'shared/audio_player', :locals => { :call => call } %>
+<h2>
+<object type="application/x-shockwave-flash" data="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(call.id, "mp3") %>" width="17" height="17">
+	<param name="movie" value="/assets/musicplayer.swf?song_url=<%=resource_analyze_path(call.id, "mp3") %>" />
+</object>
+<%= call.number %>
+</h2>

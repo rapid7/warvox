@@ -59,7 +59,7 @@
     	<% if job.task == "dialer" %>
     		<a class="btn" href="<%= view_results_path(job.project,job) %>" rel="tooltip" title="View Current Stats" ><i class="icon-zoom-in"></i></a>
     	<% end %>
-    	<% if job.task == "analysis" %>
+    	<% if job.task == "analysis" and job.details[:scope].to_s != "calls" %>
     		<a class="btn" href="<%= view_analyze_path(job.project,job.details[:target_id]||job.id) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
     	<% end %>
 		<a class="btn" href="<%= stop_job_path(job) %>" data-confirm="Terminate this job?" rel="nofollow tooltip" title="Terminate Job"><i class="icon-stop"></i></a>

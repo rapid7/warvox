@@ -35,16 +35,6 @@
 				delay: { show: 300, hide: 300 },
 				animation: false,
 			});
-
-			var ap = $("#audio_player");
-			if (ap && null != ap) {
-				$("#ubaPlayer").ubaPlayer({
-					codecs: [{name:"MP3", codec: 'audio/mpeg'}],
-					flashAudioPlayerPath: "/assets/player.swf",
-					swfobjectPath: "/assets/swfobject.js",
-					playerContainer: "audio_player"
-				});
-			}
 		});
 	<% end %>
   </head>
@@ -104,8 +94,6 @@
           <footer class="footer">
           	<p>WarVOX v<%=WarVOX::VERSION %> &copy; Rapid7, Inc. 2009-2013</p>
           </footer>
-
-		<div id="audio_player"></div>
 
         </div>
       </div>
