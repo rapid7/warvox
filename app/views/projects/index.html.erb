@@ -20,9 +20,9 @@
   <tr>
     <td><%= link_to( h(project.name), project_path(project)) %></td>
     <td><%=truncate(project.description, :length => 40, :separator => '') %></td>
-    <td><%= project.jobs.count %></td>
-    <td><%= project.calls.count %></td>
-    <td><%= project.calls.where('analysis_completed_at IS NOT NULL').count %></td>
+    <td><%= number_with_delimiter(project.jobs.count) %></td>
+    <td><%= number_with_delimiter(project.calls.count) %></td>
+    <td><%= number_with_delimiter(project.calls.where('analysis_completed_at IS NOT NULL').count) %></td>
     <td><%= project.updated_at.localtime.strftime("%Y-%m-%d %H:%M:%S") %></td>
     <td>
       	<a class="btn" href="<%= edit_project_path(project) %>"rel="tooltip" title="Update Project Information"><i class="icon-pencil"></i></a>

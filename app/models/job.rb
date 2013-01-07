@@ -107,7 +107,7 @@ class Job < ActiveRecord::Base
 				:scope      => self.scope,          # job / project/ global
 				:force      => !!(self.force),      # true / false
 				:target_id  => self.target_id.to_i, # job_id or project_id or nil
-				:target_ids => self.target_ids.map{|x| x.to_i }
+				:target_ids => (self.target_ids || []).map{|x| x.to_i }
 			})
 			return self.save
 		else

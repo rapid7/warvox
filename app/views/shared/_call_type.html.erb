@@ -11,4 +11,4 @@ ttip << raw("<div class='task_args_val'>") + h(call.audio_length.to_s) + raw("&n
 ttip << raw("<div class='task_args_var'>Ring:</div> ")
 ttip << raw("<div class='task_args_val'>") + h(call.ring_length.to_s) + raw("&nbsp;</div>")
 ttip << raw("</div>\n")
-%><%= raw("<span class='xpopover' rel='popover' data-title=\"#{h call.number.to_s }\" data-content=\"#{ttip}\"><strong>#{h call.line_type.upcase }</strong></span>") -%>
+%><%= raw("<span class='xpopover' rel='popover' data-title=\"#{h call.number.to_s }\" data-content=\"#{ttip}\"><strong>#{h call.line_type.to_s.upcase }</strong></span>") -%>
