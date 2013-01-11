@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 ruby '1.9.3'
 gem 'thin'
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.11'
 gem 'pg', '0.11'
 
 gem 'jquery-rails'
