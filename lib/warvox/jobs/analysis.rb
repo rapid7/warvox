@@ -6,7 +6,12 @@ class Analysis < Base
 	require 'tempfile'
 	require 'open3'
 
-	require 'kissfft'
+	# This is required by the verify_instal.rb script, so dont error
+	# out if the gem is not yet available
+	begin
+		require 'kissfft'
+	rescue ::LoadError
+	end
 
 	class Classifier
 
