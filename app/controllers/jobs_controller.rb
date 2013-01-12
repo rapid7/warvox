@@ -110,6 +110,7 @@ class JobsController < ApplicationController
 	param = []
 	glue  = ""
 	terms.each do |w|
+		next if w.downcase == 'undefined'
 		where << glue
 		case w
 			when 'answered'
