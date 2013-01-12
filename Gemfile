@@ -2,8 +2,8 @@ source 'http://rubygems.org'
 
 ruby '1.9.3'
 gem 'thin'
-gem 'rails', '3.2.11'
-gem 'pg', '0.11'
+gem 'rails', '>=3.2.11'
+gem 'pg', '>=0.11'
 
 gem 'jquery-rails'
 gem 'jquery-datatables-rails'
@@ -30,6 +30,9 @@ gem 'twitter-bootstrap-rails'
 gem 'formtastic'
 gem 'formtastic-bootstrap'
 gem 'rails_bootstrap_navbar'
+gem 'less-rails-bootstrap'
+gem 'therubyracer'
+
 
 # gem "therubyracer", :group => :assets, :platform => :ruby
 
