@@ -13,7 +13,7 @@
 	<%= f.input :lines,  :as => :number, :label => 'Maximum number of outgoing lines', :input_html => { :value => 1 } %>
 	<%= f.input :cid_mask,  :as => :string, :label => 'The source Caller ID range (1-555-555-55XX or SELF)', :input_html => { :value => '1-123-456-XXXX' } %>
 
-	<%= f.action :submit, :label => 'Create', :button_html => { :class => 'btn btn-large fbtn' }  %>
+	<%= f.action :submit, :label => 'Dial', :button_html => { :class => 'btn btn-large fbtn' }  %>
 
 	<a class="btn btn-link" href="<%= jobs_path %>" rel="tooltip" title="Return to jobs"><i class="icon-return"></i>Cancel</a>
 <% end %>
