@@ -16,9 +16,9 @@
 	<div class="span9">
 		<div class="row-fluid">
 			<div class="span2">&nbsp;</div>
-			<div class="span2"><a href="<%= new_dialer_job_path %>" class="btn" rel="tooltip" title="Gather data by dialing a range of numbers"><i class="icon-phone"></i> <strong>Wardial</strong></a></div>
+			<div class="span2"><a href="<%= new_dialer_project_job_path(@project) %>" class="btn" rel="tooltip" title="Gather data by dialing a range of numbers"><i class="icon-phone"></i> <strong>Wardial</strong></a></div>
 			<% if @boxes[:answered][:cnt] > 0 %>
-			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Analyze call data to determine line types and frequencies"><i class="icon-cogs"></i> <strong>Analyze</strong></a></div>
+			<div class="span2"><a href="<%= new_analyze_job_path %>" class="btn" rel="tooltip" title="Analyze call data to determine line types and frequencies"><i class="icon-cogs"></i> <strong>Analyze</strong></a></div>
 			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Look up meta-information about specific lines"><i class="icon-user"></i> <strong>Identify</strong></a></div>
 			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Signal analysis and other research tools"><i class="icon-star"></i> <strong>Research</strong></a></div>
 			<% else %>

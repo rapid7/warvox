@@ -20,7 +20,7 @@
     <td><%= time_ago_in_words(job.created_at) %> ago</td>
 
     <td>
-		<a class="btn" href="<%= job_path(job) %>" data-confirm="Remove this job?" data-method="delete" rel="nofollow tooltip" title="Remove Job"><i class="icon-trash"></i></a>
+		<a class="btn" href="<%= job_path(job) %>" data-confirm="Remove this job?" data-method="delete" rel="nofollow tooltip" title="Remove Job"><i class="icon-remove"></i></a>
 	</td>
     <td><%= link_to( h(truncate(job.project.name, :length => 25)), project_path(job.project)) %></td>
   </tr>
@@ -78,7 +78,7 @@
 <h1 class='title'>No Active Jobs</h1>
 <% end %>
 
-<a class="btn" href="<%= new_dialer_job_path %>"><i class="icon-plus"></i> New Scan </a>
+<a class="btn" href="<%= new_dialer_job_path %>"><i class="icon-phone"></i> <strong>Wardial</strong></a>
 
 <% if(@inactive_jobs.length > 0) %>
 <br/><br/>
