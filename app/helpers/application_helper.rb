@@ -68,7 +68,7 @@ module ApplicationHelper
 	end
 
 	def format_job_rate(job)
-		pluralize(job.rate.to_i, "call") + "/s"
+		pluralize( (job.rate * 60.0).to_i, "call") + "/min"
 	end
 
 	#
@@ -171,7 +171,7 @@ module ApplicationHelper
 	end
 
 	def call_ring_length_html(call)
-		json_data_scrub(h(call.ring_lenght.to_s)).to_json.html_safe
+		json_data_scrub(h(call.ring_length.to_s)).to_json.html_safe
 	end
 
 

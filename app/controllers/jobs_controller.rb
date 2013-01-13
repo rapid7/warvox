@@ -18,12 +18,11 @@ class JobsController < ApplicationController
 		end
 
 		if @submitted_jobs.length > 0
-			@reload_interval = 1000
+			@reload_interval = 3000
 		end
 
 		respond_to do |format|
-			format.html # index.html.erb
-			format.xml	{ render :xml => @active_jobs + @submitted_jobs }
+			format.html
 		end
 	end
 
@@ -35,8 +34,7 @@ class JobsController < ApplicationController
 		)
 
 		respond_to do |format|
-			format.html # index.html.erb
-			format.xml	{ render :xml => @calls }
+			format.html
 		end
 	end
 
@@ -144,7 +142,6 @@ class JobsController < ApplicationController
 
 		respond_to do |format|
 			format.html
-			format.xml	{ render :xml => @job }
 		 end
 	end
 
@@ -160,8 +157,8 @@ class JobsController < ApplicationController
 		@job = Job.new(params[:job])
 		@job.created_by = @current_user.login
 		@job.task = 'dialer'
-		@job.range.gsub!(/[^0-9X:,\n]/, '')
-		@job.cid_mask.gsub!(/[^0-9X]/, '') if @job.cid_mask != "SELF"
+		@job.range.to_s.gsub!(/[^0-9X:,\n]/, '')
+		@job.cid_mask.to_s.gsub!(/[^0-9X]/, '') if @job.cid_mask != "SELF"
 
 		if @job.range_file.to_s != ""
 			@job.range = @job.range_file.read.gsub(/[^0-9X:,\n]/, '')
@@ -170,13 +167,53 @@ class JobsController < ApplicationController
 		respond_to do |format|
 			if @job.schedule
 				flash[:notice] = 'Job was successfully created.'
-			format.html { redirect_to :action => :index }
-				format.xml	{ render :xml => @job, :status => :created }
+				format.html { redirect_to :action => :index }
 			else
 				format.html { render :action => "new_dialer" }
-				format.xml	{ render :xml => @job.errors, :status => :unprocessable_entity }
 			end
 		end
+	end
+
+	def new_analyze
+		@job = Job.new
+		if @project
+			@job.project = @project
+		else
+			@job.project = Project.last
+		end
+
+		if params[:result_ids]
+			nums = ""
+			Call.find_each(:conditions => { :id => params[:result_ids] }) do |call|
+				nums << call.number + "\n"
+			end
+			@job.range = nums
+		end
+
+		respond_to do |format|
+			format.html
+		 end
+	end
+
+	def new_identify
+		@job = Job.new
+		if @project
+			@job.project = @project
+		else
+			@job.project = Project.last
+		end
+
+		if params[:result_ids]
+			nums = ""
+			Call.find_each(:conditions => { :id => params[:result_ids] }) do |call|
+				nums << call.number + "\n"
+			end
+			@job.range = nums
+		end
+
+		respond_to do |format|
+			format.html
+		 end
 	end
 
 	def reanalyze_job
@@ -189,12 +226,10 @@ class JobsController < ApplicationController
 		respond_to do |format|
 			if @new.schedule
 				flash[:notice] = 'Analysis job was successfully created.'
-			format.html { redirect_to jobs_path }
-				format.xml	{ render :xml => @job, :status => :created }
+				format.html { redirect_to jobs_path }
 			else
 				flash[:notice] = 'Analysis job could not run: ' + @new.errors.inspect
 				format.html { redirect_to results_path(@project) }
-				format.xml	{ render :xml => @job.errors, :status => :unprocessable_entity }
 			end
 		end
 	end
@@ -221,12 +256,70 @@ class JobsController < ApplicationController
 		respond_to do |format|
 			if @new.schedule
 				flash[:notice] = 'Analysis job was successfully created.'
-			format.html { redirect_to jobs_path }
-				format.xml	{ render :xml => @job, :status => :created }
+				format.html { redirect_to jobs_path }
 			else
 				flash[:notice] = 'Analysis job could not run: ' + @new.errors.inspect
 				format.html { redirect_to results_path(@project) }
-				format.xml	{ render :xml => @job.errors, :status => :unprocessable_entity }
+			end
+		end
+	end
+
+
+	def analyze_project
+
+		# Handle analysis of specific call IDs via checkbox submission
+		if params[:result_ids]
+			@new = Job.new({
+				:task => 'analysis', :scope => 'calls', :target_ids => params[:result_ids],
+				:project_id => @project.id, :status => 'submitted'
+			})
+		else
+		# Otherwise analyze the entire Project
+			@new = Job.new({
+				:task => 'analysis', :scope => 'project', :target_id => @project.id,
+				:project_id => @project.id, :status => 'submitted'
+			})
+		end
+
+		@new.created_by = @current_user.login
+
+		respond_to do |format|
+			if @new.schedule
+				flash[:notice] = 'Analysis job was successfully created.'
+				format.html { redirect_to jobs_path }
+			else
+				flash[:notice] = 'Analysis job could not run: ' + @new.errors.inspect
+				format.html { redirect_to results_path(@project) }
+			end
+		end
+	end
+
+	def identify_job
+		@job = Job.find(params[:id])
+
+		# Handle identification of specific lines via checkbox submission
+		if params[:result_ids]
+			@new = Job.new({
+				:task => 'identify', :scope => 'calls', :target_ids => params[:result_ids],
+				:project_id => @project.id, :status => 'submitted'
+			})
+		else
+		# Otherwise analyze the entire Job
+			@new = Job.new({
+				:task => 'identify', :scope => 'job', :target_id => @job.id,
+				:project_id => @project.id, :status => 'submitted'
+			})
+		end
+
+		@new.created_by = @current_user.login
+
+		respond_to do |format|
+			if @new.schedule
+				flash[:notice] = 'Identify job was successfully created.'
+				format.html { redirect_to jobs_path }
+			else
+				flash[:notice] = 'Identify job could not run: ' + @new.errors.inspect
+				format.html { redirect_to results_path(@project) }
 			end
 		end
 	end

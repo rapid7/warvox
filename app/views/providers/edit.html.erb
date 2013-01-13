@@ -1,6 +1,7 @@
 <h1 class='title'>Update Provider</h1>
 
 <%= semantic_form_for(@provider) do |f| %>
+	<%= f.input :enabled, :as => :boolean %>
 	<%= f.input :name, :as => :string, :label => 'Name', :hint => 'A friendly name for this provider', :autofocus => true %>
 	<%= f.input :host, :as => :string, :label => 'IAX2 Server', :hint => 'The IP address or hostname of the IAX2 service' %>
 	<%= f.input :port, :as => :number, :label => 'IAX2 Port', :hint => 'The port of the IAX2 service' %>

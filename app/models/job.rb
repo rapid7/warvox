@@ -27,6 +27,9 @@ class Job < ActiveRecord::Base
 				unless record.lines.to_i > 0 and record.lines.to_i < 10000
 					record.errors[:lines] << "Lines should be between 1 and 10,000"
 				end
+
+				$stderr.puts "Errors: #{record.errors.map{|x| x.inspect}}"
+
 			when 'analysis'
 				unless ['calls', 'job', 'project', 'global'].include?(record.scope)
 					record.errors[:scope] << "Scope must be calls, job, project, or global"
@@ -66,7 +69,7 @@ class Job < ActiveRecord::Base
 	attr_accessor :seconds
 	attr_accessor :cid_mask
 
-	attr_accessible :range, :seconds, :lines, :cid_mask
+	attr_accessible :range, :seconds, :lines, :cid_mask, :range_file
 
 	attr_accessor :scope
 	attr_accessor :force
@@ -104,6 +107,7 @@ class Job < ActiveRecord::Base
 				:seconds  => self.seconds.to_i,
 				:cid_mask => self.cid_mask
 			})
+
 			return self.save
 
 		when 'analysis'

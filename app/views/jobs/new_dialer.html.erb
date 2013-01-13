@@ -1,7 +1,12 @@
-<h1 class='title'>Phone Scan</h1>
+<h1 class='title'>Wardial Configuration</h1>
 
 <%= semantic_form_for(@job, :url => dialer_job_path, :html => { :multipart => true, :method => :put }) do |f| %>
+
+	<% if @project %>
+	<%= f.input :project_id, :as => :hidden, :input_html => { :value => @project.id } %>
+	<% else %>
 	<%= f.input :project, :as => :select %>
+	<% end %>
 
 	<%= f.input :range, :as => :text,
 		:label => 'Target telephone range(s)',
@@ -10,8 +15,8 @@
 	%>
 	<%= f.input :range_file, :as => :file, :label => 'Or upload a file containing the target ranges' %>
 	<%= f.input :seconds,  :as => :number, :label => 'Seconds of audio to capture', :input_html => { :value => 53 } %>
-	<%= f.input :lines,  :as => :number, :label => 'Maximum number of outgoing lines', :input_html => { :value => 1 } %>
-	<%= f.input :cid_mask,  :as => :string, :label => 'The source Caller ID range (1-555-555-55XX or SELF)', :input_html => { :value => '1-123-456-XXXX' } %>
+	<%= f.input :lines,  :as => :number, :label => 'Maximum number of outgoing lines', :input_html => { :value => 10 } %>
+	<%= f.input :cid_mask,  :as => :string, :label => 'The source Caller ID range (1-555-555-55XX or SELF)', :input_html => { :value => '1-555-555-XXXX' } %>
 
 	<%= f.action :submit, :label => 'Dial', :button_html => { :class => 'btn btn-large fbtn' }  %>
 

@@ -13,6 +13,26 @@
   width: auto;
 }
 
+.formtastic .boolean label {
+	padding: 4px;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.formtastic .boolean .control-label {
+	display: none;
+}
+
+.formtastic .boolean input {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	height: 20px;
+	width: 20px;
+	margin-right: 20px;
+	margin-left: 0;
+}
+
 .formtastic .numeric input {
 	width: 5em;
 }

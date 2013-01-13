@@ -1,1 +1,47 @@
-<h1 class='title'>Analysis</h1>
+<% include_view_javascript %>
+
+<h1 class='title'>Analysis of Project <%= @project.name %></h1>
+
+<table class='table table-striped table-condensed'>
+<tr>
+	<td align='center'>
+		<%= render :partial => 'shared/graphs/lines_by_type' %>
+	</td>
+</tr>
+</table>
+
+
+<%= form_tag do %>
+
+<div class="control-bar">
+<table width='100%' border=0 cellpadding=6>
+<tbody><tr>
+<td>
+	<%= submit_checkboxes_to(raw('<i class="icon-refresh"></i> ReDial'), new_dialer_project_job_path(@project), { :class => "btn any" }) %>
+</td>
+<td>
+	<%= submit_checkboxes_to(raw('<i class="icon-trash"></i> Delete'), purge_calls_project_job_path, { :class => "btn any ", :confirm => 'Delete selected calls?' }) %>
+</td>
+</tr></tbody></table>
+
+</div>
+
+
+<div class="analysis-control-bar"> </div>
+
+<span id="results-path" class="invisible"><%= analyze_path(@project, :format => :json) %></span>
+
+<table id='results-table' class='table table-striped table-condensed sortable list' >
+  <thead>
+  <tr>
+	<th><%= check_box_tag "all_results", false %></th>
+    <th>Number</th>
+    <th>Type</th>
+    <th>Signal</th>
+  </tr>
+  </thead>
+  <tbody id="results-list">
+  </tbody>
+</table>
+
+<% end %>

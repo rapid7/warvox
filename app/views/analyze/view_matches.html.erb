@@ -2,7 +2,15 @@
 
 <% call = @result %>
 
-<h1 class='title'><%= @result.number %> (<a href="<%=view_analyze_path(@project.id, call.job_id)%>">Back to Job Analysis</a>)</h1>
+<h1 class='title'>
+<%= @result.number %>
+<% if @job_id %>
+(<a href="<%= view_analyze_path(@project.id, call.job_id)%>">Back to Job Analysis</a>)
+<% else %>
+(<a href="<%= analyze_path(@project.id)%>">Back to Project Analysis</a>)
+<% end %>
+</h1>
+
 <table class='table table-striped table-condensed'>
   <thead>
   <tr>

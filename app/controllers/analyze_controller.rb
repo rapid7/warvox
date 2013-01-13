@@ -13,25 +13,30 @@ class AnalyzeController < ApplicationController
   	@job      = Job.find(@job_id)
 	@shown    = params[:show]
 
-	ltypes = Call.find( :all, :select => 'DISTINCT line_type', :conditions => ["job_id = ?", @job_id] ).map{|r| r.line_type}
-	res_types = {}
+	if request.format.html?
+		ltypes = Call.find( :all, :select => 'DISTINCT line_type', :conditions => ["job_id = ?", @job_id] ).map{|r| r.line_type}
+		res_types = {}
 
-	ltypes.each do |k|
-		next if not k
-		res_types[k.capitalize.to_sym] = Call.count(
-			:conditions => ['job_id = ? and line_type = ?', @job_id, k]
-		)
+		ltypes.each do |k|
+			next if not k
+			res_types[k.capitalize.to_sym] = Call.count(
+				:conditions => ['job_id = ? and line_type = ?', @job_id, k]
+			)
+		end
+
+		@lines_by_type = res_types
 	end
-
-	@lines_by_type = res_types
 
     sort_by  = params[:sort_by] || 'number'
     sort_dir = params[:sort_dir] || 'asc'
 
     @results = []
-    @results_total_count = @job.calls.where("job_id = ? AND analysis_completed_at IS NOT NULL", @job_id).count()
+    @results_total_count = 0
 
     if request.format.json?
+
+      @results_total_count = Call.where("job_id = ? AND analysis_completed_at IS NOT NULL", @job.id).count()
+
       if params[:iDisplayLength] == '-1'
         @results_per_page = nil
       else
@@ -40,8 +45,10 @@ class AnalyzeController < ApplicationController
       @results_offset = (params[:iDisplayStart] || 0).to_i
 
 	  calls_search
-      @results = @job.calls.includes(:provider).where(@search_conditions).limit(@results_per_page).offset(@results_offset).order(calls_sort_option)
-      @results_total_display_count = @job.calls.includes(:provider).where(@search_conditions).count()
+
+	  @results_total_display_count = Call.where(@search_conditions).count()
+      @results = Call.where(@search_conditions).includes(:provider).limit(@results_per_page).offset(@results_offset).order(calls_sort_option)
+
     end
 
 	respond_to do |format|
@@ -55,16 +62,66 @@ class AnalyzeController < ApplicationController
 
   def view_matches
   	@result = Call.find(params[:call_id])
-  	@job_id = @result.job_id
   	@match_scopes = [
   		{ :scope => 'job', :label => 'This Job' },
   		{ :scope => 'project', :label => 'This Project' },
   		{ :scope => 'global', :label => 'All Projects' }
   	]
 
-  	@match_scope = params[:match_scope] || "job"
+  	@job_id = params[:job_id]
+
+	if @job_id
+	  	@match_scope = params[:match_scope] || "job"
+	else
+		@match_scope = params[:match_scope] || "project"
+	end
 
 	@results = @result.paginate_matches(@match_scope, 30.0, params[:page], 30)
+  end
+
+
+
+  def index
+	@shown    = params[:show]
+
+	ltypes = Line.find( :all, :select => 'DISTINCT line_type', :conditions => ["project_id = ?", @project.id] ).map{|r| r.line_type}
+	res_types = {}
+
+	ltypes.each do |k|
+		next if not k
+		res_types[k.capitalize.to_sym] = Line.count(
+			:conditions => ['project_id = ? and line_type = ?', @project.id, k]
+		)
+	end
+
+	@lines_by_type = res_types
+
+    sort_by  = params[:sort_by] || 'number'
+    sort_dir = params[:sort_dir] || 'asc'
+
+    @results = []
+    @results_total_count = @project.calls.where("analysis_completed_at IS NOT NULL").count()
+
+    if request.format.json?
+      if params[:iDisplayLength] == '-1'
+        @results_per_page = nil
+      else
+        @results_per_page = (params[:iDisplayLength] || 20).to_i
+      end
+      @results_offset = (params[:iDisplayStart] || 0).to_i
+
+	  project_search
+      @results = Call.where(@search_conditions).includes(:provider).limit(@results_per_page).offset(@results_offset).order(calls_sort_option)
+      @results_total_display_count = Call.where(@search_conditions).includes(:provider).count()
+    end
+
+	respond_to do |format|
+      format.html
+      format.json {
+      	render :content_type => 'application/json', :json => render_to_string(:partial => 'index', :results => @results, :lines_by_type => @lines_by_type )
+      }
+    end
+
   end
 
   def resource
@@ -146,8 +203,35 @@ class AnalyzeController < ApplicationController
 				param << "%#{w}%"
 		end
 		glue = "AND " if glue.empty?
-		@search_conditions = [ where, *param ]
 	end
+    @search_conditions = [ where, *param ]
+  end
+
+  def project_search
+  	@search_conditions = []
+  	terms = params[:sSearch].to_s
+  	terms = Shellword.shellwords(terms) rescue terms.split(/\s+/)
+	where = "project_id = ? AND analysis_completed_at IS NOT NULL "
+	param = [ @project.id ]
+	glue  = "AND "
+	terms.each do |w|
+		next if w == "undefined"
+		where << glue
+		case w
+			when /^F(\d+)$/i   # F2100 = peak frequency between 2095hz and 2105hz
+				freq = $1.to_i
+				where << "( peak_freq > ? AND peak_freq < ? ) "
+				param << freq - 5.0
+				param << freq + 5.0
+			else
+				where << "( number ILIKE ? OR caller_id ILIKE ? OR line_type ILIKE ? ) "
+				param << "%#{w}%"
+				param << "%#{w}%"
+				param << "%#{w}%"
+		end
+		glue = "AND " if glue.empty?
+	end
+	@search_conditions = [ where, *param ]
   end
 
 
