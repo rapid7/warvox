@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 	before_filter :require_user, :load_project
 	add_breadcrumb :projects, :root_path
 
-
+	include ActionView::Helpers::NumberHelper
 
 private
 

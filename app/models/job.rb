@@ -47,7 +47,6 @@ class Job < ActiveRecord::Base
 		end
 	end
 
-
 	# XXX: Purging a single job will be slow, but deleting the project is fast
 	has_many :calls, :dependent => :destroy
 
@@ -105,9 +104,8 @@ class Job < ActiveRecord::Base
 				:seconds  => self.seconds.to_i,
 				:cid_mask => self.cid_mask
 			})
-			$stderr.puts self.inspect
-
 			return self.save
+
 		when 'analysis'
 			self.status = 'submitted'
 			self.args = Marshal.dump({
@@ -119,6 +117,22 @@ class Job < ActiveRecord::Base
 			return self.save
 		else
 			raise ::RuntimeError, "Unsupported Job type"
+		end
+	end
+
+	def rate
+		tend = (self.completed_at || Time.now)
+		tlen = tend.to_f - self.started_at.to_f
+
+		case self.task
+		when 'dialer'
+			Call.where('job_id = ?', self.id).count() / tlen
+		when 'analysis'
+			Call.where('job_id = ? AND analysis_completed_at > ? AND analysis_completed_at < ?', self.details[:target_id], self.created_at, tend).count() / tlen
+		when 'import'
+			Call.where('job_id = ?', self.id).count() / tlen
+		else
+			0
 		end
 	end
 

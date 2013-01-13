@@ -7,7 +7,7 @@ class JobsController < ApplicationController
 
 		@submitted_jobs = Job.where(:status => ['submitted', 'scheduled'], :completed_at => nil)
 		@active_jobs    = Job.where(:status => 'running', :completed_at => nil)
-		@inactive_jobs  = Job.where('status NOT IN (?) OR completed_at IS NULL', ['submitted', 'scheduled', 'running']).paginate(
+		@inactive_jobs  = Job.where('status NOT IN (?)', ['submitted', 'scheduled', 'running']).paginate(
 			:page => params[:page],
 			:order => 'id DESC',
 			:per_page => 30

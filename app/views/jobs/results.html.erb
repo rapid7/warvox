@@ -49,7 +49,7 @@
     <td><span rel="tooltip" class="xtooltip" title="<%= pct_analyzed %>% analyzed"><%= number_with_delimiter(cnt_analyzed) %></span></td>
 
 
-	<td><%= job.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+	<td><%= time_ago_in_words(job.created_at) %> ago</td>
 	<td><%= job.created_by %></td>
     <td>
         <a class="btn" href="<%= view_results_path(@project,job) %>" rel="tooltip" title="View Call Connections" ><i class="icon-zoom-in"></i></a>
@@ -59,11 +59,11 @@
 			<% if pct_analyzed == 100 %>
 				<a class="btn" href="<%= reanalyze_job_path(@project,job) %>" data-confirm="Reprocess this job?" rel="nofollow tooltip" title="Rerun Call Analysis"><i class="icon-refresh"></i></a>
 			<% else %>
-				<a class="btn" href="<%= analyze_job_path(@project,job) %>" data-confirm="Continue to process this job?" rel="nofollow tooltip" title="Finish Call Analysis"><i class="icon-cog"></i></a>
+				<a class="btn" href="<%= analyze_job_path(@project,job) %>" data-confirm="Continue to process this job?" rel="nofollow tooltip" title="Finish Call Analysis"><i class="icon-cogs"></i></a>
 			<% end %>
 		<% else %>
 			<% if cnt_answered > 0 %>
-			<a class="btn" href="<%= analyze_job_path(@project,job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-cog"></i></a>
+			<a class="btn" href="<%= analyze_job_path(@project,job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-cogs"></i></a>
 			<% end %>
 		<% end %>
 
