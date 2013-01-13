@@ -13,8 +13,6 @@ end
 
 <%= javascript_tag do %>
 
- $(function () {
-    var chart;
     $(document).ready(function() {
           chart = new Highcharts.Chart({
             chart: {
@@ -53,8 +51,5 @@ end
             series: [ <%= line_data %> ]
         });
     });
-
-});
-
 
 <% end %>

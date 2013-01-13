@@ -148,7 +148,7 @@ class Analysis < Base
 
 	def run_analyze_call(cid, jid)
 
-		dr = Call.find(cid)
+		dr = Call.find(cid, :include => :job)
 		dr.analysis_started_at = Time.now.utc
 		dr.analysis_job_id = jid
 		dr.save

@@ -1,0 +1,67 @@
+<% graph_id = "g" + rand(0x10000000).to_s %>
+
+<div class="sparkline" id="<%= graph_id %>"></div>
+
+<%= javascript_tag do %>
+	$(document).ready(function() {
+		var chart = new Highcharts.Chart({
+		chart: {
+			renderTo: '<%= graph_id %>',
+			defaultSeriesType: 'area',
+			margin:[0,0,0,0],
+			// borderWidth: 0;
+		},
+		title:{
+			text:''
+		},
+		credits:{
+			enabled:false
+		},
+		xAxis: {
+			labels: {
+				enabled:false
+			}
+		},
+		yAxis: {
+			maxPadding:0,
+			minPadding:0,
+			endOnTick:false,
+			labels: {
+				enabled:false
+			}
+		},
+		legend: {
+			enabled:false
+		},
+		tooltip: {
+			enabled:false
+		},
+		plotOptions: {
+			series:{
+				lineWidth:1,
+				shadow:false,
+				states:{
+					hover:{
+						lineWidth:1
+					}
+				},
+				marker:{
+					//enabled:false,
+					radius:1,
+					states:{
+						hover:{
+							radius:2
+						}
+					}
+				}
+			}
+		},
+		series: [{
+			color:'#666',
+			fillColor:'rgba(204,204,204,.25)',
+			data: [ <%= raw(points.join(", ")) %> ]
+		}]
+	});
+});
+
+<% end %>

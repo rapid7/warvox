@@ -145,7 +145,7 @@ class JobsController < ApplicationController
 		respond_to do |format|
 			format.html
 			format.xml	{ render :xml => @job }
-		end
+		 end
 	end
 
 	def purge_calls
@@ -158,7 +158,7 @@ class JobsController < ApplicationController
 
 	def dialer
 		@job = Job.new(params[:job])
-		@job.created_by = current_user.login
+		@job.created_by = @current_user.login
 		@job.task = 'dialer'
 		@job.range.gsub!(/[^0-9X:,\n]/, '')
 		@job.cid_mask.gsub!(/[^0-9X]/, '') if @job.cid_mask != "SELF"
@@ -185,6 +185,7 @@ class JobsController < ApplicationController
 			:task => 'analysis', :scope => 'job', :target_id => @job.id, :force => true,
 			:project_id => @project.id, :status => 'submitted'
 		})
+		@new.created_by = @current_user.login
 		respond_to do |format|
 			if @new.schedule
 				flash[:notice] = 'Analysis job was successfully created.'
@@ -214,6 +215,8 @@ class JobsController < ApplicationController
 				:project_id => @project.id, :status => 'submitted'
 			})
 		end
+
+		@new.created_by = @current_user.login
 
 		respond_to do |format|
 			if @new.schedule

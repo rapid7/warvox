@@ -1,5 +1,10 @@
 class Job < ActiveRecord::Base
 
+	reportable :hourly, :aggregation => :count, :grouping => :hour, :date_column => :created_at, :cacheable => false
+	reportable :daily, :aggregation => :count, :grouping => :day, :date_column => :created_at, :cacheable => false
+	reportable :weeky, :aggregation => :count, :grouping => :week, :date_column => :created_at, :cacheable => false
+	reportable :monthly, :aggregation => :count, :grouping => :month, :date_column => :created_at, :cacheable => false
+
 	class JobValidator < ActiveModel::Validator
 		def validate(record)
 			case record.task
@@ -100,6 +105,8 @@ class Job < ActiveRecord::Base
 				:seconds  => self.seconds.to_i,
 				:cid_mask => self.cid_mask
 			})
+			$stderr.puts self.inspect
+
 			return self.save
 		when 'analysis'
 			self.status = 'submitted'
