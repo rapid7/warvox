@@ -1,24 +1,80 @@
-<h1 class='title'>View Project</h1>
-<p>
-  <b>Name:</b>
-  <%=h @project.name %>
-</p>
-
-<p>
-  <b>Description:</b>
-  <%=h @project.description %>
-</p>
-
-<p>
-  <b>Default Include:</b>
-  <%=h @project.included %>
-</p>
-
-<p>
-  <b>Default Exclude:</b>
-  <%=h @project.excluded %>
-</p>
 
 
-<%= link_to 'Edit', edit_project_path(@project) %> |
-<%= link_to 'Back', projects_path %>
+
+<div class="row-fluid">
+	<div class="span12">
+		<a class="btn btn-small pull-right" href="<%= edit_project_path(@project) %>" rel="tooltip" title="Update project settings"><i class="icon-wrench"></i> Settings</a>
+		<h1 class='title'>Project <%= @project.name %></h1>
+		<p class='project-header'><%=h @project.description %></p>
+	</div>
+</div>
+
+
+<div class="row-fluid">
+	<div class="span2">
+		<div class="stat-box">
+			<div><%= number_with_delimiter( @project.calls.count ) %></div>
+			<span class="stat-subtitle">Calls</span>
+		</div>
+	</div>
+	<div class="span2">
+		<div class="stat-box">
+			<div><%= number_with_delimiter( @project.calls.where(:answered => true).count ) %></div>
+			<span class="stat-subtitle">Answered</span>
+		</div>
+	</div>
+	<div class="span2">
+		<div class="stat-box">
+			<div><%= number_with_delimiter( @project.calls.where('analysis_completed_at IS NOT NULL').count ) %></div>
+			<span class="stat-subtitle">Analyzed</span>
+		</div>
+	</div>
+
+	<div class="span2">
+		<div class="stat-box">
+			<div><%= number_with_delimiter( @project.calls.where(:line_type => 'voice').count ) %></div>
+			<span class="stat-subtitle">Voice</span>
+		</div>
+	</div>
+	<div class="span2">
+		<div class="stat-box">
+			<div><%= number_with_delimiter( @project.calls.where(:line_type => 'fax').count ) %></div>
+			<span class="stat-subtitle">Fax</span>
+		</div>
+	</div>
+	<div class="span2">
+		<div class="stat-box">
+			<div><%= number_with_delimiter( @project.calls.where(:line_type => 'modem').count ) %></div>
+			<span class="stat-subtitle">Modem</span>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="row-fluid">
+	<div class="span2">
+		<%= render :partial => 'shared/graphs/sparkline', :locals => { :points => @project.calls.hourly_report.to_a.map{|x| x[1] } } %>
+		Calls/Hour
+	</div>
+	<div class="span2">
+		<%= render :partial => 'shared/graphs/sparkline', :locals => { :points => @project.calls.daily_report.to_a.map{|x| x[1] } } %>
+		Calls/Day
+	</div>
+	<div class="span2">
+		<%= render :partial => 'shared/graphs/sparkline', :locals => { :points => @project.calls.weekly_report.to_a.map{|x| x[1] } } %>
+		Calls/Week
+	</div>
+	<div class="span2">
+		<%= render :partial => 'shared/graphs/sparkline', :locals => { :points => @project.calls.analyzed_hourly_report.to_a.map{|x| x[1] } } %>
+		Analysis/Hour
+	</div>
+	<div class="span2">
+		<%= render :partial => 'shared/graphs/sparkline', :locals => { :points => @project.calls.analyzed_daily_report.to_a.map{|x| x[1] } } %>
+		Analysis/Day
+	</div>
+	<div class="span2">
+		<%= render :partial => 'shared/graphs/sparkline', :locals => { :points => @project.calls.analyzed_weekly_report.to_a.map{|x| x[1] } } %>
+		Analysis/Week
+	</div>
+</div>

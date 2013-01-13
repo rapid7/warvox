@@ -1,9 +1,12 @@
 class ApplicationController < ActionController::Base
-	helper :all
 	protect_from_forgery
+	helper :all
+
 	helper_method :current_user_session, :current_user
 	before_filter :require_user, :load_project
 	add_breadcrumb :projects, :root_path
+
+
 
 private
 

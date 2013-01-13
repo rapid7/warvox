@@ -12,9 +12,6 @@ line_data << raw("{ name: 'Answered', data: [ #{@call_results[:Answered].to_i.to
 <div id="<%= graph_id %>"></div>
 
 <%= javascript_tag do %>
-
- $(function () {
-    var chart;
     $(document).ready(function() {
           chart = new Highcharts.Chart({
             chart: {
@@ -53,8 +50,4 @@ line_data << raw("{ name: 'Answered', data: [ #{@call_results[:Answered].to_i.to
             series: [ <%= line_data %> ]
         });
     });
-
-});
-
-
 <% end %>

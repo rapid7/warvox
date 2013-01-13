@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130106000000) do
+ActiveRecord::Schema.define(:version => 20130113004653) do
 
   add_extension "intarray"
 
@@ -44,8 +44,8 @@ ActiveRecord::Schema.define(:version => 20130106000000) do
     t.integer  "ring_length"
     t.text     "caller_id"
     t.integer  "analysis_job_id"
-    t.boolean  "analysis_started_at"
-    t.boolean  "analysis_completed_at"
+    t.datetime "analysis_started_at"
+    t.datetime "analysis_completed_at"
     t.float    "peak_freq"
     t.text     "peak_freq_data"
     t.text     "line_type"
@@ -120,6 +120,21 @@ ActiveRecord::Schema.define(:version => 20130106000000) do
     t.integer  "lines",      :default => 1,    :null => false
     t.boolean  "enabled",    :default => true
   end
+
+  create_table "reportable_cache", :force => true do |t|
+    t.string   "model_name",       :limit => 100,                  :null => false
+    t.string   "report_name",      :limit => 100,                  :null => false
+    t.string   "grouping",         :limit => 10,                   :null => false
+    t.string   "aggregation",      :limit => 10,                   :null => false
+    t.string   "conditions",       :limit => 100,                  :null => false
+    t.float    "value",                           :default => 0.0, :null => false
+    t.datetime "reporting_period",                                 :null => false
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
+  end
+
+  add_index "reportable_cache", ["model_name", "report_name", "grouping", "aggregation", "conditions", "reporting_period"], :name => "name_model_grouping_aggregation_period", :unique => true
+  add_index "reportable_cache", ["model_name", "report_name", "grouping", "aggregation", "conditions"], :name => "name_model_grouping_agregation"
 
   create_table "settings", :force => true do |t|
     t.string   "var",                      :null => false
