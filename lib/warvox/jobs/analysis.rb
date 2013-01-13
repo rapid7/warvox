@@ -149,7 +149,7 @@ class Analysis < Base
 	def run_analyze_call(cid, jid)
 
 		dr = Call.find(cid, :include => :job)
-		dr.analysis_started_at = Time.now.utc
+		dr.analysis_started_at = Time.now
 		dr.analysis_job_id = jid
 		dr.save
 
@@ -179,7 +179,7 @@ class Analysis < Base
 			end
 		end
 
-		dr.analysis_completed_at = Time.now.utc
+		dr.analysis_completed_at = Time.now
 
 		rescue ::Interrupt
 		ensure

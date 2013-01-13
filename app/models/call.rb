@@ -4,6 +4,7 @@ class Call < ActiveRecord::Base
 	reportable :daily, :aggregation => :count, :grouping => :day, :live_data => true, :cacheable => false
 	reportable :weekly, :aggregation => :count, :grouping => :week, :live_data => true, :cacheable => false
 	reportable :monthly, :aggregation => :count, :grouping => :month, :live_data => true, :cacheable => false
+
 	reportable :analyzed_hourly, :aggregation => :count, :grouping => :hour, :date_column => :analysis_completed_at, :live_data => true, :cacheable => false
 	reportable :analyzed_daily, :aggregation => :count, :grouping => :day, :date_column => :analysis_completed_at, :live_data => true, :cacheable => false
 	reportable :analyzed_weekly, :aggregation => :count, :grouping => :week, :date_column => :analysis_completed_at, :live_data => true, :cacheable => false
