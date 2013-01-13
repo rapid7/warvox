@@ -67,6 +67,10 @@ module ApplicationHelper
 		end
 	end
 
+	def format_job_rate(job)
+		pluralize(job.rate.to_i, "call") + "/s"
+	end
+
 	#
 	# Includes any javascripts specific to this view. The hosts/show view
 	# will automatically include any javascripts at public/javascripts/hosts/show.js.

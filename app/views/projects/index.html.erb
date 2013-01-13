@@ -10,7 +10,7 @@
     <th>Jobs</th>
     <th>Calls</th>
     <th>Analyzed</th>
-    <th>Date</th>
+    <th>Created</th>
     <th>Actions</th>
   </tr>
   </thead>
@@ -23,7 +23,7 @@
     <td><%= number_with_delimiter(project.jobs.count) %></td>
     <td><%= number_with_delimiter(project.calls.count) %></td>
     <td><%= number_with_delimiter(project.calls.where('analysis_completed_at IS NOT NULL').count) %></td>
-    <td><%= project.updated_at.localtime.strftime("%Y-%m-%d %H:%M:%S") %></td>
+    <td><%= time_ago_in_words(project.created_at) %> ago</td>
     <td>
       	<a class="btn" href="<%= edit_project_path(project) %>"rel="tooltip" title="Update Project Information"><i class="icon-pencil"></i></a>
     	<a class="btn" href="<%= project_path(project) %>" data-confirm="Delete this project?" data-method="delete" rel="nofollow tooltip" title="Delete Project"><i class="icon-trash"></i></a>

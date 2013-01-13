@@ -86,8 +86,13 @@
 
 
 .sparkline {
-	width: 100px;
-	height: 20px;
+	width: 100%;
+	height: 30px;
+}
+
+.sparkline-title {
+	text-align: center;
+	font-size: 11px;
 }
 
 .call-detail {
@@ -99,17 +104,89 @@
 	border-bottom: 1px solid #eeeeee;
 }
 
+.zoom {
+	background-color: @orange;
+	height: 40px;
+}
+
+
 .stat-box {
 	padding: 10px;
-
-	background-color: #eeeeee;
-	border: 1px solid #bbbbbb;
-	font-size: 18px;
+	background-color: white;
+	border: 2px solid @darkGray;
+	font-size: 16px;
 	font-weight: bold;
 	color: @darkGray;
-	width: 65px;
+	width: 55px;
 	margin: auto auto;
 	text-align: center;
+
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+	border-bottom-left-radius: 20px;
+}
+
+.stat-modem {
+	background-color: white;
+	border: 2px solid @red;
+	color: @red;
+}
+
+
+.stat-nodata {
+	background-color: #f4f4f4;
+	border: 2px solid @darkGray;
+	color: @darkGray;
+	font-size: 24px;
+}
+
+.stat-completed {
+	background-color: white;
+	border: 2px solid @orange;
+	color: @darkGray;
+}
+
+.stat-voice {
+	background-color: white;
+	border: 2px solid @green;
+	color: @darkGray;
+}
+
+.stat-voicemail {
+	background-color: white;
+	border: 2px solid @blue;
+	color: @darkGray;
+}
+
+.stat-fax {
+	background-color: white;
+	border: 2px solid @darkGray;
+	color: @darkGray;
+}
+
+.stat-modem {
+	background-color: white;
+	border: 2px solid @red;
+	color: @darkGray;
+}
+
+
+.arrow-down {
+	font-size: 18px;
+	text-align: center;
+	margin: auto auto;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	color: @darkOrange;
+}
+
+.arrow-right {
+	font-size: 22px;
+	text-align: center;
+	margin: auto auto;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .stat-subtitle {
@@ -170,7 +247,7 @@
 }
 
 .progress_pct {
-	color: @red;
+	color: @darkGray;
 	margin-left: 10px;
 	font-weight: bold;
 }

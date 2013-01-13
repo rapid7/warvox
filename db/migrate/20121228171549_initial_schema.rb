@@ -65,7 +65,7 @@ class InitialSchema < ActiveRecord::Migration
 			t.timestamps
 			t.text			"number", :null => false
 			t.integer		"project_id", :null => false
-			t.text			"type"
+			t.text			"line_type"
 			t.text			"notes"
 		end
 
