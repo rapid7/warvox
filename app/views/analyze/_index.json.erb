@@ -1,0 +1,17 @@
+<%- self.formats = ["html"] %>
+{
+  "sEcho": <%= echo_data_tables %>,
+  "iTotalRecords": <%= @results_total_count.to_json %>,
+  "iTotalDisplayRecords": <%= @results_total_display_count.to_json %>,
+  "aaData": [
+  <% @results.each_with_index do |result, index| -%>
+    {
+      "DT_RowId":   <%= dom_id(result).to_json.html_safe%>,
+      "checkbox":   <%= call_checkbox_tag(result) %>,
+      "number":     "<%= raw(escape_javascript_dq(render(:partial => 'shared/call_info', :layout => false,  :locals => { :call => result }))) %>",
+      "line_type":  "<%= raw(escape_javascript_dq(render(:partial => 'shared/call_type', :layout => false,  :locals => { :call => result }))) %>",
+      "signal":     "<%= raw(escape_javascript_dq(render(:partial => 'shared/call_signal', :layout => false,  :locals => { :call => result }))) %>"
+    }<%= ',' unless index == (@results.size - 1) %>
+  <% end -%>
+  ]
+}
