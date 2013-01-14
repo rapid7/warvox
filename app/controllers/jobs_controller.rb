@@ -146,11 +146,15 @@ class JobsController < ApplicationController
 	end
 
 	def purge_calls
-		@job = Job.find(params[:id])
 		Call.delete_all(:id => params[:result_ids])
 		CallMedium.delete_all(:call_id => params[:result_ids])
 		flash[:notice] = "Purged #{params[:result_ids].length} calls"
-		redirect_to view_results_path(@job.project_id, @job.id)
+		if params[:id]
+			@job = Job.find(params[:id])
+			redirect_to view_results_path(@job.project_id, @job.id)
+		else
+			redirect_to analyze_path(@project)
+		end
 	end
 
 	def dialer

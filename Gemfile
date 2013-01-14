@@ -33,7 +33,7 @@ gem 'rails_bootstrap_navbar'
 gem 'less-rails-bootstrap'
 gem 'therubyracer'
 
-gem 'reportable', :git => 'git@github.com:hmoore-r7/reportable.git', :require => 'saulabs/reportable'
+gem 'reportable', :git => 'git://github.com/hmoore-r7/reportable.git', :require => 'saulabs/reportable'
 
 gem 'will_paginate', '~> 3.0'
 gem 'will_paginate-bootstrap'

@@ -10,11 +10,13 @@ Web::Application.routes.draw do
 
   match  '/jobs/dial'            => 'jobs#new_dialer',   :as => :new_dialer_job
   match  '/projects/:project_id/jobs/dial'            => 'jobs#new_dialer',   :as => :new_dialer_project_job
-
   match  '/jobs/dialer'          => 'jobs#dialer',       :as => :dialer_job
+
   match  '/jobs/analyze'         => 'jobs#new_analyze',  :as => :new_analyze_job
+  match  '/projects/:project_id/jobs/analyze'         => 'jobs#new_analyze',  :as => :new_analyze_project_job
   match  '/jobs/analyzer'        => 'jobs#analyzer',     :as => :analyzer_job
-  match  '/jobs/identify'        => 'jobs#new_identify', :as => :new_identify_job
+
+  match  '/projects/:project_id/jobs/identify'        => 'jobs#new_identify', :as => :new_identify_project_job
   match  '/jobs/identifier'      => 'jobs#identifier',   :as => :identifier_job
 
   match  '/jobs/:id/stop'        => 'jobs#stop',         :as => :stop_job
@@ -27,9 +29,8 @@ Web::Application.routes.draw do
   match  '/projects/:project_id/scans/:id/analyze'    => 'jobs#analyze_job', :as => :analyze_job
   match  '/projects/:project_id/scans/:id/reanalyze'  => 'jobs#reanalyze_job', :as => :reanalyze_job
 
-  match  '/projects/:project_id/all/analyze'      => 'jobs#analyze_project', :as => :analyze_project_job
-  match  '/projects/:project_id/all/identify'     => 'jobs#identify_project', :as => :identify_project_job
-
+  match  '/projects/:project_id/calls/analyze'      => 'jobs#analyze_project', :as => :analyze_project_job
+  match  '/projects/:project_id/calls/identify'     => 'jobs#identify_project', :as => :identify_project_job
 
 
   match '/projects/:project_id/analyze'             => 'analyze#index', :as => :analyze
