@@ -7,7 +7,7 @@ GIT
       pg_array_parser (~> 0.0.8)
 
 GIT
-  remote: git@github.com:hmoore-r7/reportable.git
+  remote: git://github.com/hmoore-r7/reportable.git
   revision: f8532eeb704c511bb75b5bd4fd9656243c9b118b
   specs:
     reportable (1.2.0)
