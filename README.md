@@ -49,12 +49,15 @@ Copy the example database configuration to database.yml:
 Modify config/database.yml to include the password set previously
 
 Initialize the WarVOX database:
+
 	$ make database
 
 Add an admin account to WarVOX
+
 	$ bin/adduser admin
 
 Start the WarVOX daemons:
+
 	$ bin/warvox.rb 
 
 Access the web interface at http://127.0.0.1:7777/
