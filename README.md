@@ -20,13 +20,13 @@ To get started, install the OS-level dependencies:
 	$ sudo apt-get install gnuplot lame build-essential libssl-dev libcurl-openssl-dev \ 
 	  postgresql postgresql-contrib git-core curl
 
-Clone this repository to the location you want to install WarVOX:
-
-	$ git clone git://github.com/rapid7/warvox.git /home/warvox
-
 Install RVM to obtain Ruby 1.9.3 or later
 
 	$ \curl -L https://get.rvm.io | bash -s stable --autolibs=3 --rails
+
+Clone this repository to the location you want to install WarVOX:
+
+	$ git clone git://github.com/rapid7/warvox.git /home/warvox
 
 Configure WarVOX:
 
