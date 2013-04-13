@@ -1,5 +1,4 @@
 WarVOX
-
 ==
 WarVOX is released under a BSD-style license. See docs/LICENSE for more details.
 
@@ -18,7 +17,8 @@ WarVOX requires PostgreSQL 9.1 or newer with the "contrib" package installed for
 
 To get started, install the OS-level dependencies:
 
-	$ sudo apt-get install gnuplot lame build-essential libssl-dev libcurl-openssl-dev postgresql postgresql-contrib git-core curl
+	$ sudo apt-get install gnuplot lame build-essential libssl-dev libcurl-openssl-dev \ 
+	  postgresql postgresql-contrib git-core curl
 
 Clone this repository to the location you want to install WarVOX:
 
