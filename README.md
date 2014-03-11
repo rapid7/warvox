@@ -18,7 +18,7 @@ WarVOX requires PostgreSQL 9.1 or newer with the "contrib" package installed for
 To get started, install the OS-level dependencies:
 
 	$ sudo apt-get install gnuplot lame build-essential libssl-dev libcurl-openssl-dev \ 
-	  postgresql postgresql-contrib git-core curl
+	  postgresql postgresql-contrib libpq-dev git-core curl
 
 Install RVM to obtain Ruby 1.9.3 or later
 
