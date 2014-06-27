@@ -17,13 +17,21 @@ WarVOX requires PostgreSQL 9.1 or newer with the "contrib" package installed for
 
 To get started, install the OS-level dependencies:
 
-	$ sudo apt-get install gnuplot lame build-essential libssl-dev libcurl-openssl-dev \ 
-	  postgresql postgresql-contrib git-core curl
+	$ sudo apt-get install gnuplot lame build-essential libssl-dev libcurl3-openssl-dev \ 
+	  postgresql postgresql-contrib git-core curl libpq-dev
 
 Install RVM to obtain Ruby 1.9.3 or later
 
 	$ \curl -L https://get.rvm.io | bash -s stable --autolibs=3 --rails
 
+After RVM is installed you need to run the rvm script provided
+
+	$ source /usr/local/rvm/scripts/rvm
+
+In case you have not installed Ruby 1.9.3 or later by now, do so using RVM.
+
+	$ rvm install ruby-1.9.3-p547
+        
 Clone this repository to the location you want to install WarVOX:
 
 	$ git clone git://github.com/rapid7/warvox.git /home/warvox
@@ -41,6 +49,7 @@ Configure the PostgreSQL account for WarVOX:
 	$ psql
 	psql> alter user warvox with password 'randompass';
 	psql> exit
+	$ exit
 
 Copy the example database configuration to database.yml:
 
