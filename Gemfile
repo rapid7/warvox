@@ -38,3 +38,4 @@ gem 'reportable', :git => 'git://github.com/hmoore-r7/reportable.git', :require 
 gem 'will_paginate', '~> 3.0'
 gem 'will_paginate-bootstrap'
 gem 'dynamic_form'
+gem 'psych_shield'

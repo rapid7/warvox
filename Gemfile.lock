@@ -96,6 +96,7 @@ GEM
     pg (0.15.1)
     pg_array_parser (0.0.8)
     polyglot (0.3.5)
+    psych_shield (0.0.4)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -234,6 +235,7 @@ DEPENDENCIES
   librex
   pg (>= 0.11)
   postgres_ext!
+  psych_shield
   rails (>= 3.2.19)
   rails-settings-cached
   rails_bootstrap_navbar
