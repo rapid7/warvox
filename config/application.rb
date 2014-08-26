@@ -61,11 +61,12 @@ module Web
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+   
+    # Config I8n
+    I18n.enforce_available_locales = false
 
     # Configure sensitive parameters which will be filtered from the log file.
-	config.filter_parameters += [:password, :pass]
-
-	config.session_store :cookie_store, :key => "_warvox"
-	config.secret_token = WarVOX::Config.load_session_key
+    config.session_store :cookie_store, :key => "_warvox"
+    config.secret_token = WarVOX::Config.load_session_key
   end
 end
