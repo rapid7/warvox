@@ -11,6 +11,8 @@ Installing
 --
 WarVOX 2.0.0 is still in development and the installation process is not ideal at the moment.
 
+**DO NOT USE WARVOX 2.x.x AT THIS TIME**
+
 WarVOX requires a Linux operating system, preferably Ubuntu or Debian, but Kali should work as well.
 
 WarVOX requires PostgreSQL 9.1 or newer with the "contrib" package installed for integer array support.
