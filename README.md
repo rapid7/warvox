@@ -41,6 +41,7 @@ Clone this repository to the location you want to install WarVOX:
 Configure WarVOX:
 
 	$ cd /home/warvox
+	$ bundle install
 	$ make
 
 Configure the PostgreSQL account for WarVOX:
