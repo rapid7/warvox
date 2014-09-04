@@ -90,14 +90,13 @@ GEM
       less (~> 2.3.1)
     less-rails-bootstrap (2.3.2)
       less-rails (~> 2.3.1)
-    librex (0.0.70)
     libv8 (3.11.8.17)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.25.1)
     multi_json (1.10.1)
-    pg (0.15.1)
+    pg (0.17.1)
     pg_array_parser (0.0.8)
     polyglot (0.3.5)
     psych_shield (0.0.4)
@@ -132,6 +131,7 @@ GEM
       json (~> 1.4)
     ref (1.0.4)
     request_store (1.1.0)
+    rex (2.0.0)
     sass (3.2.7)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -239,7 +239,6 @@ DEPENDENCIES
   jquery-rails
   kissfft
   less-rails-bootstrap
-  librex
   pg (>= 0.11)
   postgres_ext!
   psych_shield
@@ -247,6 +246,7 @@ DEPENDENCIES
   rails-settings-cached
   rails_bootstrap_navbar
   reportable!
+  rex (~> 2.0.0)
   sass-rails (~> 3.2.3)
   scrypt
   therubyracer
