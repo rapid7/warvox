@@ -11,7 +11,7 @@ Installing
 --
 WarVOX 2.0.0 is still in development and the installation process is not ideal at the moment.
 
-** DO NOT USE WARVOX 2.0.0-dev YET! **
+**DO NOT USE WARVOX 2.0.0-dev YET!**
 
 WarVOX requires a Linux operating system, preferably Ubuntu or Debian, but Kali should work as well.
 
@@ -20,7 +20,7 @@ WarVOX requires PostgreSQL 9.1 or newer with the "contrib" package installed for
 To get started, install the OS-level dependencies:
 
 	$ sudo apt-get install gnuplot lame build-essential libssl-dev libcurl3-openssl-dev \ 
-	  postgresql postgresql-contrib git-core curl libpq-dev
+	  postgresql postgresql-contrib git-core curl libpq libpq-dev
 
 Install RVM to obtain Ruby 1.9.3 or later
 
