@@ -37,5 +37,8 @@ Web::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = false
 
+  # Eager load
+  config.eager_load = false
+
   config.serve_static_assets = true
 end
