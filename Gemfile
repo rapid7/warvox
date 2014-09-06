@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 ruby '1.9.3'
-gem 'thin'
+gem 'unicorn'
 gem 'rails', '>=4.1.5', '< 5.0.0'
 gem 'pg', '>=0.17'
 
