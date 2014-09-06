@@ -13,7 +13,7 @@ gem 'jquery-datatables-rails', '>= 2.2.3'
 gem 'postgres_ext', :git => 'git://github.com/dockyard/postgres_ext.git'
 
 gem 'kissfft'
-gem 'rex', '~> 2.0.0'
+gem 'rex', '>= 2.0.1'
 
 gem 'sass-rails',   '~> 4.0.2'
 gem 'coffee-rails', '~> 4.0.1'

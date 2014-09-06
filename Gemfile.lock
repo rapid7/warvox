@@ -130,7 +130,7 @@ GEM
     rake (10.3.2)
     ref (1.0.5)
     request_store (1.1.0)
-    rex (2.0.0)
+    rex (2.0.1)
     sass (3.2.19)
     sass-rails (4.0.3)
       railties (>= 4.0.0, < 5.0)
@@ -197,7 +197,7 @@ DEPENDENCIES
   rails-settings-cached (>= 0.4.1)
   rails_bootstrap_navbar (>= 2.0.1)
   reportable!
-  rex (~> 2.0.0)
+  rex (>= 2.0.1)
   sass-rails (~> 4.0.2)
   scrypt
   therubyracer
