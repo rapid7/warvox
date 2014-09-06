@@ -222,7 +222,7 @@ GEM
     uglifier (2.0.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    will_paginate (3.0.4)
+    will_paginate (3.0.7)
     will_paginate-bootstrap (0.2.2)
       will_paginate (>= 3.0.3)
 
