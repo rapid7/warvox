@@ -131,7 +131,7 @@ GEM
       json (~> 1.4)
     ref (1.0.4)
     request_store (1.1.0)
-    rex (2.0.0)
+    rex (2.0.3)
     sass (3.2.7)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -246,7 +246,7 @@ DEPENDENCIES
   rails-settings-cached
   rails_bootstrap_navbar
   reportable!
-  rex (~> 2.0.0)
+  rex (~> 2.0.3)
   sass-rails (~> 3.2.3)
   scrypt
   therubyracer

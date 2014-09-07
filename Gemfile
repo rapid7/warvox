@@ -13,7 +13,7 @@ gem 'jquery-datatables-rails'
 gem 'postgres_ext', :git => 'git://github.com/dockyard/postgres_ext.git'
 
 gem 'kissfft'
-gem 'rex', '~> 2.0.0'
+gem 'rex', '~> 2.0.3'
 
 # Gems used only for assets and not required
 # in production environments by default.
