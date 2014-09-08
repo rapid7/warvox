@@ -5,7 +5,7 @@
 //= require twitter/bootstrap
 //= require bootstrap-lightbox
 //= require dataTables/jquery.dataTables
-//= require dataTables/jquery.dataTables.bootstrap
+//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require dataTables.hiddenTitle
 //= require dataTables.filteringDelay
 //= require dataTables.fnReloadAjax

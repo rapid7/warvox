@@ -1,3 +1,3 @@
 
 # Extend PostgreSQL
-require 'postgres_ext'
+# require 'postgres_ext'

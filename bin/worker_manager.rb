@@ -95,7 +95,7 @@ def clear_completed_jobs
 	@jobs = @jobs.reject{|x| dead_pids.include?( x[:pid] ) }
 
 	# Mark failed/crashed jobs as completed
-	Job.update_all({ :completed_at => Time.now.utc }, { :id => dead_jids, :completed_at => nil })
+	Job.where(id: dead_jids, completed_at: nil).update_all({completed_at: Time.now.utc})
 end
 
 def clear_stale_jobs
@@ -131,21 +131,21 @@ def clear_stale_jobs
 	# Mark these jobs as abandoned
 	if dead.length > 0
 		WarVOX::Log.debug("Worker Manager is marking #{dead.length} jobs as abandoned")
-		Job.update_all({ :locked_by => nil, :status => 'abandoned' }, { :id => dead })
+		Job.where(:id => dead).update_all({locked_by: nil, status: 'abandoned'})
 	end
 end
 
 def schedule_submitted_jobs
 	loop do
 		# Look for a candidate job with no current owner
-		j  = Job.where(:status => 'submitted', :locked_by => nil).limit(1).first
+		j  = Job.where(status: 'submitted', locked_by: nil).limit(1).first
 		return unless j
 
 		# Try to get a lock on this job
-		Job.update_all({:locked_by => @cookie, :locked_at => Time.now.utc, :status => 'scheduled'}, {:id => j.id, :locked_by => nil})
+		Job.where(id: j.id, locked_by: nil).update_all({locked_by: @cookie, locked_at: Time.now.utc, status: 'scheduled'})
 
 		# See if we actually got the lock
-		j  = Job.where(:id => j.id, :status => 'scheduled', :locked_by => @cookie).limit(1).first
+		j  = Job.where(id: j.id, status: 'scheduled', locked_by: @cookie).limit(1).first
 
 		# Try again if we lost the race,
 		next unless j

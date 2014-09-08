@@ -57,7 +57,7 @@
 					<% if Project.count > 0 %>
 						<%= drop_down_divider %>
 						<%= drop_down_header "Recent Projects" %>
-						<% Project.find(:all, :order => 'ID DESC', :limit => 5).each do |project| %>
+						<% Project.order('ID DESC').limit(5).each do |project| %>
 							<%= menu_item raw('<i class="icon-chevron-right"></i> ' + h(truncate(project.name, :length => 15))),project_path(project) %>
 						<% end %>
 					<% end %>

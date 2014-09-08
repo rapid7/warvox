@@ -15,27 +15,42 @@ class Call < ActiveRecord::Base
   belongs_to :job
   has_one :call_medium, :dependent => :delete
 
-  has_many :matches, :class_name => 'Call', :finder_sql => proc {
-    'SELECT calls.*,  ' +
-    "  (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) AS matchscore " +
-    'FROM calls ' +
-    'WHERE icount(calls.fprint) > 0 AND ' +
-    "calls.job_id = \'#{job_id}\' AND " +
-    "calls.id != \'#{id}\' " +
-#    "AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > 10.0 " +
-    'ORDER BY matchscore DESC'
-  }
+  def matches
+    #    "AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > 10.0 " +
+    self.find_by_sql([
+      'SELECT calls.*,  ' +
+      "  (( icount(?::int[] & calls.fprint::int[]) / icount(?::int[])::float ) * 100.0 ) AS matchscore " +
+      'FROM calls ' +
+      'WHERE icount(calls.fprint) > 0 AND ' +
+      "calls.job_id = ? AND " +
+      "calls.id != ? " +
+      'ORDER BY matchscore DESC',
+      fprint_map,
+      fprint_map,
+      self.job_id,
+      self.id
+      ])
+  end
 
-  has_many :matches_all_jobs, :class_name => 'Call', :finder_sql => proc {
-    'SELECT calls.*,  ' +
-    "  (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[])::float ) * 100.0 ) AS matchscore " +
-    'FROM calls ' +
-    'WHERE icount(calls.fprint) > 0 AND ' +
-    "calls.id != \'#{id}\' " +
-#  "AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > 10.0 " +
-    'ORDER BY matchscore DESC'
-  }
+  def matches_all_jobs
 
+    #    "AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > 10.0 " +
+    self.find_by_sql([    
+      'SELECT calls.*,  ' +
+      "  (( icount(?::int[] & calls.fprint::int[]) / icount(?::int[])::float ) * 100.0 ) AS matchscore " +
+      'FROM calls ' +
+      'WHERE icount(calls.fprint) > 0 AND ' +
+      "calls.id != ? " +
+      'ORDER BY matchscore DESC',
+      fprint_map,
+      fprint_map,
+      self.id
+      ])    
+  end
+
+  def fprint_map
+    @fprint_map ||= "{" + fprint.map{|x| x.to_s}.join(",") + "}"
+  end
 
   after_save :update_linked_line
 
@@ -44,19 +59,19 @@ class Call < ActiveRecord::Base
     scope_limit = ""
     case scope
     when 'job'
-      scope_limit = "calls.job_id = \'#{job_id}\' AND "
+      scope_limit = "calls.job_id = \'#{job_id.to_i}\' AND "
     when 'project'
-      scope_limit = "calls.project_id = \'#{project_id}\' AND "
+      scope_limit = "calls.project_id = \'#{project_id.to_i}\' AND "
     end
 
     query =
       'SELECT calls.*,  ' +
-      "  (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) AS matchscore " +
+      "  (( icount(\'{#{fprint_map}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint_map}'::int[])::float ) * 100.0 ) AS matchscore " +
       'FROM calls ' +
       'WHERE icount(calls.fprint) > 0 AND ' +
       scope_limit +
       "calls.id != \'#{id}\' " +
-      "AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > #{min_match} " +
+      "AND (( icount(\'#{fprint_map}\'::int[] & calls.fprint::int[]) / icount(\'#{fprint_map}\'::int[])::float ) * 100.0 ) > #{min_match.to_f} " +
       'ORDER BY matchscore DESC'
 
     Call.paginate_by_sql(query, :page => page, :per_page => per_page)

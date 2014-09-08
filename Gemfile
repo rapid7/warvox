@@ -1,6 +1,5 @@
 source 'http://rubygems.org'
 
-ruby '1.9.3'
 gem 'unicorn'
 gem 'rails', '>=4.1.5', '< 5.0.0'
 gem 'pg', '>=0.17'
@@ -10,15 +9,17 @@ gem 'jquery-datatables-rails', '>= 2.2.3'
 
 # Integer array support (until Rails 4.0 is released)
 # Git version required to work around this bug: https://github.com/dockyard/postgres_ext/issues/5
-gem 'postgres_ext', :git => 'git://github.com/dockyard/postgres_ext.git'
+# gem 'postgres_ext', :git => 'git://github.com/dockyard/postgres_ext.git'
 
 gem 'kissfft'
 gem 'rex', '~> 2.0.3'
 
+gem 'bootstrap-sass', '>= 3.2.0'
 gem 'sass-rails',   '~> 4.0.2'
 gem 'coffee-rails', '~> 4.0.1'
 gem 'uglifier',     '>= 1.0.3'
 gem 'protected_attributes', '~> 1.0.7'
+gem 'autoprefixer-rails'
 
 gem 'authlogic', '>= 3.4.0'
 gem 'rails-settings-cached', '>= 0.4.1'

@@ -30,7 +30,7 @@ def stop
 		@task.stop() rescue nil
 	end
 	if @job
-		Job.update_all({ :status => 'stopped', :completed_at => Time.now }, { :id => @job.id })
+		Job.where(id: @job_id).update_all({ status: 'stopped', completed_at: Time.now })
 	end
 	exit(0)
 end
@@ -51,7 +51,7 @@ trap("SIGTERM") { stop() }
 
 jid = jid.to_i
 
-@job = Job.where(:id => jid).first
+@job = Job.where(id: jid).first
 
 unless @job
 	$stderr.puts "Error: Specified job not found"
@@ -61,7 +61,7 @@ end
 
 $0 = "warvox worker: #{jid} "
 
-Job.update_all({ :started_at => Time.now.utc, :status => 'running'}, { :id => @job.id })
+Job.where(id: @job.id).update_all({ started_at: Time.now.utc, status: 'running'})
 
 args = Marshal.load(@job.args) rescue {}
 
@@ -78,7 +78,7 @@ when 'analysis'
 	@task = WarVOX::Jobs::Analysis.new(@job.id, args)
 	@task.start
 else
-	Job.update_all({ :error => 'unsupported', :status => 'error' }, { :id => @job.id })
+	Job.where(id: @job.id).update_all({ error: 'unsupported', status: 'error' })
 end
 
 @job.update_progress(100)
@@ -87,5 +87,5 @@ rescue ::SignalException, ::SystemExit
 	raise $!
 rescue ::Exception => e
 	WarVOX::Log.warn("Worker #{@job.id} #{@job.task} threw an exception: #{e.class} #{e} #{e.backtrace}")
-	Job.update_all({ :error => "Exception: #{e.class} #{e}", :status => 'error', :completed_at => Time.now.utc }, { :id => @job.id })
+	Job.where(id: @job.id).update_all({ error: "Exception: #{e.class} #{e}", status: 'error', completed_at: Time.now.utc })
 end

@@ -1,9 +1,8 @@
 class ProjectsController < ApplicationController
 
 	def index
-	 	@projects = Project.paginate(
+	 	@projects = Project.order('id DESC').paginate(
 			:page => params[:page],
-			:order => 'id DESC',
 			:per_page => 10
 		)
 
@@ -18,9 +17,8 @@ class ProjectsController < ApplicationController
 	def show
 		@project = Project.find(params[:id])
 		@active_jobs = @project.jobs.where(:status => 'running', :completed_at => nil)
-		@inactive_jobs	= @project.jobs.where('status NOT IN (?)', ['submitted', 'scheduled', 'running']).paginate(
+		@inactive_jobs	= @project.jobs.order('id DESC').where('status NOT IN (?)', ['submitted', 'scheduled', 'running']).paginate(
 			:page => params[:page],
-			:order => 'id DESC',
 			:per_page => 30
 		)
 

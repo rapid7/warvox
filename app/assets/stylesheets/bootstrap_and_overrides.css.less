@@ -1,35 +1,23 @@
 @import "twitter/bootstrap/bootstrap";
-@import "twitter/bootstrap/responsive";
 
 // Set the correct sprite paths
-@iconSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings");
-@iconWhiteSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings-white");
+@iconSpritePath: image-url("twitter/bootstrap/glyphicons-halflings.png");
+@iconWhiteSpritePath: image-url("twitter/bootstrap/glyphicons-halflings-white.png");
 
 // Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
-// Note: If you use asset_path() here, your compiled bootstrap_and_overrides.css will not
-//       have the proper paths. So for now we use the absolute path.
-@fontAwesomeEotPath: asset-path("fontawesome-webfont.eot");
-@fontAwesomeEotPath_iefix: asset-path("fontawesome-webfont.eot#iefix");
-@fontAwesomeWoffPath: asset-path("fontawesome-webfont.woff");
-@fontAwesomeTtfPath: asset-path("fontawesome-webfont.ttf");
-@fontAwesomeSvgPath: asset-path("fontawesome-webfont.svg");
+@fontAwesomeEotPath: font-url("fontawesome-webfont.eot");
+@fontAwesomeEotPath_iefix: font-url("fontawesome-webfont.eot?#iefix");
+@fontAwesomeWoffPath: font-url("fontawesome-webfont.woff");
+@fontAwesomeTtfPath: font-url("fontawesome-webfont.ttf");
+@fontAwesomeSvgPath: font-url("fontawesome-webfont.svg#fontawesomeregular");
 
 // Font Awesome
-@import "fontawesome";
+@import "fontawesome/font-awesome";
 
 // Glyphicons
-//@import "twitter/bootstrap/sprites.less";
+//@import "twitter/bootstrap/glyphicons.less";
 
 // Your custom LESS stylesheets goes here
-//
-// Since bootstrap was imported above you have access to its mixins which
-// you may use and inherit here
-//
-// If you'd like to override bootstrap's own variables, you can do so here as well
-// See http://twitter.github.com/bootstrap/customize.html#variables for their names and documentation
-//
-// Example:
-// @linkColor: #ff0000;
 
 
 @sansFontFamily: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -38,6 +26,9 @@
 @darkGray: #29383f;
 @lightGray: #666666;
 @blue: #0197b8;
+@white: #ffffff;
+@yellow: yellow;
+@red: red;
 
 @darkOrange: #BB4607;
 @lightOrange: #F8ECE6;
@@ -66,166 +57,166 @@
 // Datatables
 
 .paginate_disabled_previous {
-	display: none;
+  display: none;
 }
 
 .paginate_disabled_next {
-	display: none;
+  display: none;
 }
 
 .paginate_enabled_previous {
-	color: red;
-	margin-right: 20px;
+  color: red;
+  margin-right: 20px;
 }
 
 .paginate_enabled_next {
-	color: green;
+  color: green;
 }
 
 // End of DataTables
 
 
 .sparkline {
-	width: 100%;
-	height: 30px;
+  width: 100%;
+  height: 30px;
 }
 
 .sparkline-title {
-	text-align: center;
-	font-size: 11px;
+  text-align: center;
+  font-size: 11px;
 }
 
 .call-detail {
-	font-size: 10px;
+  font-size: 10px;
 }
 
 .project-header {
-	margin-bottom: 30px;
-	border-bottom: 1px solid #eeeeee;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .zoom {
-	background-color: @orange;
-	height: 40px;
+  background-color: @orange;
+  height: 40px;
 }
 
 
 .stat-box {
-	padding: 10px;
-	background-color: white;
-	border: 2px solid @darkGray;
-	font-size: 16px;
-	font-weight: bold;
-	color: @darkGray;
-	width: 55px;
-	margin: auto auto;
-	text-align: center;
+  padding: 10px;
+  background-color: white;
+  border: 2px solid @darkGray;
+  font-size: 16px;
+  font-weight: bold;
+  color: @darkGray;
+  width: 55px;
+  margin: auto auto;
+  text-align: center;
 
-	border-top-left-radius: 20px;
-	border-top-right-radius: 20px;
-	border-bottom-right-radius: 20px;
-	border-bottom-left-radius: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 
 .stat-modem {
-	background-color: white;
-	border: 2px solid @red;
-	color: @red;
+  background-color: white;
+  border: 2px solid @red;
+  color: @red;
 }
 
 
 .stat-nodata {
-	background-color: #f4f4f4;
-	border: 2px solid @darkGray;
-	color: @darkGray;
-	font-size: 24px;
+  background-color: #f4f4f4;
+  border: 2px solid @darkGray;
+  color: @darkGray;
+  font-size: 24px;
 }
 
 .stat-completed {
-	background-color: white;
-	border: 2px solid @orange;
-	color: @darkGray;
+  background-color: white;
+  border: 2px solid @orange;
+  color: @darkGray;
 }
 
 .stat-voice {
-	background-color: white;
-	border: 2px solid @green;
-	color: @darkGray;
+  background-color: white;
+  border: 2px solid @green;
+  color: @darkGray;
 }
 
 .stat-voicemail {
-	background-color: white;
-	border: 2px solid @blue;
-	color: @darkGray;
+  background-color: white;
+  border: 2px solid @blue;
+  color: @darkGray;
 }
 
 .stat-fax {
-	background-color: white;
-	border: 2px solid @darkGray;
-	color: @darkGray;
+  background-color: white;
+  border: 2px solid @darkGray;
+  color: @darkGray;
 }
 
 .stat-modem {
-	background-color: white;
-	border: 2px solid @red;
-	color: @darkGray;
+  background-color: white;
+  border: 2px solid @red;
+  color: @darkGray;
 }
 
 
 .arrow-down {
-	font-size: 18px;
-	text-align: center;
-	margin: auto auto;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	color: @darkOrange;
+  font-size: 18px;
+  text-align: center;
+  margin: auto auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: @darkOrange;
 }
 
 .arrow-right {
-	font-size: 22px;
-	text-align: center;
-	margin: auto auto;
-	padding-top: 10px;
-	padding-bottom: 10px;
+  font-size: 22px;
+  text-align: center;
+  margin: auto auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .stat-subtitle {
-	text-align: center;
-	font-size: 12px;
-	margin-top: 1px;
+  text-align: center;
+  font-size: 12px;
+  margin-top: 1px;
 }
 
 .fwd_match_span {
-	width: 100px;
-	padding-left: 20px;
-	padding-right: 20px;
-	padding-bottom: 5px;
-	padding-top: 5px;
-	font-weight: bold;
-	color: white;
-	text-align: center;
+  width: 100px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
 }
 
 .filter-label {
-	line-height: 16px;
-	font-size: 16px;
-	margin-right: 5px;
-	padding-top: 5px;
-	font-weight: bold;
+  line-height: 16px;
+  font-size: 16px;
+  margin-right: 5px;
+  padding-top: 5px;
+  font-weight: bold;
 }
 
 .filter-select {
-	line-height: 14px;
-	font-size: 14px;
-	width: 120px;
-	font-weight: bold;
+  line-height: 14px;
+  font-size: 14px;
+  width: 120px;
+  font-weight: bold;
 }
 
 .popover-title {
-	line-height: 12px;
-	font-size: 12px;
-	text-align: center;
-	font-weight: bold;
+  line-height: 12px;
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .popover-content {
@@ -233,83 +224,83 @@
 }
 
 .xtooltip {
-	border-bottom: 1px dotted @blue;
-	cursor: help;
+  border-bottom: 1px dotted @blue;
+  cursor: help;
 }
 
 .xpopover {
-	border-bottom: 1px dotted @blue;
-	cursor: help;
+  border-bottom: 1px dotted @blue;
+  cursor: help;
 }
 
 .progress-bar {
-	margin-bottom: -2px;
+  margin-bottom: -2px;
 }
 
 .progress_pct {
-	color: @darkGray;
-	margin-left: 10px;
-	font-weight: bold;
+  color: @darkGray;
+  margin-left: 10px;
+  font-weight: bold;
 }
 
 .task_args_formatted {
-	padding:10px;
+  padding:10px;
 }
 
 .task_args_var {
-	font-size: 12px;
-	float: left;
-	font-weight: bold;
-	text-align: right;
+  font-size: 12px;
+  float: left;
+  font-weight: bold;
+  text-align: right;
 }
 .task_args_val {
-	font-size: 14px;
-	text-align: left;
-	padding-left: 5px;
-	float: auto;
+  font-size: 14px;
+  text-align: left;
+  padding-left: 5px;
+  float: auto;
 }
 .check-item {
-	font-size: 18px;
-	margin-bottom: 10px;
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 .check-result {
-	margin-left: 40px;
-	width: 500px;
-	font-size: 16px;
+  margin-left: 40px;
+  width: 500px;
+  font-size: 16px;
 }
 
 
 // Hacks to override active drop-down item background color and hover
 .dropdown-menu .active > a {
-	background-color: @white;
-	background-image: none;
-	color: @darkGray;
+  background-color: @white;
+  background-image: none;
+  color: @darkGray;
 }
 
 // Do not make active icons white
 .dropdown-menu > .active > a > [class^="icon-"], .dropdown-menu > .active > a > [class*="icon-"] {
-	color: @darkGray;
-	background-image: url("/assets/twitter/bootstrap/glyphicons-halflings.png");
+  color: @darkGray;
+  background-image: url("/assets/twitter/bootstrap/glyphicons-halflings.png");
 }
 
 .dropdown-menu .active > a:hover {
-	background-color: @orange;
-	background-image: none;
-	color: @white;
+  background-color: @orange;
+  background-image: none;
+  color: @white;
 }
 
 .fconstrained {
-	width: 400px;
+  width: 400px;
 }
 
 
 .project_description {
-	height: 100px;
-	padding: 5px;
+  height: 100px;
+  padding: 5px;
 }
 .project_includes {
-	height: 100px;
-	padding: 5px;
+  height: 100px;
+  padding: 5px;
 }
 
 body#login {
@@ -351,35 +342,35 @@ background-image: linear-gradient(to bottom, #EA5709 0%, #000000 100%);
 }
 
 #login-logo {
-	margin-left: auto;
-	margin-right: auto;
-	width: 222px;
-	height: 68px;
-	margin-top: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 222px;
+  height: 68px;
+  margin-top: 60px;
 }
 
 #box {
-	margin-left: auto;
-	margin-right: auto;
-	width: 350px;
-	background: white;
-	padding: 25px;
-	margin-top: 20px;
-	border: 1px solid #4A1C04;
-	margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 350px;
+  background: white;
+  padding: 25px;
+  margin-top: 20px;
+  border: 1px solid #4A1C04;
+  margin-bottom: 30px;
 }
 
 .login-label {
-	width: 120px;
-	margin-right: 10px;
-	margin-bottom: 5px;
-	text-align: right;
-	font-weight: bold;
-	float: left;
+  width: 120px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  text-align: right;
+  font-weight: bold;
+  float: left;
 }
 
 .btn-login {
-	margin-left: 130px;
+  margin-left: 130px;
 }
 
 .nav {
@@ -389,7 +380,7 @@ background-image: linear-gradient(to bottom, #EA5709 0%, #000000 100%);
 }
 
 .content {
-	margin-top: 40px;
+  margin-top: 40px;
 }
 
 .accordion-toggle:hover {
@@ -397,18 +388,18 @@ background-image: linear-gradient(to bottom, #EA5709 0%, #000000 100%);
 }
 
 h1 {
-	font-size: 24px;
-	line-height: 30px;
+  font-size: 24px;
+  line-height: 30px;
 }
 
 h2 {
-	font-size: 20px;
-	line-height: 24px;
+  font-size: 20px;
+  line-height: 24px;
 }
 
 h3 {
-	font-size: 16px;
-	line-height: 18px;
+  font-size: 16px;
+  line-height: 18px;
 }
 
 .header {

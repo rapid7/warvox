@@ -3,9 +3,8 @@ class CallsController < ApplicationController
   # GET /calls
   # GET /calls.xml
   def index
-    @jobs = @project.jobs.where('task = ? AND completed_at IS NOT NULL', 'dialer').paginate(
+    @jobs = @project.jobs.order('id DESC').where('task = ? AND completed_at IS NOT NULL', 'dialer').paginate(
 		:page => params[:page],
-		:order => 'id DESC',
 		:per_page => 30
 	)
 
@@ -18,9 +17,8 @@ class CallsController < ApplicationController
   # GET /calls/1/view
   # GET /calls/1/view.xml
   def view
-    @calls = Call.where(:job_id => params[:id]).paginate(
+    @calls = Call.order('id DESC').where(:job_id => params[:id]).paginate(
 		:page => params[:page],
-		:order => 'number ASC',
 		:per_page => 30
 	)
 

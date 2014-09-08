@@ -1,9 +1,8 @@
 class AnalyzeController < ApplicationController
 
   def index
-	@jobs = Job.paginate(
+	@jobs = Job.order('id DESC').paginate(
 		:page => params[:page],
-		:order => 'id DESC',
 		:per_page => 30
 	)
   end
@@ -14,14 +13,12 @@ class AnalyzeController < ApplicationController
 	@shown    = params[:show]
 
 	if request.format.html?
-		ltypes = Call.find( :all, :select => 'DISTINCT line_type', :conditions => ["job_id = ?", @job_id] ).map{|r| r.line_type}
+		ltypes = Call.select('DISTINCT line_type').where(:job_id => @job_id).map{|r| r.line_type}
 		res_types = {}
 
 		ltypes.each do |k|
 			next if not k
-			res_types[k.capitalize.to_sym] = Call.count(
-				:conditions => ['job_id = ? and line_type = ?', @job_id, k]
-			)
+			res_types[k.capitalize.to_sym] = Call.where(:job_id => @job_id, :line_type => k).count
 		end
 
 		@lines_by_type = res_types
@@ -47,7 +44,7 @@ class AnalyzeController < ApplicationController
 	  calls_search
 
 	  @results_total_display_count = Call.where(@search_conditions).count()
-      @results = Call.where(@search_conditions).includes(:provider).limit(@results_per_page).offset(@results_offset).order(calls_sort_option)
+    @results = Call.where(@search_conditions).includes(:provider).limit(@results_per_page).offset(@results_offset).order(calls_sort_option)
 
     end
 
