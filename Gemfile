@@ -24,7 +24,7 @@ gem 'autoprefixer-rails'
 gem 'authlogic', '>= 3.4.0'
 gem 'rails-settings-cached', '>= 0.4.1'
 
-gem 'twitter-bootstrap-rails'
+gem "twitter-bootstrap-rails", :git => 'https://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'formtastic', '>= 3.0.0'
 gem 'formtastic-bootstrap', '>= 3.0.0'
 gem 'rails_bootstrap_navbar', '>= 2.0.1'
