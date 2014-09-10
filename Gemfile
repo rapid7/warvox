@@ -26,7 +26,7 @@ end
 gem 'authlogic'
 gem 'rails-settings-cached'
 
-gem 'twitter-bootstrap-rails'
+gem "twitter-bootstrap-rails", :git => 'https://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'formtastic'
 gem 'formtastic-bootstrap'
 gem 'rails_bootstrap_navbar'
