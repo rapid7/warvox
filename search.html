@@ -3,10 +3,10 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>HD Moore - WarVOX </title>
+	<title>HD Moore</title>
 	<meta name="author" content="HD Moore">
 	
-	<meta name="description" content="WarVOX Intro ">
+	<meta name="description" content="Search Results ">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<link href="/atom.xml" rel="alternate" title="HD Moore" type="application/atom+xml">
@@ -50,17 +50,21 @@
 </header>
 
     <div id="content" class="inner">
-        <h1>WarVOX</h1>
+        <h1 class="entry-title"><center>Search Results</center></h1>
+<div id="search_loading" style="margin: 40px 0">
+    <center><img src="/images/loading.gif"></center>
+</div>
 
-<p class="about"><i class="fa fa-caret-right"></i> Intro</p>
-<p class="about-info">
-
-</p><p class="about-info">
-</p>
-
-
- <div class="hline"></div>
-
+<script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+<div id="search_results" style="display:none">
+<br>
+</div>
+<script>
+         $('#search_results').tapir({
+             'token': '',
+             'complete' : function() { document.getElementById('search_loading').style.display="none"; }
+         });
+</script>
 
 
     </div>    

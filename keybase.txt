@@ -1,0 +1,82 @@
+==================================================================
+https://keybase.io/hdm
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://hdm.io
+  * I am hdm (https://keybase.io/hdm) on keybase.
+  * I have a public key with fingerprint 6FA8 0245 1666 8044 ABA6  C695 2201 5B93 FA60 4913
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "client": {
+            "name": "keybase.io node.js client",
+            "version": "0.7.2"
+        },
+        "key": {
+            "fingerprint": "6fa8024516668044aba6c69522015b93fa604913",
+            "host": "keybase.io",
+            "key_id": "22015B93FA604913",
+            "uid": "c6d0b3ba5ff0c7145cb370afc18a3400",
+            "username": "hdm"
+        },
+        "merkle_root": {
+            "ctime": 1412390267,
+            "hash": "952b92c307135788da5c66723186a8bfc7d73d5af017c19eaf1650b505063aa296e45a48989a1a5dcee0d7e0de3d1e06e8cd1da93fadb8b6d27db0b33c5a5ea2",
+            "seqno": 71276
+        },
+        "service": {
+            "hostname": "hdm.io",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1412390195,
+    "expire_in": 157680000,
+    "prev": "201e8b2f18b3c11cfce1bb6932b295612f5a17447cfa989d8eac24d6449f7c62",
+    "seqno": 11,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+
+owFVkwtsFEUYx69QKcXQAhWplABZHgG5Hju7O7O7LaFcawtIIzSAIhWus7Ozd0vb
+3evutuXRBioqEoRDCPVRQVPDyygij0BjKKW8KYlEEA2SyEMCNAK2BSIg1N0KCpNM
+Mjvzm2/+/+/7dnXv7r5ecUxc4dr7RZNT4lquK74ZY+fwixjFVBcwGYsYUqJTw/FW
+Bi6lTAZTTBco2KYB3RxqmCoNzLOHPmb8TAW1bN00XIoNiAGOqfZ7uHdZ040wtaKW
+7sVikIYllhMgQAhJrCBgBSOCZMhxLICKzGsYsYIMeDdkxLSdZ15lumKGdNXd7eKz
+ZT4v+B9f3nVAkMoqvIKhprFEBAIkCi+yWCNAwrzAsh5oU+uxpYha6kktpVZxCQ1Z
+ptnllzi6dwoEwPEyyyHRFYPtiMu7QhWZIzwrAh6KkqRiSBASOR5ICEuKRkRV5FWI
+NRaIBMgUawBBVoEsZBGPMScjKkAsSLIkY4ChSihlVdGdlFcBZRGViApU7OVBVSQF
+qZyoKq4fnkAMKeZc9TYtM0wmQwSciKq9T6tCJ9ST7SXsf1//JixqmY5JzBJvz3Gi
+GZ5bZ0HUYyqpEnp8O6TohlrvFurpSgIXfTYTQIZ+hs6P6hYN6R4BRbeI7vDeoRVe
+WVhAJYXTgKTwBACiEQoUBck8p3AyRIDTIAaiIIhEw24OVIliwgkqEgRZEwl6yh8A
+rlAcdmPaetjATrlFmerl3arifXG9fNpz3bxeDb2wxOeOgG+Ubtvl1ErXotYEw3Sw
+4xqwA2aUGtFwNKDpmhOJmJZNS7ERMKiD8oLPNGEwO4hynjThU03l65XY58kP0r8l
++eFLaUcP3zglJJSN2yynX9jy8xfHl66CLaQtpW7mlKtZ6xLUvLnVS9qOvvxiYUcP
+vPHX34uN8ydOVgUP+Hfeo1PxUfbb7XdzUvpGi5qnODuz3vv4eM1bDfFZlWE4f2fF
+ym2NK+qcxEMfLTd81bWdP41ctn4Un3Iuf3PcsG92rO59L5GtLM9+lPnn5LqMNfIV
+IviHtzbPHijm3bplhrWNNTf/TpxecHfrxTt8yR4ev7vsTal1QFPN5kXTGi8lmMlt
+yTmn90Uurzz09fOXUebWYCSx34nOifEwt7xHcseM9juDdg+oPBt81Hlq98FjGZ8X
+d+97JtJ+5l6ftrizJeOvzjn4SlJT2oZYx4gfTq27WNy+Y1fS9XRm9F+De8S2FY0u
+WVtQFfql4Ed+3Ji0ka9HG69sSt3bsPTG3k/OrRp27HBBwzuVZ7o9FCft2VXXFL5U
+ey1n5Mn+/PqyqvhHE+P9NbHPcqeHH3w184Cs1K3c23Q238e2dmb2vDluVnqsc8Tg
+07fG9BvvT/qy+ULqirVjc2Y0Hh5SO29f8neovkycfv+P1Gm/vZ1d+kH4fm5rQ+0q
+J2XQ+6R0HtgCt6W9OillyGJx4O36EfO3p7Xmm8tjOx5k1hfOLm7W5+buX/NpYd6y
+CQ9a3oh1JN1YmK9UDuozZxP8Pr3w2v722IfnNyxk1tsJt4+USUuGZ702EzWkHps1
+FS4uPNKz6B8=
+=D1f4
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/hdm
+
+==================================================================
