@@ -3,7 +3,7 @@ class Line < ActiveRecord::Base
 	belongs_to :project
 
 	def set_attribute(name, value, ctype='text/plain')
-		la = LineAttribute.find_or_create_by_line_id_and_project_id_and_name(self[:id], self[:project_id], name)
+		la = LineAttribute.where(line_id: self.id, project_id: self.project_id, name: name).first_or_create
 		la.value = value
 		la.ctype = ctype
 		la.save

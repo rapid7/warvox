@@ -35,7 +35,7 @@ class Call < ActiveRecord::Base
   def matches_all_jobs
 
     #    "AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > 10.0 " +
-    self.find_by_sql([    
+    self.find_by_sql([
       'SELECT calls.*,  ' +
       "  (( icount(?::int[] & calls.fprint::int[]) / icount(?::int[])::float ) * 100.0 ) AS matchscore " +
       'FROM calls ' +
@@ -45,7 +45,7 @@ class Call < ActiveRecord::Base
       fprint_map,
       fprint_map,
       self.id
-      ])    
+      ])
   end
 
   def fprint_map
@@ -78,7 +78,7 @@ class Call < ActiveRecord::Base
   end
 
   def media
-    CallMedium.find_or_create_by_call_id_and_project_id(self[:id], self[:project_id])
+    CallMedium.where(call_id: self.id, project_id: self.project_id).first_or_create
   end
 
   def media_fields
@@ -86,7 +86,7 @@ class Call < ActiveRecord::Base
   end
 
   def linked_line
-    Line.find_or_create_by_number_and_project_id(self[:number], self[:project_id])
+    Line.where(number: self.number, project_id: self.project_id).first_or_create
   end
 
   def update_linked_line
