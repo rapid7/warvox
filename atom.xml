@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[HD Moore]]></title>
-  <link href="http://hdm.io/atom.xml" rel="self"/>
-  <link href="http://hdm.io/"/>
-  <updated>2014-10-25T13:16:25-05:00</updated>
-  <id>http://hdm.io/</id>
+  <title><![CDATA[WarVOX]]></title>
+  <link href="http://warvox.org/atom.xml" rel="self"/>
+  <link href="http://warvox.org/"/>
+  <updated>2014-10-25T13:30:44-05:00</updated>
+  <id>http://warvox.org/</id>
   <author>
     <name><![CDATA[HD Moore]]></name>
     
