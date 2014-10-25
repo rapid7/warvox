@@ -82,14 +82,14 @@ class Job < ActiveRecord::Base
 	validates_with JobValidator
 
 	def stop
-		self.class.update_all({ :status => 'cancelled'}, { :id => self.id })
+		self.class.where(id: self.id).update_all(status: 'cancelled')
 	end
 
 	def update_progress(pct)
 		if pct >= 100
-			self.class.update_all({ :progress => pct, :completed_at => Time.now, :status => 'completed' }, { :id => self.id })
+      self.class.where(id: self.id).update_all(:progress => pct, :completed_at => Time.now, :status => 'completed')
 		else
-			self.class.update_all({ :progress => pct }, { :id => self.id })
+			self.class.where(id: self.id).update_all(:progress => pct)
 		end
 	end
 

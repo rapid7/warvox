@@ -148,10 +148,10 @@ class Analysis < Base
 
 	def run_analyze_call(cid, jid)
 
-		dr = Call.find(cid, :include => :job)
+		dr = Call.includes(:job).where(id: cid).first
 		dr.analysis_started_at = Time.now
 		dr.analysis_job_id = jid
-		dr.save
+		dr.save!
 
 		WarVOX::Log.debug("Worker processing audio for #{dr.number}...")
 

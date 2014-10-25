@@ -81,7 +81,7 @@ class AnalyzeController < ApplicationController
   def index
 	@shown    = params[:show]
 
-	ltypes = Line.find( :all, :select => 'DISTINCT line_type', :conditions => ["project_id = ?", @project.id] ).map{|r| r.line_type}
+	ltypes = Line.select('DISTINCT line_type', :conditions => ["project_id = ?", @project.id] ).map{|r| r.line_type}
 	res_types = {}
 
 	ltypes.each do |k|
