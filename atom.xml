@@ -4,10 +4,10 @@
   <title><![CDATA[WarVOX]]></title>
   <link href="http://warvox.org/atom.xml" rel="self"/>
   <link href="http://warvox.org/"/>
-  <updated>2014-10-25T13:31:35-05:00</updated>
+  <updated>2014-10-25T13:32:44-05:00</updated>
   <id>http://warvox.org/</id>
   <author>
-    <name><![CDATA[HD Moore]]></name>
+    <name><![CDATA[Rapid7, Inc.]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
