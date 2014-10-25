@@ -3,8 +3,8 @@
 
 <% if call.fprint and call.fprint.length > 0 and call != @result %>
 	<% if @job_id %>
-	<a class="btn" href="<%= view_matches_path(call.project_id, call.job_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="icon-search"></i></a>
+	<a class="btn" href="<%= view_matches_path(call.project_id, call.job_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="fa fa-search"></i></a>
 	<% else %>
-	<a class="btn" href="<%= view_matches_project_path(call.project_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="icon-search"></i></a>
+	<a class="btn" href="<%= view_matches_project_path(call.project_id, call.id) %>" rel="tooltip" title="Search for Matches"><i class="fa fa-search"></i></a>
 	<% end%>
 <% end %>

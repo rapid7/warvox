@@ -34,7 +34,7 @@ Web::Application.routes.draw do
 
 
   get '/projects/:project_id/analyze'             => 'analyze#index', :as => :analyze
-  get '/call/:result_id.:type'                   => 'analyze#resource', :as => :resource_analyze
+  get '/call/:result_id/:rtype'                   => 'analyze#resource', :as => :resource_analyze
   get '/projects/:project_id/analyze/:id/view'    => 'analyze#view', :as => :view_analyze
 
   get '/projects/:project_id/analyze/:job_id/:call_id/matches'    => 'analyze#view_matches', :as => :view_matches

@@ -25,8 +25,8 @@
     <td><%= number_with_delimiter(project.calls.where('analysis_completed_at IS NOT NULL').count) %></td>
     <td><%= time_ago_in_words(project.created_at) %> ago</td>
     <td>
-      	<a class="btn" href="<%= edit_project_path(project) %>"rel="tooltip" title="Update Project Information"><i class="icon-pencil"></i></a>
-    	<a class="btn" href="<%= project_path(project) %>" data-confirm="Delete this project?" data-method="delete" rel="nofollow tooltip" title="Delete Project"><i class="icon-trash"></i></a>
+      	<a class="btn" href="<%= edit_project_path(project) %>"rel="tooltip" title="Update Project Information"><i class="fa fa-pencil"></i></a>
+    	<a class="btn" href="<%= project_path(project) %>" data-confirm="Delete this project?" data-method="delete" rel="nofollow tooltip" title="Delete Project"><i class="fa fa-trash"></i></a>
 	</td>
   </tr>
 
@@ -43,4 +43,4 @@
 
 <% end %>
 
-<a class="btn" href="<%= new_project_path %>"><i class="icon-plus"></i> Create Project </a>
+<a class="btn" href="<%= new_project_path %>"><i class="fa fa-plus"></i> Create Project </a>

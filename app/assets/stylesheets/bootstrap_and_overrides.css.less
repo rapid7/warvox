@@ -1,15 +1,15 @@
 @import "twitter/bootstrap/bootstrap";
 
 // Set the correct sprite paths
-@iconSpritePath: image-url("twitter/bootstrap/glyphicons-halflings.png");
-@iconWhiteSpritePath: image-url("twitter/bootstrap/glyphicons-halflings-white.png");
+@iconSpritePath: image-url("/assets/glyphicons-halflings.png");
+@iconWhiteSpritePath: image-url("/assets/glyphicons-halflings-white.png");
 
 // Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
-@fontAwesomeEotPath: font-url("fontawesome-webfont.eot");
-@fontAwesomeEotPath_iefix: font-url("fontawesome-webfont.eot?#iefix");
-@fontAwesomeWoffPath: font-url("fontawesome-webfont.woff");
-@fontAwesomeTtfPath: font-url("fontawesome-webfont.ttf");
-@fontAwesomeSvgPath: font-url("fontawesome-webfont.svg#fontawesomeregular");
+@fontAwesomeEotPath: font-url("/assets/fontawesome-webfont.eot");
+@fontAwesomeEotPath_iefix: font-url("/assets/fontawesome-webfont.eot?#iefix");
+@fontAwesomeWoffPath: font-url("/assets/fontawesome-webfont.woff");
+@fontAwesomeTtfPath: font-url("/assets/fontawesome-webfont.ttf");
+@fontAwesomeSvgPath: font-url("/assets/fontawesome-webfont.svg#fontawesomeregular");
 
 // Font Awesome
 @import "fontawesome/font-awesome";
@@ -18,7 +18,6 @@
 //@import "twitter/bootstrap/glyphicons.less";
 
 // Your custom LESS stylesheets goes here
-
 
 @sansFontFamily: "Trebuchet MS", Arial, Helvetica, sans-serif;
 @green: #90d552;
@@ -51,7 +50,87 @@
 @headingsColor: @darkGray;
 
 @navbarBackground: #ea5709;
+@navbarBorderColor: red;
 @navbarBackgroundHighlight: #4A1C04;
+
+// Overrides
+
+/* navbar */
+.navbar-default {
+    background-color: @navbarBackground;
+    border-color: @navbarBorderColor;
+}
+/* title */
+.navbar-default .navbar-brand {
+    color: #ffffff;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #5E5E5E;
+}
+/* link */
+.navbar-default .navbar-nav > li > a {
+    color: #777;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: #333;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #555;
+    background-color: @navbarBackground;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+    color: #555;
+    background-color: #D5D5D5;
+}
+/* caret */
+.navbar-default .navbar-nav > .dropdown > a .caret {
+    border-top-color: #777;
+    border-bottom-color: #777;
+}
+.navbar-default .navbar-nav > .dropdown > a:hover .caret,
+.navbar-default .navbar-nav > .dropdown > a:focus .caret {
+    border-top-color: #333;
+    border-bottom-color: #333;
+}
+.navbar-default .navbar-nav > .open > a .caret,
+.navbar-default .navbar-nav > .open > a:hover .caret,
+.navbar-default .navbar-nav > .open > a:focus .caret {
+    border-top-color: #555;
+    border-bottom-color: #555;
+}
+/* mobile version */
+.navbar-default .navbar-toggle {
+    border-color: #DDD;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background-color: #DDD;
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: @navbarBackground;
+}
+@media (max-width: 767px) {
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: white;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+        color: @yellow;
+    }
+}
+
+//
+
+a .project-title, a:visited .project-title {
+  color: white;
+  font-weight: bold;
+}
 
 
 // Datatables
@@ -380,7 +459,7 @@ background-image: linear-gradient(to bottom, #EA5709 0%, #000000 100%);
 }
 
 .content {
-  margin-top: 40px;
+  margin-top: 80px;
 }
 
 .accordion-toggle:hover {

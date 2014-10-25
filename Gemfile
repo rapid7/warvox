@@ -7,10 +7,6 @@ gem 'pg', '>=0.17'
 gem 'jquery-rails', '>= 3.1.2'
 gem 'jquery-datatables-rails', '>= 2.2.3'
 
-# Integer array support (until Rails 4.0 is released)
-# Git version required to work around this bug: https://github.com/dockyard/postgres_ext/issues/5
-# gem 'postgres_ext', :git => 'git://github.com/dockyard/postgres_ext.git'
-
 gem 'kissfft'
 gem 'rex', '~> 2.0.3'
 
@@ -23,13 +19,13 @@ gem 'autoprefixer-rails'
 
 gem 'authlogic', '>= 3.4.0'
 gem 'rails-settings-cached', '>= 0.4.1'
+gem "breadcrumbs_on_rails"
 
-gem "twitter-bootstrap-rails", :git => 'https://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'formtastic', '>= 3.0.0'
 gem 'formtastic-bootstrap', '>= 3.0.0'
-gem 'rails_bootstrap_navbar', '>= 2.0.1'
-gem 'less-rails-bootstrap'
 gem 'therubyracer'
+
+gem 'font-awesome-rails'
 
 gem 'reportable', :git => 'git://github.com/hmoore-r7/reportable.git', :require => 'saulabs/reportable'
 

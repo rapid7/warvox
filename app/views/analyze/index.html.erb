@@ -17,10 +17,10 @@
 <table width='100%' border=0 cellpadding=6>
 <tbody><tr>
 <td>
-	<%= submit_checkboxes_to(raw('<i class="icon-refresh"></i> ReDial'), new_dialer_project_job_path(@project), { :class => "btn any" }) %>
+	<%= submit_checkboxes_to(raw('<i class="fa fa-refresh"></i> ReDial'), new_dialer_project_job_path(@project), { :class => "btn any" }) %>
 </td>
 <td>
-	<%= submit_checkboxes_to(raw('<i class="icon-trash"></i> Delete'), purge_calls_project_job_path, { :class => "btn any ", :confirm => 'Delete selected calls?' }) %>
+	<%= submit_checkboxes_to(raw('<i class="fa fa-trash"></i> Delete'), purge_calls_project_job_path, { :class => "btn any ", :confirm => 'Delete selected calls?' }) %>
 </td>
 </tr></tbody></table>
 
