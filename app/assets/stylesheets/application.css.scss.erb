@@ -6,6 +6,7 @@
  *= require bootstrap-lightbox
  *= require jquery.dataTables
  *= require font-awesome
+ *= require nv.d3
 */
 
 @import "bootstrap-sprockets";
@@ -221,7 +222,7 @@ a .project-title, a:visited .project-title {
   font-size: 16px;
   font-weight: bold;
   color: #29383f;
-  width: 55px;
+  width: 100px;
   margin: auto auto;
   text-align: center;
 
@@ -471,6 +472,7 @@ background-image: linear-gradient(to bottom, #EA5709 0%, #000000 100%);
   margin-top: 20px;
   border: 1px solid #4A1C04;
   margin-bottom: 30px;
+  border-radius: 15px;
 }
 
 .login-label {
@@ -482,8 +484,35 @@ background-image: linear-gradient(to bottom, #EA5709 0%, #000000 100%);
   float: left;
 }
 
+div.login-label h3 {
+  text-align: left;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+div.login-label input {
+  float: right;
+}
+
+#user_session_login {
+  width: 300px;
+}
+
+#user_session_password {
+  width: 300px;
+}
+
 .btn-login {
-  margin-left: 130px;
+  margin-left: 110px;
+  margin-top: 20px;
+}
+
+.alert {
+  background: #FFFEDE;
+  border: 1px solid red;
+  color: red;
+  font-weight: bold;
+  text-align: center;
 }
 
 .nav {

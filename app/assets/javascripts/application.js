@@ -14,8 +14,6 @@
 //= require highcharts
 
 
-
-
 function getParameterByName(name)
 {
   name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");

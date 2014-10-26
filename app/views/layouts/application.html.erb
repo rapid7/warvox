@@ -12,8 +12,10 @@
 	<![endif]-->
 
 <%= javascript_include_tag "application" %>
+
 <%= yield :view_javascript %>
 <%= stylesheet_link_tag "application", :media => "all" %>
+
 <%= yield :view_stylesheets %>
   <%= favicon_link_tag '/assets/favicon.ico', :rel => 'shortcut icon' %>
 	<%= javascript_tag do %>

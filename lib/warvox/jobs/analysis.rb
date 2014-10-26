@@ -142,7 +142,7 @@ class Analysis < Base
 
 	def update_progress(pct)
 		::ActiveRecord::Base.connection_pool.with_connection {
-			Job.update_all({ :progress => pct }, { :id => @job_id })
+			Job.where(id: @job_id).update_all(progress: pct)
 		}
 	end
 
