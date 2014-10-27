@@ -6,6 +6,7 @@ gem 'pg', '>=0.17'
 
 gem 'jquery-rails', '>= 3.1.2'
 gem 'jquery-datatables-rails', '>= 2.2.3'
+#gem 'postgres_ext', :git => 'git://github.com/dockyard/postgres_ext.git'
 
 gem 'kissfft'
 gem 'rex', '~> 2.0.3'

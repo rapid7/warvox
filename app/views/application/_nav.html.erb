@@ -1,0 +1,67 @@
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="fa fa-bar"></span>
+        <span class="fa fa-bar"></span>
+        <span class="fa fa-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><img src="/assets/logo_light.png" border=0 alt="WarVOX"></a>
+    </div>
+
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav navbar-right">
+
+        <% if @project and @project.id %>
+        <li>
+          <%= link_to(
+            raw(
+              '<i class="fa fa-chevron-left icon-white"></i> ' +
+              h(truncate(@project.name, :length => 20)) +
+              ' <i class="fa fa-chevron-right icon-white"></i>'), project_path(@project), :class => 'project-title') %>
+        </li>
+        <li><a href="<%= results_path(@project) %>">Scans</a></li>
+        <li><a href="<%= analyze_path(@project) %>">Analysis</a></li>
+        <% end %>
+
+        <li><a href="<%= jobs_path %>">Jobs</a></li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+
+          <% if Project.count > 0 %>
+            <li><a href="<%= projects_path %>"><i class="fa fa-list"></i> Browse Projects</a></li>
+          <% end %>
+
+          <li><a href="<%= new_project_path %>"><i class="fa fa-plus"></i> Create Project</a></li>
+
+          <% if Project.count > 0 %>
+            <li class="divider"></li>
+            <li>&nbsp;&nbsp;Recent Projects</li>
+            <% Project.order('ID DESC').limit(5).each do |project| %>
+              <li><a href="<%= project_path(project)%>"><i class="fa fa-chevron-right"></i> <%= truncate(project.name, :length => 15) %></a></li>
+            <% end %>
+          <% end %>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+          <li><a href="<%= user_path(current_user) %>"><i class="fa fa-user"></i> My Account</a></li>
+          <li><a href="<%= providers_path%>"><i class="fa fa-globe"></i> Providers</a></li>
+          <!-- <li><a href="<%= settings_path%>"><i class="fa fa-wrench"></i> Config</a></li> -->
+          <li><a href="<%= about_path%>"><i class="fa fa-info-circle"></i> About</a></li>
+          </ul>
+        </li>
+
+        <li><a href="<%= logout_path %>"><div class="help-icon"><i class="fa fa-sign-out" rel="tooltip" title="Logout"></i></div></a></li>
+        <li><a href="<%= check_path %>"<div class="help-icon"><i class="fa fa-question" rel="tooltip" title="Help!"></i></div></a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

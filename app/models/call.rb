@@ -19,7 +19,7 @@ class Call < ActiveRecord::Base
     #    "AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > 10.0 " +
     self.find_by_sql([
       'SELECT calls.*,  ' +
-      "  (( icount(?::int[] & calls.fprint::int[]) / icount(?::int[])::float ) * 100.0 ) AS matchscore " +
+      "  (( icount(ARRAY[?]::int[] & calls.fprint::int[]) / icount(ARRAY[?]::int[])::float ) * 100.0 ) AS matchscore " +
       'FROM calls ' +
       'WHERE icount(calls.fprint) > 0 AND ' +
       "calls.job_id = ? AND " +
@@ -37,43 +37,46 @@ class Call < ActiveRecord::Base
     #    "AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > 10.0 " +
     self.find_by_sql([
       'SELECT calls.*,  ' +
-      "  (( icount(?::int[] & calls.fprint::int[]) / icount(?::int[])::float ) * 100.0 ) AS matchscore " +
+      "  (( icount(ARRAY[?]::int[] & calls.fprint::int[]) / icount(ARRAY[?]::int[])::float ) * 100.0 ) AS matchscore " +
       'FROM calls ' +
       'WHERE icount(calls.fprint) > 0 AND ' +
       "calls.id != ? " +
       'ORDER BY matchscore DESC',
-      fprint_map,
-      fprint_map,
+      fprint,
+      fprint,
       self.id
       ])
-  end
-
-  def fprint_map
-    @fprint_map ||= "{" + fprint.map{|x| x.to_s}.join(",") + "}"
   end
 
   after_save :update_linked_line
 
   def paginate_matches(scope, min_match, page, per_page)
 
-    scope_limit = ""
+    match_sql =
+      'SELECT calls.*,  ' +
+      "  (( icount(ARRAY[?]::int[] & calls.fprint::int[]) / icount(ARRAY[?]::int[])::float ) * 100.0 ) AS matchscore " +
+      'FROM calls ' +
+      'WHERE icount(calls.fprint) > 0 AND '
+    args = [fprint, fprint]
+
     case scope
     when 'job'
-      scope_limit = "calls.job_id = \'#{job_id.to_i}\' AND "
+      match_sql << " calls.job_id = ? AND "
+      args << job.id.to_i
     when 'project'
-      scope_limit = "calls.project_id = \'#{project_id.to_i}\' AND "
+      match_sql << " calls.project_id = ? AND "
+      args << project_id.to_i
     end
 
-    query =
-      'SELECT calls.*,  ' +
-      "  (( icount(\'{#{fprint_map}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint_map}'::int[])::float ) * 100.0 ) AS matchscore " +
-      'FROM calls ' +
-      'WHERE icount(calls.fprint) > 0 AND ' +
-      scope_limit +
-      "calls.id != \'#{id}\' " +
-      "AND (( icount(\'#{fprint_map}\'::int[] & calls.fprint::int[]) / icount(\'#{fprint_map}\'::int[])::float ) * 100.0 ) > #{min_match.to_f} " +
-      'ORDER BY matchscore DESC'
+    match_sql << "calls.id != ? "
+    args << self.id
 
+    match_sql << " AND (( icount(ARRAY[?]::int[] & calls.fprint::int[]) / icount(ARRAY[?]::int[])::float ) * 100.0 ) > ? ORDER BY matchscore DESC"
+    args << fprint
+    args << fprint
+    args << min_match.to_f
+
+    query = [match_sql, *args]
     Call.paginate_by_sql(query, :page => page, :per_page => per_page)
   end
 
