@@ -169,7 +169,7 @@ DEPENDENCIES
   pg (>= 0.17)
   protected_attributes (~> 1.0.7)
   psych_shield
-  rails (>= 4.1.6, < 5.0.0)
+  rails (>= 4.1.7, < 5.0.0)
   rails-settings-cached (>= 0.4.1)
   reportable!
   rex (~> 2.0.3)
