@@ -6,7 +6,7 @@ class Analysis < Base
 	require 'tempfile'
 	require 'open3'
 
-	# This is required by the verify_instal.rb script, so dont error
+	# This is required by the verify_install.rb script, so dont error
 	# out if the gem is not yet available
 	begin
 		require 'kissfft'
