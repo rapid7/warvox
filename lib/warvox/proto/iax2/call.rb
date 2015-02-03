@@ -72,7 +72,14 @@ class Call
     end
 
     chall = nil
-    if res[2][14] == "\x00\x03" and res[2][IAX_IE_CHALLENGE_DATA]
+
+    # Look for IAX_AUTH_MD5 (2) as an available auth method
+    if res[2][14].unpack("n")[0] & 2 <= 0
+      dprint("REGAUTH: MD5 authentication is not enabled on the server")
+      return
+    end
+
+    if res[2][IAX_IE_CHALLENGE_DATA]
       self.dcall = res[0][0]
       chall = res[2][IAX_IE_CHALLENGE_DATA]
     end
