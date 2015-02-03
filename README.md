@@ -45,6 +45,7 @@ Configure WarVOX:
 	$ make
 
 Verify your installation:
+
 	$ bin/verify_install.rb
 
 Configure the PostgreSQL account for WarVOX:
