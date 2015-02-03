@@ -6,7 +6,7 @@ class Analysis < Base
 	require 'tempfile'
 	require 'open3'
 
-	# This is required by the verify_instal.rb script, so dont error
+	# This is required by the verify_install.rb script, so dont error
 	# out if the gem is not yet available
 	begin
 		require 'kissfft'
@@ -142,16 +142,16 @@ class Analysis < Base
 
 	def update_progress(pct)
 		::ActiveRecord::Base.connection_pool.with_connection {
-			Job.update_all({ :progress => pct }, { :id => @job_id })
+			Job.where(id: @job_id).update_all(progress: pct)
 		}
 	end
 
 	def run_analyze_call(cid, jid)
 
-		dr = Call.find(cid, :include => :job)
+		dr = Call.includes(:job).where(id: cid).first
 		dr.analysis_started_at = Time.now
 		dr.analysis_job_id = jid
-		dr.save
+		dr.save!
 
 		WarVOX::Log.debug("Worker processing audio for #{dr.number}...")
 

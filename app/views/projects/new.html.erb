@@ -4,7 +4,7 @@
 	<%= f.input :name, :as => :string, :label => 'Name', :input_html => { :autofocus => true }  %>
 	<%= f.input :description, :as => :text, :input_html => { :class => 'project_description' } %>
 	<%= f.action :submit, :label => 'Create', :button_html => { :class => 'btn btn-large fbtn' }  %>
-	<a class="btn btn-link" href="<%= projects_path %>"rel="tooltip" title="Return to projects"><i class="icon-return"></i>Cancel</a>
+	<a class="btn btn-link" href="<%= projects_path %>"rel="tooltip" title="Return to projects"><i class="fa fa-return"></i>Cancel</a>
 <% end %>
 
 <%= set_focus('project_name') %>

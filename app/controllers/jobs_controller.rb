@@ -7,9 +7,8 @@ class JobsController < ApplicationController
 
 		@submitted_jobs = Job.where(:status => ['submitted', 'scheduled'], :completed_at => nil)
 		@active_jobs    = Job.where(:status => 'running', :completed_at => nil)
-		@inactive_jobs  = Job.where('status NOT IN (?)', ['submitted', 'scheduled', 'running']).paginate(
+		@inactive_jobs  = Job.order('id DESC').where('status NOT IN (?)', ['submitted', 'scheduled', 'running']).paginate(
 			:page => params[:page],
-			:order => 'id DESC',
 			:per_page => 30
 		)
 
@@ -27,9 +26,8 @@ class JobsController < ApplicationController
 	end
 
 	def results
-		@jobs = @project.jobs.where('(task = ? OR task = ?) AND completed_at IS NOT NULL', 'dialer', 'import').paginate(
+		@jobs = @project.jobs.order('id DESC').where('(task = ? OR task = ?) AND completed_at IS NOT NULL', 'dialer', 'import').paginate(
 			:page => params[:page],
-			:order => 'id DESC',
 			:per_page => 30
 		)
 

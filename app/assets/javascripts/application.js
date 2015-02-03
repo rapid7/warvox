@@ -1,19 +1,17 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 //= require jquery
+//= require bootstrap-sprockets
 //= require jquery_ujs
-//= require twitter/bootstrap
 //= require bootstrap-lightbox
 //= require dataTables/jquery.dataTables
-//= require dataTables/jquery.dataTables.bootstrap
+//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require dataTables.hiddenTitle
 //= require dataTables.filteringDelay
 //= require dataTables.fnReloadAjax
 //= require jquery.table
 //= require dataTables_overrides
 //= require highcharts
-
-
 
 
 function getParameterByName(name)

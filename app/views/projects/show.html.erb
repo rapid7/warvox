@@ -1,6 +1,6 @@
 <div class="row-fluid">
 	<div class="span12">
-		<a class="btn btn-small pull-right" href="<%= edit_project_path(@project) %>" rel="tooltip" title="Update project settings"><i class="icon-wrench"></i> Settings</a>
+		<a class="btn btn-small pull-right" href="<%= edit_project_path(@project) %>" rel="tooltip" title="Update project settings"><i class="fa fa-wrench"></i> Settings</a>
 		<h1 class='title'>Project <%= @project.name %></h1>
 		<p class='project-header'><%=h @project.description %></p>
 	</div>
@@ -16,15 +16,15 @@
 	<div class="span9">
 		<div class="row-fluid">
 			<div class="span2">&nbsp;</div>
-			<div class="span2"><a href="<%= new_dialer_project_job_path(@project) %>" class="btn" rel="tooltip" title="Gather data by dialing a range of numbers"><i class="icon-phone"></i> <strong>Wardial</strong></a></div>
+			<div class="span2"><a href="<%= new_dialer_project_job_path(@project) %>" class="btn" rel="tooltip" title="Gather data by dialing a range of numbers"><i class="fa fa-phone"></i> <strong>Wardial</strong></a></div>
 			<% if @boxes[:answered][:cnt] > 0 %>
-			<div class="span2"><a href="<%= new_analyze_project_job_path(@project) %>" class="btn" rel="tooltip" title="Analyze call data to determine line types and frequencies"><i class="icon-cogs"></i> <strong>Analyze</strong></a></div>
-			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Look up meta-information about specific lines"><i class="icon-user"></i> <strong>Identify</strong></a></div>
-			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Signal analysis and other research tools"><i class="icon-star"></i> <strong>Research</strong></a></div>
+			<div class="span2"><a href="<%= new_analyze_project_job_path(@project) %>" class="btn" rel="tooltip" title="Analyze call data to determine line types and frequencies"><i class="fa fa-cogs"></i> <strong>Analyze</strong></a></div>
+			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Look up meta-information about specific lines"><i class="fa fa-user"></i> <strong>Identify</strong></a></div>
+			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Signal analysis and other research tools"><i class="fa fa-star"></i> <strong>Research</strong></a></div>
 			<% else %>
-			<div class="span2"><a href="#" class="btn disabled" rel="tooltip" title="No call data is available to analyze"><i class="icon-cogs"></i> <strong>Analyze</strong></a></div>
-			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Look up meta-information about specific lines"><i class="icon-user"></i> <strong>Identify</strong></a></div>
-			<div class="span2"><a href="#" class="btn disabled" rel="tooltip" title="No call data is available to research"><i class="icon-star"></i> <strong>Research</strong></a></div>
+			<div class="span2"><a href="#" class="btn disabled" rel="tooltip" title="No call data is available to analyze"><i class="fa fa-cogs"></i> <strong>Analyze</strong></a></div>
+			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Look up meta-information about specific lines"><i class="fa fa-user"></i> <strong>Identify</strong></a></div>
+			<div class="span2"><a href="#" class="btn disabled" rel="tooltip" title="No call data is available to research"><i class="fa fa-star"></i> <strong>Research</strong></a></div>
 			<% end %>
 			<div class="span2">&nbsp;</div>
 		</div>
@@ -32,7 +32,7 @@
 </div>
 
 <div class="row-fluid">
-	<div class="span3 arrow-down"><i class="icon-arrow-down"></i></div>
+	<div class="span3 arrow-down"><i class="fa fa-arrow-down"></i></div>
 	<div class="span9">&nbsp;</div>
 </div>
 
@@ -47,7 +47,7 @@
 </div>
 
 <div class="row-fluid">
-	<div class="span3 arrow-down"><i class="icon-arrow-down"></i></div>
+	<div class="span3 arrow-down"><i class="fa fa-arrow-down"></i></div>
 	<div class="span9">&nbsp;</div>
 </div>
 
@@ -62,7 +62,7 @@
 </div>
 
 <div class="row-fluid">
-	<div class="span3 arrow-down"><i class="icon-arrow-down"></i></div>
+	<div class="span3 arrow-down"><i class="fa fa-arrow-down"></i></div>
 	<div class="span9">&nbsp;</div>
 </div>
 
@@ -169,12 +169,12 @@
 	    <td><%= time_ago_in_words(job.created_at) %> ago</td>
 	    <td>
 	    	<% if job.task == "dialer" %>
-	    		<a class="btn" href="<%= view_results_path(job.project,job) %>" rel="tooltip" title="View Current Stats" ><i class="icon-zoom-in"></i></a>
+	    		<a class="btn" href="<%= view_results_path(job.project,job) %>" rel="tooltip" title="View Current Stats" ><i class="fa fa-eye"></i></a>
 		    	<% end %>
 	    	<% if job.task == "analysis" and job.details[:scope].to_s != "calls" %>
-	    		<a class="btn" href="<%= view_analyze_path(job.project,job.details[:target_id]||job.id) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
+	    		<a class="btn" href="<%= view_analyze_path(job.project,job.details[:target_id]||job.id) %>" rel="tooltip" title="View Call Analysis"><i class="fa fa-pie-chart"></i></a>
 	    	<% end %>
-			<a class="btn" href="<%= stop_job_path(job) %>" data-confirm="Terminate this job?" rel="nofollow tooltip" title="Terminate Job"><i class="icon-stop"></i></a>
+			<a class="btn" href="<%= stop_job_path(job) %>" data-confirm="Terminate this job?" rel="nofollow tooltip" title="Terminate Job"><i class="fa fa-stop"></i></a>
 			</td>
 	  </tr>
 <% end %>

@@ -1,15 +1,15 @@
 /*
- *= require bootstrap_and_overrides
- */
-
-/*
  *= require_self
  *= require formtastic
  *= require formtastic-bootstrap
  *= require formtastic-overrides
  *= require bootstrap-lightbox
- *= require dataTables/jquery.dataTables.bootstrap
+ *= require jquery.dataTables
+ *= require font-awesome
 */
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
 
 
 table.list {
@@ -75,4 +75,542 @@ table.list {
 	border: 0;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+
+#main {
+  margin-top: 50px;
+}
+
+// Overrides
+
+/* navbar */
+
+.navbar-default {
+    background-color: #ea5709;
+    border-color: red;
+}
+/* title */
+.navbar-default .navbar-brand {
+    color: #ffffff;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: yellow;
+    background-color: #ea5709;
+}
+/* link */
+.navbar-default .navbar-nav > li > a {
+    color: white;
+    background-color: #ea5709;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: yellow;
+    background-color: #ea5709;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: yellow;
+    background-color: #ea5709;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+    color: yellow;
+    background-color: #ea5709;
+}
+/* caret */
+.navbar-default .navbar-nav > .dropdown > a .caret {
+    border-top-color: white;
+    border-bottom-color: white;
+}
+.navbar-default .navbar-nav > .dropdown > a:hover .caret,
+.navbar-default .navbar-nav > .dropdown > a:focus .caret {
+    border-top-color: #333;
+    border-bottom-color: #333;
+}
+.navbar-default .navbar-nav > .open > a .caret,
+.navbar-default .navbar-nav > .open > a:hover .caret,
+.navbar-default .navbar-nav > .open > a:focus .caret {
+    border-top-color: #555;
+    border-bottom-color: #555;
+}
+/* mobile version */
+.navbar-default .navbar-toggle {
+    border-color: #DDD;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #ea5709;
+}
+@media (max-width: 767px) {
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: white;
+        background-color: #ea5709;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+        color: yellow;
+    }
+}
+
+//
+
+a .project-title, a:visited .project-title {
+  color: white;
+  font-weight: bold;
+}
+
+
+// Datatables
+
+.paginate_disabled_previous {
+  display: none;
+}
+
+.paginate_disabled_next {
+  display: none;
+}
+
+.paginate_enabled_previous {
+  color: red;
+  margin-right: 20px;
+}
+
+.paginate_enabled_next {
+  color: green;
+}
+
+// End of DataTables
+
+
+.sparkline {
+  width: 100%;
+  height: 30px;
+}
+
+.sparkline-title {
+  text-align: center;
+  font-size: 11px;
+}
+
+.call-detail {
+  font-size: 10px;
+}
+
+.project-header {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.zoom {
+  background-color: yellow;
+  height: 40px;
+}
+
+
+.stat-box {
+  padding: 10px;
+  background-color: white;
+  border: 2px solid #29383f;
+  font-size: 16px;
+  font-weight: bold;
+  color: #29383f;
+  width: 100px;
+  margin: auto auto;
+  text-align: center;
+
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.stat-modem {
+  background-color: white;
+  border: 2px solid red;
+  color: red;
+}
+
+
+.stat-nodata {
+  background-color: #f4f4f4;
+  border: 2px solid #29383f;
+  color: #29383f;
+  font-size: 24px;
+}
+
+.stat-completed {
+  background-color: white;
+  border: 2px solid #ea5709;
+  color: #29383f;
+}
+
+.stat-voice {
+  background-color: white;
+  border: 2px solid green;
+  color: #29383f;
+}
+
+.stat-voicemail {
+  background-color: white;
+  border: 2px solid blue;
+  color: #29383f;
+}
+
+.stat-fax {
+  background-color: white;
+  border: 2px solid #29383f;
+  color: #29383f;
+}
+
+.stat-modem {
+  background-color: white;
+  border: 2px solid red;
+  color: #29383f;
+}
+
+
+.arrow-down {
+  font-size: 18px;
+  text-align: center;
+  margin: auto auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #ea5709;
+}
+
+.arrow-right {
+  font-size: 22px;
+  text-align: center;
+  margin: auto auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.stat-subtitle {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 1px;
+}
+
+.fwd_match_span {
+  width: 150px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.filter-label {
+  line-height: 16px;
+  font-size: 16px;
+  margin-right: 5px;
+  padding-top: 5px;
+  font-weight: bold;
+}
+
+.filter-select {
+  line-height: 14px;
+  font-size: 14px;
+  width: 120px;
+  font-weight: bold;
+}
+
+.popover-title {
+  line-height: 12px;
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.popover-content {
+
+}
+
+.xtooltip {
+  border-bottom: 1px dotted blue;
+  cursor: help;
+}
+
+.xpopover {
+  border-bottom: 1px dotted blue;
+  cursor: help;
+}
+
+.progress-bar {
+  margin-bottom: -2px;
+}
+
+.progress_pct {
+  color: #29383f;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.task_args_formatted {
+  padding:10px;
+}
+
+.task_args_var {
+  font-size: 12px;
+  float: left;
+  font-weight: bold;
+  text-align: right;
+}
+.task_args_val {
+  font-size: 14px;
+  text-align: left;
+  padding-left: 5px;
+  float: auto;
+}
+.check-item {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.check-result {
+  margin-left: 40px;
+  width: 500px;
+  font-size: 16px;
+}
+
+
+// Hacks to override active drop-down item background color and hover
+.dropdown-menu .active > a {
+  background-color: white;
+  background-image: none;
+  color: #29383f;
+}
+
+// Do not make active icons white
+.dropdown-menu > .active > a > [class^="icon-"], .dropdown-menu > .active > a > [class*="icon-"] {
+  color: #29383f;
+  background-image: url("/assets/twitter/bootstrap/glyphicons-halflings.png");
+}
+
+.dropdown-menu .active > a:hover {
+  background-color: #ea5709;
+  background-image: none;
+  color: white;
+}
+
+.fconstrained {
+  width: 400px;
+}
+
+
+.project_description {
+  height: 100px;
+  padding: 5px;
+}
+.project_includes {
+  height: 100px;
+  padding: 5px;
+}
+
+body#login {
+
+background-color: black;
+padding: 0;
+margin: 0;
+
+}
+
+#login-panel {
+
+margin: 0px;
+width: 100%;
+padding: 0;
+height: 300px;
+
+position: fixed;
+z-index: 1;
+
+/* IE10 Consumer Preview */
+background-image: -ms-linear-gradient(top, #EA5709 0%, #000000 100%);
+
+/* Mozilla Firefox */
+background-image: -moz-linear-gradient(top, #EA5709 0%, #000000 100%);
+
+/* Opera */
+background-image: -o-linear-gradient(top, #EA5709 0%, #000000 100%);
+
+/* Webkit (Safari/Chrome 10) */
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #EA5709), color-stop(1, #000000));
+
+/* Webkit (Chrome 11+) */
+background-image: -webkit-linear-gradient(top, #EA5709 0%, #000000 100%);
+
+/* W3C Markup, IE10 Release Preview */
+background-image: linear-gradient(to bottom, #EA5709 0%, #000000 100%);
+
+}
+
+#login-logo {
+  margin-left: auto;
+  margin-right: auto;
+  width: 222px;
+  height: 68px;
+  margin-top: 60px;
+}
+
+#box {
+  margin-left: auto;
+  margin-right: auto;
+  width: 350px;
+  background: white;
+  padding: 25px;
+  margin-top: 20px;
+  border: 1px solid #4A1C04;
+  margin-bottom: 30px;
+  border-radius: 15px;
+}
+
+.login-label {
+  width: 120px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  text-align: right;
+  font-weight: bold;
+  float: left;
+}
+
+div.login-label h3 {
+  text-align: left;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+div.login-label input {
+  float: right;
+}
+
+#user_session_login {
+  width: 300px;
+}
+
+#user_session_password {
+  width: 300px;
+}
+
+.btn-login {
+  margin-left: 110px;
+  margin-top: 20px;
+}
+
+.alert {
+  background: #FFFEDE;
+  border: 1px solid red;
+  color: red;
+  font-weight: bold;
+  text-align: center;
+}
+
+.nav {
+   a {
+    font-size: 15px;
+  }
+}
+
+.content {
+  margin-top: 80px;
+}
+
+.accordion-toggle:hover {
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 24px;
+  line-height: 30px;
+}
+
+h2 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+h3 {
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.header {
+  border-top: solid 4px #ea5709;
+  padding-top: 20px;
+}
+
+.header a {
+  color: #ccc;
+}
+
+.header a:hover {
+  text-decoration: none;
+  color: #ea5709;
+}
+
+.footer {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 50px;
+  color: #aaa;
+}
+
+.no-space {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.right {
+  text-align: right;
+}
+
+.tabs-left {
+  text-align: left;
+}
+
+.text-large {
+  font-size: 18px;
+}
+
+h3.toc {
+  border-bottom: 1px solid #ccc;
+}
+
+.carousel .item {
+  height: 50px;
+  text-align: center;
+}
+
+.carousel .item > img {
+  display: inline;
+}
+
+.lead-box h3 {
+  text-align: center;
+}
+
+.lead-box p {
+  height: 80px;
+}
+
+.table td {
+  vertical-align: middle;
+}
+table.dataTable tr td.sorting_1 {
+  background-color: #fff !important;
+}
+.tab-content {
+  overflow: hidden;
+}
+.carousel-control {
+  background: #fff;
 }

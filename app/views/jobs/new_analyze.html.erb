@@ -1,6 +1,6 @@
 <h1 class='title'>Call Analysis</h1>
 
-<%= semantic_form_for(@job, :url => analyze_project_job_path(@project) ) do |f| %>
+<%= semantic_form_for(@job, :url => analyze_project_job_path, :html => { :multipart => true, :method => :put }) do |f| %>
 
 	<% if @project %>
 	<%= f.input :project_id, :as => :hidden, :input_html => { :value => @project.id } %>
@@ -11,7 +11,7 @@
 	<%= f.input :force,  :as => :boolean, :label => 'Process previously analyzed calls?', :input_html => { :value => 0 } %>
 	<%= f.action :submit, :label => 'Analyze', :button_html => { :class => 'btn btn-large fbtn' }  %>
 
-	<a class="btn btn-link" href="<%= project_path(@project) %>" rel="tooltip" title="Return to project"><i class="icon-return"></i>Cancel</a>
+	<a class="btn btn-link" href="<%= project_path(@project) %>" rel="tooltip" title="Return to project"><i class="fa fa-return"></i>Cancel</a>
 <% end %>
 
 <%= set_focus('job_submit') %>

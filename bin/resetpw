@@ -36,7 +36,7 @@ def generate_password
 end
 
 
-user = uname ? User.find_by_login(uname) : User.find(:first)
+user = uname ? User.find_by_login(uname) : User.first
 if uname and not user
 	$stderr.puts "[-] User #{uname} was not found"
 	exit(1)

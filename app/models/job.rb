@@ -82,14 +82,14 @@ class Job < ActiveRecord::Base
 	validates_with JobValidator
 
 	def stop
-		self.class.update_all({ :status => 'cancelled'}, { :id => self.id })
+		self.class.where(id: self.id).update_all(status: 'cancelled')
 	end
 
 	def update_progress(pct)
 		if pct >= 100
-			self.class.update_all({ :progress => pct, :completed_at => Time.now, :status => 'completed' }, { :id => self.id })
+			self.class.where(id: self.id).update_all(:progress => pct, :completed_at => Time.now, :status => 'completed')
 		else
-			self.class.update_all({ :progress => pct }, { :id => self.id })
+			self.class.where(id: self.id).update_all(:progress => pct)
 		end
 	end
 
@@ -112,6 +112,14 @@ class Job < ActiveRecord::Base
 
 		when 'analysis'
 			self.status = 'submitted'
+			d = {
+                                :scope      => self.scope,          # job / project/ global
+                                :force      => !!(self.force),      # true / false
+                                :target_id  => self.target_id.to_i, # job_id or project_id or nil
+                                :target_ids => (self.target_ids || []).map{|x| x.to_i }
+                        }
+			$stderr.puts d.inspect
+
 			self.args = Marshal.dump({
 				:scope      => self.scope,          # job / project/ global
 				:force      => !!(self.force),      # true / false

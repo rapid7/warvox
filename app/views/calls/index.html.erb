@@ -7,7 +7,7 @@
   <tr>
     <th>ID</th>
     <th>Range</th>
-	<th>CallerID</th>
+  <th>CallerID</th>
     <th>Connected</th>
     <th>Date</th>
     <th>Actions</th>
@@ -21,24 +21,25 @@
     <td><%= job.range %></td>
     <td><%= job.cid_mask %></td>
     <td><%= (
-		job.calls.where("analysis_completed_at IS NOT NULL").count.to_s +
-		"/" +
-		job.calls.count.to_s
-	)%></td>
+    job.calls.where("analysis_completed_at IS NOT NULL").count.to_s +
+    "/" +
+    job.calls.count.to_s
+  )%></td>
     <td><%= job.started_at.localtime.strftime("%Y-%m-%d %H:%M:%S") %></td>
 
     <td>
-        <a class="btn" href="<%= view_call_path(@project,job) %>" rel="tooltip" title="View Call Connections" ><i class="icon-bar-chart"></i></a>
 
-		<% if job.calls.where("analysis_completed_at IS NOT NULL").count > 0 %>
-			<a class="btn" href="<%= analyze_call_path(@project,job) %>" rel="tooltip" title="View Call Analysis"><i class="icon-eye-open"></i></a>
-			<a class="btn" href="<%= reanalyze_call_path(@project,job) %>" data-confirm="Reprocess this job?" rel="nofollow tooltip" title="Rerun Call Analysis"><i class="icon-refresh"></i></a>
-		<% else %>
-			<a class="btn" href="<%= analyze_call_path(@project,job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="icon-bolt"></i></a>
-		<% end %>
+        <a role="button" class="btn" href="<%= view_call_path(@project,job) %>" rel="tooltip" title="View Call Connections"><i class="fa fa-bar-chart"></i></a>
 
-    	<a class="btn" href="<%= call_path(@project,job) %>" data-confirm="Delete all data for this job?" data-method="delete" rel="nofollow tooltip" title="Delete Call Data"><i class="icon-trash"></i></a>
-	</td>
+    <% if job.calls.where("analysis_completed_at IS NOT NULL").count > 0 %>
+      <a role="button" class="btn" href="<%= analyze_call_path(@project,job) %>" rel="tooltip" title="View Call Analysis"><i class="fa fa-pie-chart"></i></a>
+      <a role="button" class="btn" href="<%= reanalyze_call_path(@project,job) %>" data-confirm="Reprocess this job?" rel="nofollow tooltip" title="Rerun Call Analysis"><i class="fa fa-refresh"></i></a>
+    <% else %>
+      <a role="button" class="btn" href="<%= analyze_call_path(@project,job) %>" data-confirm="Analyze this job?" rel="nofollow tooltip" title="Run Call Analysis"><i class="fa fa-bolt"></i></a>
+    <% end %>
+
+      <a role="button" class="btn" href="<%= call_path(@project,job) %>" data-confirm="Delete all data for this job?" data-method="delete" rel="nofollow tooltip" title="Delete Call Data"><i class="fa fa-trash"></i></a>
+  </td>
   </tr>
 
 <% end %>
@@ -54,4 +55,4 @@
 
 <% end %>
 
-<a class="btn" href="<%= new_dialer_job_path %>"><i class="icon-plus"></i> Start Job </a>
+<a role="button" class="btn" href="<%= new_dialer_job_path %>"><i class="fa fa-plus"></i> Start Job </a>
