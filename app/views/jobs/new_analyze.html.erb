@@ -1,6 +1,6 @@
 <h1 class='title'>Call Analysis</h1>
 
-<%= semantic_form_for(@job, :url => analyzer_job_path, :html => { :multipart => true, :method => :put }) do |f| %>
+<%= semantic_form_for(@job, :url => analyze_project_job_path, :html => { :multipart => true, :method => :put }) do |f| %>
 
 	<% if @project %>
 	<%= f.input :project_id, :as => :hidden, :input_html => { :value => @project.id } %>

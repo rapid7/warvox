@@ -87,7 +87,7 @@ class Job < ActiveRecord::Base
 
 	def update_progress(pct)
 		if pct >= 100
-      self.class.where(id: self.id).update_all(:progress => pct, :completed_at => Time.now, :status => 'completed')
+			self.class.where(id: self.id).update_all(:progress => pct, :completed_at => Time.now, :status => 'completed')
 		else
 			self.class.where(id: self.id).update_all(:progress => pct)
 		end
@@ -112,6 +112,14 @@ class Job < ActiveRecord::Base
 
 		when 'analysis'
 			self.status = 'submitted'
+			d = {
+                                :scope      => self.scope,          # job / project/ global
+                                :force      => !!(self.force),      # true / false
+                                :target_id  => self.target_id.to_i, # job_id or project_id or nil
+                                :target_ids => (self.target_ids || []).map{|x| x.to_i }
+                        }
+			$stderr.puts d.inspect
+
 			self.args = Marshal.dump({
 				:scope      => self.scope,          # job / project/ global
 				:force      => !!(self.force),      # true / false

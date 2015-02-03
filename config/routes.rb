@@ -29,8 +29,8 @@ Web::Application.routes.draw do
   get  '/projects/:project_id/scans/:id/analyze'    => 'jobs#analyze_job', :as => :analyze_job
   get  '/projects/:project_id/scans/:id/reanalyze'  => 'jobs#reanalyze_job', :as => :reanalyze_job
 
-  get  '/projects/:project_id/calls/analyze'      => 'jobs#analyze_project', :as => :analyze_project_job
-  get  '/projects/:project_id/calls/identify'     => 'jobs#identify_project', :as => :identify_project_job
+  put  '/projects/:project_id/calls/analyze'      => 'jobs#analyze_project', :as => :analyze_project_job
+  put  '/projects/:project_id/calls/identify'     => 'jobs#identify_project', :as => :identify_project_job
 
 
   get '/projects/:project_id/analyze'             => 'analyze#index', :as => :analyze
