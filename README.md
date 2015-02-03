@@ -22,7 +22,7 @@ To get started, install the OS-level dependencies:
 	$ sudo apt-get install gnuplot lame build-essential libssl-dev libcurl4-openssl-dev \ 
 	  postgresql postgresql-contrib postgresql-common git-core curl libpq libpq-dev
 
-Install RVM to obtain Ruby 1.9.3 or later
+Install RVM to obtain Ruby 2.1.5 or later
 
 	$ \curl -L https://get.rvm.io | bash -s stable --autolibs=3 --rails
 
@@ -32,7 +32,7 @@ After RVM is installed you need to run the rvm script provided
 
 In case you have not installed Ruby 1.9.3 or later by now, do so using RVM.
 
-	$ rvm install ruby-1.9.3-p547
+	$ rvm install ruby-2.1
         
 Clone this repository to the location you want to install WarVOX:
 
@@ -43,6 +43,9 @@ Configure WarVOX:
 	$ cd /home/warvox
 	$ bundle install
 	$ make
+
+Verify your installation:
+	$ bin/verify_install.rb
 
 Configure the PostgreSQL account for WarVOX:
 
