@@ -11,7 +11,7 @@ trap("SIGINT")  { stop() }
 trap("SIGTERM") { stop() }
 
 require 'rubygems'
-require "rex/proto/iax2"
+require "warvox/proto/iax2"
 require "optparse"
 
 parser = OptionParser.new
@@ -65,7 +65,7 @@ if not (opts[:server_host] and opts[:username] and opts[:password] and opts[:cal
 end
 
 
-cli = Rex::Proto::IAX2::Client.new(opts)
+cli = WarVOX::Proto::IAX2::Client.new(opts)
 
 reg = cli.create_call
 r   = reg.register
