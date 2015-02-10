@@ -32,6 +32,10 @@ if(project_id and project_id == "-h")
 	usage()
 end
 
+if project_id.to_i == 0
+	usage()
+end
+
 require 'config/boot'
 require 'config/environment'
 
@@ -51,8 +55,7 @@ begin
 	if line_type
 		cond[:line_type] = line_type.downcase
 	end
-
-	Call.where(cond).find(:order => :number) do |r|
+	Call.where(cond).order(number: :asc).each do |r|
 		out = []
 		fields.each do |f|
 			out << r[f].to_s
