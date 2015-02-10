@@ -37,10 +37,10 @@ end
 require 'config/boot'
 require 'config/environment'
 
-if(not project_id)
+if project_id.to_i == 0
 	$stderr.puts "Listing all projects"
 	$stderr.puts "===================="
-	Project.find(:all).each do |j|
+	Project.all.each do |j|
 		puts "#{j.id}\t#{j.name}\t#{j.created_at}"
 	end
 	exit
@@ -54,7 +54,7 @@ begin
 		cond[:line_type] = line_type.downcase
 	end
 
-	Call.where(cond).find(:order => :number) do |r|
+	Call.where(cond).order(number: :asc).each do |r|
 		m = r.media
 		if m and m.audio
 
