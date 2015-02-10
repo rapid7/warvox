@@ -38,7 +38,7 @@ require 'config/environment'
 if(not project_id)
 	$stderr.puts "Listing all projects"
 	$stderr.puts "===================="
-	Project.find(:all).each do |j|
+	Project.all.each do |j|
 		puts "#{j.id}\t#{j.name}\t#{j.created_at}"
 	end
 	exit
