@@ -15,9 +15,16 @@ class Phone
 			
 			if(mask.index(':'))
 				next if mask.index('X')
+
+				# Quick hack to fix leading 0s
+				prefix = ""
+				if mask =~ /^(0+)/
+					prefix = $1
+                                end
+
 				rbeg,rend = mask.split(':').map{|c| c.gsub(/[^\d]/, '').to_i }
 				rbeg.upto(rend) do |n|
-					res[n.to_s] = {}
+					res[prefix + n.to_s] = {}
 				end
 				next
 			end
