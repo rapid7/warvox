@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: jobs
+#
+#  id           :integer          not null, primary key
+#  created_at   :datetime
+#  updated_at   :datetime
+#  project_id   :integer          not null
+#  locked_by    :string(255)
+#  locked_at    :datetime
+#  started_at   :datetime
+#  completed_at :datetime
+#  created_by   :string(255)
+#  task         :string(255)      not null
+#  args         :binary
+#  status       :string(255)
+#  error        :text
+#  progress     :integer          default(0)
+#
+
 class Job < ActiveRecord::Base
 
 	reportable :hourly, :aggregation => :count, :grouping => :hour, :date_column => :created_at, :cacheable => false

@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: providers
+#
+#  id         :integer          not null, primary key
+#  created_at :datetime
+#  updated_at :datetime
+#  name       :text             not null
+#  host       :text             not null
+#  port       :integer          not null
+#  user       :text
+#  pass       :text
+#  lines      :integer          default(1), not null
+#  enabled    :boolean          default(TRUE)
+#
+
 class Provider < ActiveRecord::Base
 	has_many :dial_results
 
