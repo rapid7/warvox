@@ -25,8 +25,11 @@
 #
 
 FactoryGirl.define do
-  factory :call do
-    number { Faker::PhoneNumber.phone_number }
-  end
+	factory :call do
+		project
+		job
+		provider
+		number { Faker::PhoneNumber.phone_number }
+	end
 
 end

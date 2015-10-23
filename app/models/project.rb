@@ -14,9 +14,8 @@
 
 class Project < ActiveRecord::Base
 
-
-	validates :name, :uniqueness => true
 	validates_presence_of :name
+	validates_uniqueness_of :name
 
 	attr_accessible :name, :description, :included, :excluded
 

@@ -24,12 +24,12 @@
 #
 
 FactoryGirl.define do
-  factory :user do
-    login { Faker::Internet.user_name }
-    password 'RandomPass'
-    password_confirmation 'RandomPass'
-    enabled true
-    admin true
-  end
+	factory :user do
+		login { Faker::Internet.user_name }
+		password 'RandomPass'
+		password_confirmation 'RandomPass'
+		enabled true
+		admin true
+	end
 
 end
