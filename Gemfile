@@ -5,7 +5,7 @@ gem 'rails', '>=4.1.9', '< 4.2.0'
 gem 'pg', '>=0.17'
 
 gem 'jquery-rails', '>= 3.1.2'
-gem 'jquery-datatables-rails', '>= 2.2.3'
+gem 'jquery-datatables-rails', git: 'https://github.com/rweng/jquery-datatables-rails.git'
 #gem 'postgres_ext', :git => 'git://github.com/dockyard/postgres_ext.git'
 
 gem 'kissfft'
@@ -35,3 +35,4 @@ gem 'will_paginate-bootstrap'
 gem 'dynamic_form', '>= 1.1.4'
 gem 'psych_shield'
 gem 'scrypt'
+

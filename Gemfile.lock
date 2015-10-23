@@ -6,6 +6,16 @@ GIT
       activerecord (>= 3.0)
       activesupport (>= 3.0.0)
 
+GIT
+  remote: https://github.com/rweng/jquery-datatables-rails.git
+  revision: 9eee0a1975b5a22e50bdc73fcca7db7f8a12c143
+  specs:
+    jquery-datatables-rails (3.3.0)
+      actionpack (>= 3.1)
+      jquery-rails
+      railties (>= 3.1)
+      sass-rails
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -71,11 +81,6 @@ GEM
       formtastic (>= 3.0)
     hike (1.2.3)
     i18n (0.7.0)
-    jquery-datatables-rails (3.3.0)
-      actionpack (>= 3.1)
-      jquery-rails
-      railties (>= 3.1)
-      sass-rails
     jquery-rails (3.1.2)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -167,7 +172,7 @@ DEPENDENCIES
   font-awesome-rails
   formtastic (>= 3.0.0)
   formtastic-bootstrap (>= 3.0.0)
-  jquery-datatables-rails (>= 2.2.3)
+  jquery-datatables-rails!
   jquery-rails (>= 3.1.2)
   kissfft
   pg (>= 0.17)
@@ -184,3 +189,6 @@ DEPENDENCIES
   unicorn
   will_paginate (~> 3.0)
   will_paginate-bootstrap
+
+BUNDLED WITH
+   1.10.6
