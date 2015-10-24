@@ -27,7 +27,7 @@ FactoryGirl.define do
 		error nil
 		range { Faker::PhoneNumber.phone_number }
 		cid_mask { Faker::PhoneNumber.phone_number }
-		seconds { Faker::Number.between(1, 300) }
+		seconds { Faker::Number.between(1, 299) }
 		lines { Faker::Number.between(1, 10000) }
 	end
 
