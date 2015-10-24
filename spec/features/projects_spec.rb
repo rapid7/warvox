@@ -8,18 +8,18 @@ RSpec.feature "Projects", type: :feature do
 	end
 
 	it "list all existing projects" do
-    project = create(:project)
+		project = create(:project)
 		visit projects_path
 		expect(page).to have_content "WarVOX Projects"
-    within "#projects-table" do
-      expect(page).to have_content "Name"
-      expect(page).to have_content "Description"
-      expect(page).to have_content "Jobs"
-      expect(page).to have_content "Calls"
-      expect(page).to have_content "Analyzed"
-      expect(page).to have_content "Created"
-      expect(page).to have_content "Actions"
-      expect(page).to have_content project.name
-    end
+		within "#projects-table" do
+			expect(page).to have_content "Name"
+			expect(page).to have_content "Description"
+			expect(page).to have_content "Jobs"
+			expect(page).to have_content "Calls"
+			expect(page).to have_content "Analyzed"
+			expect(page).to have_content "Created"
+			expect(page).to have_content "Actions"
+			expect(page).to have_content project.name
+		end
 	end
 end
