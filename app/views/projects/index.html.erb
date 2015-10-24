@@ -1,46 +1,40 @@
-<% if @projects.length > 0 %>
 <h1 class='title'>WarVOX Projects</h1>
+<p>
+	<a class="btn" href="<%= new_project_path %>">
+		<i class="fa fa-plus"></i> Create Project
+	</a>
+</p>
 
 <%= will_paginate @projects, :renderer => BootstrapPagination::Rails %>
-<table class='table table-striped ' width='90%'>
-  <thead>
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Jobs</th>
-    <th>Calls</th>
-    <th>Analyzed</th>
-    <th>Created</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-
-<% @projects.each do |project|  %>
-  <tr>
-    <td><%= link_to( h(project.name), project_path(project)) %></td>
-    <td><%=truncate(project.description, :length => 40, :separator => '') %></td>
-    <td><%= number_with_delimiter(project.jobs.count) %></td>
-    <td><%= number_with_delimiter(project.calls.count) %></td>
-    <td><%= number_with_delimiter(project.calls.where('analysis_completed_at IS NOT NULL').count) %></td>
-    <td><%= time_ago_in_words(project.created_at) %> ago</td>
-    <td>
-      	<a class="btn" href="<%= edit_project_path(project) %>"rel="tooltip" title="Update Project Information"><i class="fa fa-pencil"></i></a>
-    	<a class="btn" href="<%= project_path(project) %>" data-confirm="Delete this project?" data-method="delete" rel="nofollow tooltip" title="Delete Project"><i class="fa fa-trash"></i></a>
-	</td>
-  </tr>
-
-<% end %>
-</tbody>
+<table id='projects-table' class='table table-striped' width='90%'>
+	<thead>
+	<tr>
+		<th>Name</th>
+		<th>Description</th>
+		<th>Jobs</th>
+		<th>Calls</th>
+		<th>Analyzed</th>
+		<th>Created</th>
+		<th>Actions</th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @projects.each do |project|  %>
+			<tr>
+				<td><%= link_to( h(project.name), project_path(project)) %></td>
+				<td><%=truncate(project.description, :length => 40, :separator => '') %></td>
+				<td><%= number_with_delimiter(project.jobs.count) %></td>
+				<td><%= number_with_delimiter(project.calls.count) %></td>
+				<td><%= number_with_delimiter(project.calls.where('analysis_completed_at IS NOT NULL').count) %></td>
+				<td><%= time_ago_in_words(project.created_at) %> ago</td>
+				<td>
+					<a class="btn" href="<%= edit_project_path(project) %>"rel="tooltip" title="Update Project Information"><i class="fa fa-pencil"></i></a>
+					<a class="btn" href="<%= project_path(project) %>" data-confirm="Delete this project?" data-method="delete" rel="nofollow tooltip" title="Delete Project"><i class="fa fa-trash"></i></a>
+			</td>
+			</tr>
+		<% end %>
+	</tbody>
 </table>
 
 <%= will_paginate @projects, :renderer => BootstrapPagination::Rails %>
 
-<% else %>
-
-<h1 class='title'>No Projects</h1>
-<br/>
-
-<% end %>
-
-<a class="btn" href="<%= new_project_path %>"><i class="fa fa-plus"></i> Create Project </a>
