@@ -13,7 +13,14 @@
 #  risk        :integer
 #
 
-class Signature < ActiveRecord::Base
-	has_many :signature_fps
+FactoryGirl.define do
+	factory :signature do
+		name { Faker::Commerce.product_name }
+		source { Faker::PhoneNumber.cell_phone }
+		description { Faker::Lorem.sentence }
+		category { Faker::Lorem.word }
+		line_type { Faker::Lorem.word }
+		risk { Faker::Lorem.word }
+	end
 
 end

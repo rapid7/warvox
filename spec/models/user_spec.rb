@@ -23,12 +23,13 @@
 #  admin               :boolean          default(TRUE)
 #
 
-class User < ActiveRecord::Base
-	include RailsSettings::Extend
-	acts_as_authentic do |c|
-		c.validate_email_field = false
-		c.merge_validates_length_of_password_field_options :minimum => 8
-		c.merge_validates_length_of_password_confirmation_field_options :minimum => 8
-		c.logged_in_timeout = 1.day
+require 'rails_helper'
+
+RSpec.describe User, type: :model do
+	it { should validate_length_of(:password).is_at_least(8) }
+	it { should validate_length_of(:password_confirmation).is_at_least(8) }
+
+	it 'valid record' do
+		expect(build(:user)).to be_valid
 	end
 end

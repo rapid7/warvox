@@ -14,12 +14,15 @@
 #  enabled    :boolean          default(TRUE)
 #
 
-class Provider < ActiveRecord::Base
-	has_many :dial_results
+FactoryGirl.define do
+	factory :provider do
+		name { Faker::Company.name }
+		host { Faker::Internet.ip_v4_address }
+		port { Faker::Number.between(1, 65535) }
+		user { Faker::Internet.user_name }
+		pass { Faker::Internet.password(10, 20) }
+		lines { Faker::Number.between(1, 254) }
+		enabled true
+	end
 
-	validates_presence_of :name, :host, :port, :user, :pass, :lines
-	validates_numericality_of :port, :less_than => 65536, :greater_than => 0
-	validates_numericality_of :lines, :less_than => 255, :greater_than => 0
-
-	attr_accessible :enabled, :name, :host, :port, :user, :pass, :lines
 end
