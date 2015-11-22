@@ -1,8 +1,21 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  id          :integer          not null, primary key
+#  created_at  :datetime
+#  updated_at  :datetime
+#  name        :text             not null
+#  description :text
+#  included    :text
+#  excluded    :text
+#  created_by  :string(255)
+#
+
 class Project < ActiveRecord::Base
 
-
-	validates :name, :uniqueness => true
 	validates_presence_of :name
+	validates_uniqueness_of :name
 
 	attr_accessible :name, :description, :included, :excluded
 

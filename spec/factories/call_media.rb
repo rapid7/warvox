@@ -14,7 +14,10 @@
 #  png_sig_freq :binary
 #
 
-class CallMedium < ActiveRecord::Base
-	belongs_to :call
-	belongs_to :project
+FactoryGirl.define do
+	factory :call_medium do
+		call
+		project
+	end
+
 end

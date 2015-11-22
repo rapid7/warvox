@@ -11,6 +11,10 @@
 #  updated_at :datetime
 #
 
-class Settings < RailsSettings::CachedSettings
-	attr_accessible :var
+require 'rails_helper'
+
+RSpec.describe Settings, type: :model do
+	it "valid record" do
+		expect(build(:setting)).to be_valid
+	end
 end

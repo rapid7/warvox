@@ -14,7 +14,13 @@
 #  png_sig_freq :binary
 #
 
-class CallMedium < ActiveRecord::Base
-	belongs_to :call
-	belongs_to :project
+require 'rails_helper'
+
+RSpec.describe CallMedium, type: :model do
+	it { should belong_to(:call) }
+	it { should belong_to(:project) }
+
+	it "valid record" do
+		expect(build(:call_medium)).to be_valid
+	end
 end

@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: lines
+#
+#  id         :integer          not null, primary key
+#  created_at :datetime
+#  updated_at :datetime
+#  number     :text             not null
+#  project_id :integer          not null
+#  line_type  :text
+#  notes      :text
+#
+
 class Line < ActiveRecord::Base
 	has_many :line_attributes, :dependent => :delete_all
 	belongs_to :project

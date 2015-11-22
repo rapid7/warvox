@@ -11,6 +11,9 @@
 #  updated_at :datetime
 #
 
-class Settings < RailsSettings::CachedSettings
-	attr_accessible :var
+FactoryGirl.define do
+	factory :setting, :class => 'Settings' do
+		var "CachedStuff"
+	end
+
 end
