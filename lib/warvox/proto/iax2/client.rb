@@ -143,7 +143,6 @@ class Client
     send_data( call, create_pkt( call.scall, call.dcall, stamp, call.oseq, call.iseq, IAX_TYPE_IAX, data ) )
   end
 
-
   def send_invalid(call)
     data =	[ IAX_SUBTYPE_INVAL ].pack('C')
     send_data( call, create_pkt( call.scall, call.dcall, call.timestamp, call.oseq, call.iseq, IAX_TYPE_IAX, data ) )

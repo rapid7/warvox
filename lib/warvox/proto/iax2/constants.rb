@@ -64,25 +64,26 @@ IAX_CTRL_PROCEED  = 15
 =end
 
 
-IAX_SUBTYPE_NEW     = 1
-IAX_SUBTYPE_PING    = 2
-IAX_SUBTYPE_PONG    = 3
-IAX_SUBTYPE_ANSWER  = 4
-IAX_SUBTYPE_ACK     = 4
-IAX_SUBTYPE_HANGUP  = 5
-IAX_SUBTYPE_REJECT  = 6
-IAX_SUBTYPE_ACCEPT  = 7
-IAX_SUBTYPE_AUTHREQ = 8
-IAX_SUBTYPE_AUTHREP = 9
-IAX_SUBTYPE_INVAL   = 10
-IAX_SUBTYPE_LAGRQ   = 11
-IAX_SUBTYPE_LAGRP   = 12
-IAX_SUBTYPE_REGREQ  = 13
-IAX_SUBTYPE_REGAUTH = 14
-IAX_SUBTYPE_REGACK  = 15
-IAX_SUBTYPE_REGREJ  = 16
-IAX_SUBTYPE_REGREL  = 17
-IAX_SUBTYPE_VNAK    = 18
+IAX_SUBTYPE_NEW       = 1
+IAX_SUBTYPE_PING      = 2
+IAX_SUBTYPE_PONG      = 3
+IAX_SUBTYPE_ANSWER    = 4
+IAX_SUBTYPE_ACK       = 4
+IAX_SUBTYPE_HANGUP    = 5
+IAX_SUBTYPE_REJECT    = 6
+IAX_SUBTYPE_ACCEPT    = 7
+IAX_SUBTYPE_AUTHREQ   = 8
+IAX_SUBTYPE_AUTHREP   = 9
+IAX_SUBTYPE_INVAL     = 10
+IAX_SUBTYPE_LAGRQ     = 11
+IAX_SUBTYPE_LAGRP     = 12
+IAX_SUBTYPE_REGREQ    = 13
+IAX_SUBTYPE_REGAUTH   = 14
+IAX_SUBTYPE_REGACK    = 15
+IAX_SUBTYPE_REGREJ    = 16
+IAX_SUBTYPE_REGREL    = 17
+IAX_SUBTYPE_VNAK      = 18
+IAX_SUBTYPE_CALLTOKEN = 40
 
 =begin
       +------+-----------+-----------------------------------------+
@@ -161,8 +162,11 @@ IAX_SUBTYPE_VNAK    = 18
       | 0x24 | Reserved  | Reserved for future use                 |
       |      |           |                                         |
       | 0x25 | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x28 | CALLTOKEN | Call token (part of newer auth)         |
       +------+-----------+-----------------------------------------+
 =end
+
 
 IAX_IE_CALLED_NUMBER  = 1
 IAX_IE_CALLING_NUMBER = 2
