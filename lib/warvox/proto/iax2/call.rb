@@ -19,6 +19,7 @@ class Call
   attr_accessor :caller_name
   attr_accessor :caller_number
   attr_accessor :dtmf
+  attr_accessor :call_token
 
 
   def initialize(client, src_id)
@@ -36,8 +37,8 @@ class Call
 
     self.busy = false
     self.dtmf = ''
+    self.call_token = ''
   end
-
 
   def dprint(msg)
     self.client.dprint(msg)
@@ -59,6 +60,7 @@ class Call
 
   # Register with the IAX endpoint
   def register
+
     self.client.send_regreq(self)
     res = wait_for( IAX_SUBTYPE_REGAUTH, IAX_SUBTYPE_REGREJ )
     return if not res
@@ -115,7 +117,24 @@ class Call
 
   def dial(number)
     self.client.send_new(self, number)
-    res = wait_for(IAX_SUBTYPE_AUTHREQ, IAX_SUBTYPE_ACCEPT)
+    res = wait_for(IAX_SUBTYPE_AUTHREQ, IAX_SUBTYPE_ACCEPT, IAX_SUBTYPE_CALLTOKEN)
+    return if not res
+
+    # Handle CallToken support
+    if res[1] == IAX_SUBTYPE_CALLTOKEN
+      if res[2][IAX_IE_CALL_TOKEN]
+        # Reset sequence numbers
+        self.oseq = self.iseq = 0
+        # Store the CallToken
+        self.call_token = res[2][IAX_IE_CALL_TOKEN]
+        # Restart the call
+        self.client.send_new(self, number)
+        res = wait_for(IAX_SUBTYPE_AUTHREQ, IAX_SUBTYPE_ACCEPT)
+      else
+        dprint("NEW: No CallToken received in CALLTOKEN reply")
+        return
+      end
+    end
     return if not res
 
     # Handle authentication if its requested

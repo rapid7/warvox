@@ -173,16 +173,24 @@ IAX_IE_CALLING_NUMBER = 2
 IAX_IE_AUTH_METHODS   = 3
 IAX_IE_CALLING_NAME   = 4
 IAX_IE_USERNAME       = 6
-IAX_IE_DESIRED_CODEC  = 9
-IAX_IE_ORIGINAL_DID   = 10
 IAX_IE_ACTUAL_CODECS  = 8
+IAX_IE_DESIRED_CODEC  = 9
 IAX_IE_PROTO_VERSION  = 11
+IAX_IE_CPE_ADSI_CAP   = 12
+IAX_IE_ORIGINAL_DID   = 13
 IAX_IE_REG_REFRESH    = 19
 IAX_IE_CHALLENGE_DATA = 15
 IAX_IE_CHALLENGE_RESP = 16
 IAX_IE_APPARENT_ADDR  = 18
 IAX_IE_REGREJ_CAUSE   = 22
+IAX_IE_FIRMWARE_BLOCK = 36
+IAX_IE_CALLING_PRESENTATION = 38
+IAX_IE_CALLING_TYPE_NUMBER  = 39
+IAX_IE_CALLING_TRANSIT_NETWORK_SELECT = 40
 IAX_IE_HANGUP_CAUSE   = 42
+IAX_IE_CALL_TOKEN     = 54
+
+
 
 =begin
  +------+----------------+-------------------------------------------+
@@ -244,6 +252,7 @@ IAX_IE_HANGUP_CAUSE   = 42
    |      |                | buffer)                                   |
    | 0x33 | RR OOO         | Frames received Out of Order              |
    | 0x34 | OSPTOKEN       | OSP Token Block                           |
+   | 0x54 | CALL TOKEN     | Call Token
    +------+----------------+-------------------------------------------+
 =end
 
@@ -260,6 +269,8 @@ IAX_SUPPORTED_CODECS  = IAX_CODEC_G711_MULAW | IAX_CODEC_G711_ALAW | IAX_CODEC_L
 IAX_DEFAULT_REG_REFRESH = 60
 IAX_DEFAULT_TIMEOUT     = 10
 
+# IAX Vendor
+IAX_VENDOR_STRING = "Rex IAX2 1.0"
 
 end
 end

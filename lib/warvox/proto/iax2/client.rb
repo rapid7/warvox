@@ -158,14 +158,20 @@ class Client
 
     cid = call.caller_number || self.caller_number
     cid = number if cid == 'SELF'
-
+    data << create_ie(IAX_IE_PROTO_VERSION, [2].pack("n") )
     data << create_ie(IAX_IE_CALLING_NUMBER, cid )
     data << create_ie(IAX_IE_CALLING_NAME, call.caller_name || self.caller_name)
-    data << create_ie(IAX_IE_DESIRED_CODEC, [IAX_SUPPORTED_CODECS].pack("N") )
+    data << create_ie(IAX_IE_CALLING_PRESENTATION, [1].pack("C") )
+    data << create_ie(IAX_IE_CALLING_TYPE_NUMBER, [0].pack("C") )
+    data << create_ie(IAX_IE_CALLING_TRANSIT_NETWORK_SELECT, [0].pack("n") )
+    data << create_ie(IAX_IE_DESIRED_CODEC, [IAX_CODEC_G711_MULAW].pack("N") )
     data << create_ie(IAX_IE_ACTUAL_CODECS, [IAX_SUPPORTED_CODECS].pack("N") )
     data << create_ie(IAX_IE_USERNAME, self.username) if self.username
     data << create_ie(IAX_IE_CALLED_NUMBER, number)
     data << create_ie(IAX_IE_ORIGINAL_DID, number)
+    data << create_ie(IAX_IE_CPE_ADSI_CAP, [0].pack("n"))
+    data << create_ie(IAX_IE_CALL_TOKEN, call.call_token)
+    data << create_ie(IAX_IE_FIRMWARE_BLOCK, IAX_VENDOR_STRING)
 
     send_data( call, create_pkt( call.scall, call.dcall, call.timestamp, call.oseq, call.iseq, IAX_TYPE_IAX, data ) )
   end
