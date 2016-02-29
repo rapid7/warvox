@@ -14,8 +14,8 @@ module IAX2
 class Client
 
   attr_accessor :caller_number, :caller_name, :server_host, :server_port
-  attr_accessor :username, :password
-  attr_accessor :sock, :monitor
+  attr_accessor :username, :password, :sendkeys
+  attr_accessor :sock, :monitor_thread, :sendkeys_thread, :mutex
   attr_accessor :src_call_idx
   attr_accessor :debugging
   attr_accessor :calls
@@ -36,21 +36,27 @@ class Client
     self.password      = opts[:password]
     self.debugging     = opts[:debugging]
 
+    if opts[:sendkeys]
+      self.sendkeys = opts[:sendkeys].unpack("C*").pack("C*")
+    end
+
     self.sock = Rex::Socket::Udp.create(
       'PeerHost' => self.server_host,
       'PeerPort' => self.server_port,
       'Context'  => opts[:context]
     )
 
-    self.monitor   = ::Thread.new { monitor_socket }
-
+    self.monitor_thread = ::Thread.new { monitor_socket }
+    self.mutex = ::Mutex.new
     self.src_call_idx = 0
     self.calls = {}
-
   end
 
   def shutdown
-    self.monitor.kill rescue nil
+    self.monitor_thread.kill rescue nil
+    if self.sendkeys_thread
+      self.sendkeys_thread.kill rescue nil
+    end
   end
 
   def create_call
@@ -73,7 +79,14 @@ class Client
         next if not mcall
 
         if (pkt[0,1].unpack("C")[0] & 0x80) != 0
+          prestate = mcall.state
           mcall.handle_control(pkt)
+
+          # Start the sendkeys thread when the call is answered
+          if mcall.state != prestate && mcall.state == :answered &&
+             self.sendkeys && ! self.sendkeys_thread
+            self.sendkeys_thread = Thread.new { sendkeys_runner(mcall) }
+          end
         else
           # Dispatch the buffer via the call handler
           mcall.handle_audio(pkt)
@@ -87,6 +100,7 @@ class Client
   end
 
   def matching_call(pkt)
+    return unless pkt && pkt.length > 4
     src_call = pkt[0,2].unpack('n')[0]
     dst_call = nil
 
@@ -106,13 +120,30 @@ class Client
     mcall
   end
 
-  def allocate_call_id
-    res = ( self.src_call_idx += 1 )
-    if ( res > 0x8000 )
-      self.src_call_idx = 1
-      res = 1
+  def sendkeys_runner(call)
+    begin
+    self.sendkeys.each_char do |c|
+      case c
+      when ','
+        dprint("#{Thread.current} Sleeping 1s...")
+        sleep(1.0)
+      when /^[0-9#]$/
+        dprint("#{Thread.current} Sending key #{c}")
+        send_dtmf(call, c, :begin)
+        sleep(0.3)
+        send_dtmf(call, c, :end)
+        sleep(0.3)
+      else
+        dprint("#{Thread.current} Unknown sendkey parameter: #{c}")
+      end
     end
-    res
+  rescue ::Exception => e
+    dprint("Error in sendkeys: #{e.class} #{e} #{e.backtrace}")
+  end
+  end
+
+  def allocate_call_id
+    (self.src_call_idx += 1) & 0x7fff
   end
 
   def dprint(msg)
@@ -121,11 +152,13 @@ class Client
   end
 
   def send_data(call, data, inc_seq = true )
-    r = self.sock.sendto(data, self.server_host, self.server_port, 0)
-    if inc_seq
-      call.oseq = (call.oseq + 1) & 0xff
+    self.mutex.synchronize do
+      r = self.sock.sendto(data, self.server_host, self.server_port, 0)
+      if inc_seq
+        call.oseq = (call.oseq + 1) & 0xff
+      end
+      r
     end
-    r
   end
 
   def send_ack(call)
@@ -157,6 +190,11 @@ class Client
     # TODO: Replace with the server-selected codec
     data = [IAX_CODEC_G711_MULAW].pack("C") + audio
     send_data( call, create_pkt( call.scall, call.dcall, call.timestamp, call.oseq, call.iseq, IAX_TYPE_VOICE, data ) )
+  end
+
+  def send_dtmf(call, code, action)
+    itype = (action == :begin) ? IAX_TYPE_DTMF_BEGIN : IAX_TYPE_DTMF_END
+    send_data( call, create_pkt( call.scall, call.dcall, call.timestamp, call.oseq, call.iseq, itype, code ) )
   end
 
   def send_new(call, number)
@@ -227,4 +265,3 @@ end
 end
 end
 end
-
