@@ -238,18 +238,15 @@ class Call
       case stype
       when IAX_CTRL_HANGUP
         dprint("HANGUP")
-        self.client.send_ack(self)
         self.state = :hangup
 
       when IAX_CTRL_RINGING
         dprint("RINGING")
-        self.client.send_ack(self)
 
       when IAX_CTRL_BUSY
         dprint("BUSY")
         self.busy  = true
         self.state = :hangup
-        self.client.send_ack(self)
 
       when IAX_CTRL_ANSWER
         dprint("ANSWER")
@@ -257,7 +254,6 @@ class Call
           self.state = :answered
           self.ring_finish = ::Time.now.to_i
         end
-        self.client.send_ack(self)
 
       when IAX_CTRL_PROGRESS
         dprint("PROGRESS")
@@ -268,8 +264,9 @@ class Call
       when 255
         dprint("STOP SOUNDS")
       end
+
       # Acknowledge all control packets
-      # self.client.send_ack(self)
+      self.client.send_ack(self)
 
     when IAX_TYPE_IAX
 
