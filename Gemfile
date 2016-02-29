@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem 'unicorn'
 gem 'rails', '>=4.1.9', '< 4.2.0'
