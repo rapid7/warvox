@@ -254,6 +254,7 @@ class Call
           self.state = :answered
           self.ring_finish = ::Time.now.to_i
         end
+        self.client.send_voice(self, "\xff" * 160)
 
       when IAX_CTRL_PROGRESS
         dprint("PROGRESS")

@@ -153,6 +153,12 @@ class Client
     send_data( call, create_pkt( call.scall, call.dcall, call.timestamp, call.oseq, call.iseq, IAX_TYPE_IAX, data ) )
   end
 
+  def send_voice(call, audio)
+    # TODO: Replace with the server-selected codec
+    data = [IAX_CODEC_G711_MULAW].pack("C") + audio
+    send_data( call, create_pkt( call.scall, call.dcall, call.timestamp, call.oseq, call.iseq, IAX_TYPE_VOICE, data ) )
+  end
+
   def send_new(call, number)
     data = [ IAX_SUBTYPE_NEW ].pack('C')
 
