@@ -52,6 +52,10 @@ parser.on("-d") do |v|
 	opts[:debugging] = true
 end
 
+parser.on("-k keys") do |v|
+	opts[:sendkeys] = v
+end
+
 parser.on("-h") do
 	$stderr.puts parser
 	exit(1)
