@@ -127,7 +127,7 @@ class Client
       when ','
         dprint("#{Thread.current} Sleeping 1s...")
         sleep(1.0)
-      when /^[0-9#]$/
+      when /^[0-9\#\*]$/
         dprint("#{Thread.current} Sending key #{c}")
         send_dtmf(call, c, :begin)
         sleep(0.3)
