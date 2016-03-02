@@ -6,7 +6,7 @@
 #
 base = __FILE__
 while File.symlink?(base)
-	base = File.expand_path(File.readlink(base), File.dirname(base))
+  base = File.expand_path(File.readlink(base), File.dirname(base))
 end
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
 

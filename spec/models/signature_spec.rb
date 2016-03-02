@@ -16,11 +16,11 @@
 require 'rails_helper'
 
 RSpec.describe Signature, type: :model do
-	## TODO association may not be needed
-	# causes crash:  PG::UndefinedTable: ERROR:  relation "signature_fps" does not exist
-	#it { should have_many(:signature_fps) }
+  ## TODO association may not be needed
+  # causes crash:  PG::UndefinedTable: ERROR:  relation "signature_fps" does not exist
+  #it { should have_many(:signature_fps) }
 
-	it "valid record" do
-		expect(build(:signature)).to be_valid
-	end
+  it "valid record" do
+    expect(build(:signature)).to be_valid
+  end
 end

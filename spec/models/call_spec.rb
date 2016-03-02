@@ -27,12 +27,12 @@
 require 'rails_helper'
 
 RSpec.describe Call, type: :model do
-	it { should belong_to(:project) }
-	it { should belong_to(:provider) }
-	it { should belong_to(:job) }
-	it { should have_one(:call_medium).dependent(:delete) }
+  it { should belong_to(:project) }
+  it { should belong_to(:provider) }
+  it { should belong_to(:job) }
+  it { should have_one(:call_medium).dependent(:delete) }
 
-	it "valid record" do
-		expect(build(:call)).to be_valid
-	end
+  it "valid record" do
+    expect(build(:call)).to be_valid
+  end
 end

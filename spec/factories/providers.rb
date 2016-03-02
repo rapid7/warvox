@@ -15,14 +15,14 @@
 #
 
 FactoryGirl.define do
-	factory :provider do
-		name { Faker::Company.name }
-		host { Faker::Internet.ip_v4_address }
-		port { Faker::Number.between(1, 65535) }
-		user { Faker::Internet.user_name }
-		pass { Faker::Internet.password(10, 20) }
-		lines { Faker::Number.between(1, 254) }
-		enabled true
-	end
+  factory :provider do
+    name { Faker::Company.name }
+    host { Faker::Internet.ip_v4_address }
+    port { Faker::Number.between(1, 65535) }
+    user { Faker::Internet.user_name }
+    pass { Faker::Internet.password(10, 20) }
+    lines { Faker::Number.between(1, 254) }
+    enabled true
+  end
 
 end

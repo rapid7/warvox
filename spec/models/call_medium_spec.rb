@@ -17,10 +17,10 @@
 require 'rails_helper'
 
 RSpec.describe CallMedium, type: :model do
-	it { should belong_to(:call) }
-	it { should belong_to(:project) }
+  it { should belong_to(:call) }
+  it { should belong_to(:project) }
 
-	it "valid record" do
-		expect(build(:call_medium)).to be_valid
-	end
+  it "valid record" do
+    expect(build(:call_medium)).to be_valid
+  end
 end

@@ -15,16 +15,16 @@ maxf = data[:maxf]
 # this signature can fail. For non-US numbers, the beep
 # is often a different frequency entirely.
 if(fcnt[1000] >= 1.0)
-	@line_type = 'voicemail'
-	raise Completed
+  @line_type = 'voicemail'
+  raise Completed
 end
 
 # Look for voicemail by detecting a peak frequency of
 # 1000hz. Not as accurate, but thats why this is in
 # the fallback script.
 if(maxf > 995 and maxf < 1005)
-	@line_type = 'voicemail'
-	raise Completed
+  @line_type = 'voicemail'
+  raise Completed
 end
 
 

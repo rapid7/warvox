@@ -2,13 +2,13 @@ class ProvidersController < ApplicationController
 
   def index
 
-   	@providers = Provider.order('id DESC').paginate(
-		:page => params[:page],
-		:per_page => 10
-	)
+     @providers = Provider.order('id DESC').paginate(
+    :page => params[:page],
+    :per_page => 10
+  )
 
-	@new_provider = Provider.new
-	@new_provider.enabled = true
+  @new_provider = Provider.new
+  @new_provider.enabled = true
 
     respond_to do |format|
       format.html # index.html.erb
@@ -18,8 +18,8 @@ class ProvidersController < ApplicationController
 
   def new
     @provider = Provider.new
-	@provider.enabled = true
-	@provider.port = 4569
+  @provider.enabled = true
+  @provider.port = 4569
 
     respond_to do |format|
       format.html # new.html.erb
@@ -29,12 +29,12 @@ class ProvidersController < ApplicationController
 
   def edit
     @provider = Provider.find(params[:id])
-	@provider.pass = "********"
+  @provider.pass = "********"
   end
 
   def create
     @provider = Provider.new(params[:provider])
-	@provider.enabled = true
+  @provider.enabled = true
 
     respond_to do |format|
       if @provider.save
@@ -52,10 +52,10 @@ class ProvidersController < ApplicationController
   def update
     @provider = Provider.find(params[:id])
 
-	# Dont set the password if its the placeholder
-	if params[:provider] and params[:provider][:pass] and params[:provider][:pass] == "********"
-		params[:provider].delete(:pass)
-	end
+  # Dont set the password if its the placeholder
+  if params[:provider] and params[:provider][:pass] and params[:provider][:pass] == "********"
+    params[:provider].delete(:pass)
+  end
 
     respond_to do |format|
       if @provider.update_attributes(params[:provider])

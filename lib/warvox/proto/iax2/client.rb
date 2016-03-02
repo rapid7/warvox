@@ -162,27 +162,27 @@ class Client
   end
 
   def send_ack(call)
-    data =	[ IAX_SUBTYPE_ACK ].pack('C')
+    data =  [ IAX_SUBTYPE_ACK ].pack('C')
     send_data( call, create_pkt( call.scall, call.dcall, call.timestamp, call.oseq, call.iseq, IAX_TYPE_IAX, data ), false )
   end
 
   def send_pong(call, stamp)
-    data =	[ IAX_SUBTYPE_PONG ].pack('C')
+    data =  [ IAX_SUBTYPE_PONG ].pack('C')
     send_data( call, create_pkt( call.scall, call.dcall, stamp, call.oseq, call.iseq, IAX_TYPE_IAX, data ) )
   end
 
   def send_lagrp(call, stamp)
-    data =	[ IAX_SUBTYPE_LAGRP ].pack('C')
+    data =  [ IAX_SUBTYPE_LAGRP ].pack('C')
     send_data( call, create_pkt( call.scall, call.dcall, stamp, call.oseq, call.iseq, IAX_TYPE_IAX, data ) )
   end
 
   def send_invalid(call)
-    data =	[ IAX_SUBTYPE_INVAL ].pack('C')
+    data =  [ IAX_SUBTYPE_INVAL ].pack('C')
     send_data( call, create_pkt( call.scall, call.dcall, call.timestamp, call.oseq, call.iseq, IAX_TYPE_IAX, data ) )
   end
 
   def send_hangup(call)
-    data =	[ IAX_SUBTYPE_HANGUP ].pack('C')
+    data =  [ IAX_SUBTYPE_HANGUP ].pack('C')
     send_data( call, create_pkt( call.scall, call.dcall, call.timestamp, call.oseq, call.iseq, IAX_TYPE_IAX, data ) )
   end
 

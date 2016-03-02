@@ -14,7 +14,7 @@
 require 'rails_helper'
 
 RSpec.describe Settings, type: :model do
-	it "valid record" do
-		expect(build(:setting)).to be_valid
-	end
+  it "valid record" do
+    expect(build(:setting)).to be_valid
+  end
 end

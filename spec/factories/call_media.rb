@@ -15,9 +15,9 @@
 #
 
 FactoryGirl.define do
-	factory :call_medium do
-		call
-		project
-	end
+  factory :call_medium do
+    call
+    project
+  end
 
 end

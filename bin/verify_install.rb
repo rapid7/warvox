@@ -6,7 +6,7 @@
 #
 base = __FILE__
 while File.symlink?(base)
-	base = File.expand_path(File.readlink(base), File.dirname(base))
+  base = File.expand_path(File.readlink(base), File.dirname(base))
 end
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
 require 'warvox'
@@ -24,34 +24,34 @@ puts(" ")
 
 
 begin
-	require 'rubygems'
-	puts "[*] RubyGems have been installed"
+  require 'rubygems'
+  puts "[*] RubyGems have been installed"
 rescue ::LoadError
-	puts "[*] ERROR: The RubyGems package has not been installed:"
-	puts "    $ sudo apt-get install rubygems"
-	exit
+  puts "[*] ERROR: The RubyGems package has not been installed:"
+  puts "    $ sudo apt-get install rubygems"
+  exit
 end
 
 begin
-	require 'bundler'
-	puts "[*] The Bundler gem has been installed"
+  require 'bundler'
+  puts "[*] The Bundler gem has been installed"
 rescue ::LoadError
-	puts "[*] ERROR: The Bundler gem has not been installed:"
-	puts "    $ sudo gem install bundler"
-	exit
+  puts "[*] ERROR: The Bundler gem has not been installed:"
+  puts "    $ sudo gem install bundler"
+  exit
 end
 
 if(not WarVOX::Config.tool_path('gnuplot'))
-	puts "[*] ERROR: The 'gnuplot' binary could not be installed"
-	puts "[*] $ sudo apt-get install gnuplot"
-	exit
+  puts "[*] ERROR: The 'gnuplot' binary could not be installed"
+  puts "[*] $ sudo apt-get install gnuplot"
+  exit
 end
 puts "[*] The GNUPlot binary appears to be available"
 
 if(not WarVOX::Config.tool_path('lame'))
-	puts "[*] ERROR: The 'lame' binary could not be installed"
-	puts "[*] $ sudo apt-get install lame"
-	exit
+  puts "[*] ERROR: The 'lame' binary could not be installed"
+  puts "[*] $ sudo apt-get install lame"
+  exit
 end
 puts "[*] The LAME binary appears to be available"
 

@@ -29,24 +29,24 @@ maxf = data[:maxf]
 # Look for modems by detecting a 2100hz answer + 2250hz tone
 #
 if( (fcnt[2100] > 1.0 or fcnt[2230] > 1.0) and fcnt[2250] > 0.5)
-	@line_type = 'modem'
-	raise Completed
+  @line_type = 'modem'
+  raise Completed
 end
 
 #
 # Look for modems by detecting a peak frequency of 2250hz
 #
 if(fcnt[2100] > 1.0 and (maxf > 2245.0 and maxf < 2255.0))
-	@line_type = 'modem'
-	raise Completed
+  @line_type = 'modem'
+  raise Completed
 end
 
 #
 # Look for modems by detecting a peak frequency of 3000hz
 #
 if(fcnt[2100] > 1.0 and (maxf > 2995.0 and maxf < 3005.0))
-	@line_type = 'modem'
-	raise Completed
+  @line_type = 'modem'
+  raise Completed
 end
 
 #
@@ -54,22 +54,22 @@ end
 #
 fax_sum = 0
 [
-	fcnt[1625], fcnt[1660], fcnt[1825], fcnt[2100],
-	fcnt[600],  fcnt[1855], fcnt[1100], fcnt[2250],
-	fcnt[2230], fcnt[2220], fcnt[1800], fcnt[2095],
-	fcnt[2105]
+  fcnt[1625], fcnt[1660], fcnt[1825], fcnt[2100],
+  fcnt[600],  fcnt[1855], fcnt[1100], fcnt[2250],
+  fcnt[2230], fcnt[2220], fcnt[1800], fcnt[2095],
+  fcnt[2105]
 ].map{|x| fax_sum += [x,1.0].min }
 if(fax_sum >= 2.0)
-	@line_type = 'fax'
-	raise Completed
+  @line_type = 'fax'
+  raise Completed
 end
 
 #
 # Dial tone detection (440hz + 350hz)
 #
 if(fcnt[440] > 1.0 and fcnt[350] > 1.0)
-	@line_type = 'dialtone'
-	raise Completed
+  @line_type = 'dialtone'
+  raise Completed
 end
 
 #

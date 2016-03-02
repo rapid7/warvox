@@ -12,9 +12,9 @@
 #
 
 FactoryGirl.define do
-	factory :line do
-		project
-		number { Faker::PhoneNumber.phone_number }
-	end
+  factory :line do
+    project
+    number { Faker::PhoneNumber.phone_number }
+  end
 
 end

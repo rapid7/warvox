@@ -14,10 +14,10 @@
 require 'rails_helper'
 
 RSpec.describe Line, type: :model do
-	it { should belong_to(:project) }
-	it { should have_many(:line_attributes).dependent(:delete_all) }
+  it { should belong_to(:project) }
+  it { should have_many(:line_attributes).dependent(:delete_all) }
 
-	it "valid record" do
-		expect(build(:line)).to be_valid
-	end
+  it "valid record" do
+    expect(build(:line)).to be_valid
+  end
 end

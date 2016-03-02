@@ -6,15 +6,15 @@
 # 
 base = __FILE__
 while File.symlink?(base)
-	base = File.expand_path(File.readlink(base), File.dirname(base))
+  base = File.expand_path(File.readlink(base), File.dirname(base))
 end
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
 
 require 'warvox'
 
 def usage
-	$stderr.puts "Usage: #{$0} <input.raw> <output.txt>"
-	exit
+  $stderr.puts "Usage: #{$0} <input.raw> <output.txt>"
+  exit
 end
 
 #
@@ -25,14 +25,14 @@ inp = ARGV.shift
 out = ARGV.shift
 
 if (inp and inp == "-h") or not inp
-	usage()
+  usage()
 end
 
 raw = WarVOX::Audio::Raw.from_file(inp)
 if out 
-	::File.open(out, "wb") do |fd|
-		fd.write( "{" + raw.to_freq_sig.map{|x| x.to_s}.join(",") + "}" )
-	end
+  ::File.open(out, "wb") do |fd|
+    fd.write( "{" + raw.to_freq_sig.map{|x| x.to_s}.join(",") + "}" )
+  end
 else 
-	$stdout.write( "{" + raw.to_freq_sig.map{|x| x.to_s}.join(",") + "}" )
+  $stdout.write( "{" + raw.to_freq_sig.map{|x| x.to_s}.join(",") + "}" )
 end

@@ -1,182 +1,182 @@
 class InitialSchema < ActiveRecord::Migration
-	def up
+  def up
 
-		# Require the intarray extension
-		execute("CREATE EXTENSION IF NOT EXISTS intarray")
+    # Require the intarray extension
+    execute("CREATE EXTENSION IF NOT EXISTS intarray")
 
-		create_table :settings do |t|
-			t.string :var, :null => false
-			t.text   :value, :null => true
-			t.integer :thing_id, :null => true
-			t.string :thing_type, :limit => 30, :null => true
-			t.timestamps
-		end
+    create_table :settings do |t|
+      t.string :var, :null => false
+      t.text   :value, :null => true
+      t.integer :thing_id, :null => true
+      t.string :thing_type, :limit => 30, :null => true
+      t.timestamps
+    end
 
-		add_index :settings, [ :thing_type, :thing_id, :var ], :unique => true
+    add_index :settings, [ :thing_type, :thing_id, :var ], :unique => true
 
-		create_table 'users' do |t|
-			t.string    :login,               :null => false                # optional, you can use email instead, or both
-			t.string    :email,               :null => true                 # optional, you can use login instead, or both
-			t.string    :crypted_password,    :null => false                # optional, see below
-			t.string    :password_salt,       :null => false                # optional, but highly recommended
-			t.string    :persistence_token,   :null => false                # required
-			t.string    :single_access_token, :null => false                # optional, see Authlogic::Session::Params
-			t.string    :perishable_token,    :null => false                # optional, see Authlogic::Session::Perishability
+    create_table 'users' do |t|
+      t.string    :login,               :null => false                # optional, you can use email instead, or both
+      t.string    :email,               :null => true                 # optional, you can use login instead, or both
+      t.string    :crypted_password,    :null => false                # optional, see below
+      t.string    :password_salt,       :null => false                # optional, but highly recommended
+      t.string    :persistence_token,   :null => false                # required
+      t.string    :single_access_token, :null => false                # optional, see Authlogic::Session::Params
+      t.string    :perishable_token,    :null => false                # optional, see Authlogic::Session::Perishability
 
-			# Magic columns, just like ActiveRecord's created_at and updated_at. These are automatically maintained by Authlogic if they are present.
-			t.integer   :login_count,         :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
-			t.integer   :failed_login_count,  :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
-			t.datetime  :last_request_at                                    # optional, see Authlogic::Session::MagicColumns
-			t.datetime  :current_login_at                                   # optional, see Authlogic::Session::MagicColumns
-			t.datetime  :last_login_at                                      # optional, see Authlogic::Session::MagicColumns
-			t.string    :current_login_ip                                   # optional, see Authlogic::Session::MagicColumns
-			t.string    :last_login_ip                                      # optional, see Authlogic::Session::MagicColumns
+      # Magic columns, just like ActiveRecord's created_at and updated_at. These are automatically maintained by Authlogic if they are present.
+      t.integer   :login_count,         :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
+      t.integer   :failed_login_count,  :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
+      t.datetime  :last_request_at                                    # optional, see Authlogic::Session::MagicColumns
+      t.datetime  :current_login_at                                   # optional, see Authlogic::Session::MagicColumns
+      t.datetime  :last_login_at                                      # optional, see Authlogic::Session::MagicColumns
+      t.string    :current_login_ip                                   # optional, see Authlogic::Session::MagicColumns
+      t.string    :last_login_ip                                      # optional, see Authlogic::Session::MagicColumns
 
-			t.timestamps
-			t.boolean   "enabled", :default => true
-			t.boolean   "admin",   :default => true
-		end
+      t.timestamps
+      t.boolean   "enabled", :default => true
+      t.boolean   "admin",   :default => true
+    end
 
-		create_table 'projects' do |t|
-			t.timestamps
-			t.text      "name", :null => false
-			t.text      "description"
-			t.text		"included"
-			t.text		"excluded"
-			t.string	"created_by"
-		end
+    create_table 'projects' do |t|
+      t.timestamps
+      t.text      "name", :null => false
+      t.text      "description"
+      t.text    "included"
+      t.text    "excluded"
+      t.string  "created_by"
+    end
 
-		create_table "jobs" do |t|
-			t.timestamps
-			t.integer	"project_id", :null => false
-			t.string	"locked_by"
-			t.timestamp	"locked_at"
-			t.timestamp	"started_at"
-			t.timestamp	"completed_at"
-			t.string	"created_by"
-			t.string	"task", :null => false
-			t.binary	"args"
-			t.string	"status"
-			t.text		"error"
-			t.integer	"progress", :default => 0
-		end
+    create_table "jobs" do |t|
+      t.timestamps
+      t.integer  "project_id", :null => false
+      t.string  "locked_by"
+      t.timestamp  "locked_at"
+      t.timestamp  "started_at"
+      t.timestamp  "completed_at"
+      t.string  "created_by"
+      t.string  "task", :null => false
+      t.binary  "args"
+      t.string  "status"
+      t.text    "error"
+      t.integer  "progress", :default => 0
+    end
 
-		create_table "lines" do |t|
-			t.timestamps
-			t.text			"number", :null => false
-			t.integer		"project_id", :null => false
-			t.text			"line_type"
-			t.text			"notes"
-		end
+    create_table "lines" do |t|
+      t.timestamps
+      t.text      "number", :null => false
+      t.integer    "project_id", :null => false
+      t.text      "line_type"
+      t.text      "notes"
+    end
 
-		create_table "line_attributes" do |t|
-			t.timestamps
-			t.integer		"line_id", :null => false
-			t.integer		"project_id", :null => false
-			t.text			"name", :null => false
-			t.binary		"value", :null => false
-			t.string		"content_type", :default => "text"
-		end
+    create_table "line_attributes" do |t|
+      t.timestamps
+      t.integer    "line_id", :null => false
+      t.integer    "project_id", :null => false
+      t.text      "name", :null => false
+      t.binary    "value", :null => false
+      t.string    "content_type", :default => "text"
+    end
 
-		create_table "calls" do |t|
-			# Created by the dialer job
-			t.timestamps
-			t.text			"number", :null => false
-			t.integer		"project_id", :null => false
-			t.integer		"job_id", :null => false
-			t.integer		"provider_id", :null => false
-			t.boolean		"answered"
-			t.boolean		"busy"
-			t.text			"error"
-			t.integer		"audio_length"
-			t.integer		"ring_length"
-			t.text			"caller_id"
+    create_table "calls" do |t|
+      # Created by the dialer job
+      t.timestamps
+      t.text      "number", :null => false
+      t.integer    "project_id", :null => false
+      t.integer    "job_id", :null => false
+      t.integer    "provider_id", :null => false
+      t.boolean    "answered"
+      t.boolean    "busy"
+      t.text      "error"
+      t.integer    "audio_length"
+      t.integer    "ring_length"
+      t.text      "caller_id"
 
-			# Generated by the analysis job
-			t.integer		"analysis_job_id"
-			t.timestamp		"analysis_started_at"
-			t.timestamp		"analysis_completed_at"
-			t.float			"peak_freq"
-			t.text			"peak_freq_data"
-			t.text			"line_type"
-			t.integer		"fprint", :array => true
-		end
+      # Generated by the analysis job
+      t.integer    "analysis_job_id"
+      t.timestamp    "analysis_started_at"
+      t.timestamp    "analysis_completed_at"
+      t.float      "peak_freq"
+      t.text      "peak_freq_data"
+      t.text      "line_type"
+      t.integer    "fprint", :array => true
+    end
 
-		create_table "call_media" do |t|
-			t.integer		"call_id", :null => false
-			t.integer		"project_id", :null => false
-			t.binary		"audio"
-			t.binary		"mp3"
-			t.binary		"png_big"
-			t.binary		"png_big_dots"
-			t.binary		"png_big_freq"
-			t.binary		"png_sig"
-			t.binary		"png_sig_freq"
-		end
+    create_table "call_media" do |t|
+      t.integer    "call_id", :null => false
+      t.integer    "project_id", :null => false
+      t.binary    "audio"
+      t.binary    "mp3"
+      t.binary    "png_big"
+      t.binary    "png_big_dots"
+      t.binary    "png_big_freq"
+      t.binary    "png_sig"
+      t.binary    "png_sig_freq"
+    end
 
-		create_table "signatures" do |t|
-			t.timestamps
-			t.text			"name", :null => false
-			t.string		"source"
-			t.text			"description"
-			t.string		"category"
-			t.string		"line_type"
-			t.integer		"risk"
-		end
+    create_table "signatures" do |t|
+      t.timestamps
+      t.text      "name", :null => false
+      t.string    "source"
+      t.text      "description"
+      t.string    "category"
+      t.string    "line_type"
+      t.integer    "risk"
+    end
 
-		create_table "signature_fp" do |t|
-			t.integer		"signature_id", :null => false
-			t.integer		"fprint", :array => true
-		end
+    create_table "signature_fp" do |t|
+      t.integer    "signature_id", :null => false
+      t.integer    "fprint", :array => true
+    end
 
-		create_table "providers" do |t|
-			t.timestamps
-			t.text			"name", :null => false
-			t.text			"host", :null => false
-			t.integer		"port", :null => false
-			t.text			"user"
-			t.text			"pass"
-			t.integer		"lines", :null => false, :default => 1
-			t.boolean		"enabled", :default => true
-		end
+    create_table "providers" do |t|
+      t.timestamps
+      t.text      "name", :null => false
+      t.text      "host", :null => false
+      t.integer    "port", :null => false
+      t.text      "user"
+      t.text      "pass"
+      t.integer    "lines", :null => false, :default => 1
+      t.boolean    "enabled", :default => true
+    end
 
-		add_index :jobs, :project_id
-		add_index :lines, :number
-		add_index :lines, :project_id
-		add_index :line_attributes, :line_id
-		add_index :line_attributes, :project_id
-		add_index :calls, :number
-		add_index :calls, :job_id
-		add_index :calls, :provider_id
-		add_index :call_media, :call_id
-		add_index :call_media, :project_id
-		add_index :signature_fp, :signature_id
+    add_index :jobs, :project_id
+    add_index :lines, :number
+    add_index :lines, :project_id
+    add_index :line_attributes, :line_id
+    add_index :line_attributes, :project_id
+    add_index :calls, :number
+    add_index :calls, :job_id
+    add_index :calls, :provider_id
+    add_index :call_media, :call_id
+    add_index :call_media, :project_id
+    add_index :signature_fp, :signature_id
 
-	end
+  end
 
-	def down
-		remove_index :jobs, :project_id
-		remove_index :lines, :number
-		remove_index :lines, :project_id
-		remove_index :line_attributes, :line_id
-		remove_index :line_attributes, :project_id
-		remove_index :calls, :number
-		remove_index :calls, :job_id
-		remove_index :calls, :provider_id
-		remove_index :call_media, :call_id
-		remove_index :call_media, :project_id
-		remove_index :signature_fp, :signature_id
+  def down
+    remove_index :jobs, :project_id
+    remove_index :lines, :number
+    remove_index :lines, :project_id
+    remove_index :line_attributes, :line_id
+    remove_index :line_attributes, :project_id
+    remove_index :calls, :number
+    remove_index :calls, :job_id
+    remove_index :calls, :provider_id
+    remove_index :call_media, :call_id
+    remove_index :call_media, :project_id
+    remove_index :signature_fp, :signature_id
 
-		drop_table "providers"
-		drop_table "signature_fp"
-		drop_table "signatures"
-		drop_table "call_media"
-		drop_table "calls"
-		drop_table "line_attributes"
-		drop_table "lines"
-		drop_table "jobs"
-		drop_table "projects"
-		drop_table "users"
-		drop_table "settings"
-	end
+    drop_table "providers"
+    drop_table "signature_fp"
+    drop_table "signatures"
+    drop_table "call_media"
+    drop_table "calls"
+    drop_table "line_attributes"
+    drop_table "lines"
+    drop_table "jobs"
+    drop_table "projects"
+    drop_table "users"
+    drop_table "settings"
+  end
 end

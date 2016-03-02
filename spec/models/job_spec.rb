@@ -21,12 +21,12 @@
 require 'rails_helper'
 
 RSpec.describe Job, type: :model do
-	it { should belong_to(:project) }
-	it { should have_many(:calls) }
+  it { should belong_to(:project) }
+  it { should have_many(:calls) }
 
-	it { should validate_presence_of(:project_id) }
+  it { should validate_presence_of(:project_id) }
 
-	it "valid record" do
-		expect(build(:job)).to be_valid
-	end
+  it "valid record" do
+    expect(build(:job)).to be_valid
+  end
 end

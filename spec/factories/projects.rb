@@ -13,9 +13,9 @@
 #
 
 FactoryGirl.define do
-	factory :project do
-		name { Faker::Lorem.sentence }
-		description { Faker::Lorem.sentence }
-	end
+  factory :project do
+    name { Faker::Lorem.sentence }
+    description { Faker::Lorem.sentence }
+  end
 
 end

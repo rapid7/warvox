@@ -12,8 +12,8 @@
 #
 
 FactoryGirl.define do
-	factory :setting, :class => 'Settings' do
-		var "CachedStuff"
-	end
+  factory :setting, :class => 'Settings' do
+    var "CachedStuff"
+  end
 
 end

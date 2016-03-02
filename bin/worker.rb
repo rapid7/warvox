@@ -6,7 +6,7 @@
 #
 base = __FILE__
 while File.symlink?(base)
-	base = File.expand_path(File.readlink(base), File.dirname(base))
+  base = File.expand_path(File.readlink(base), File.dirname(base))
 end
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
 
@@ -21,18 +21,18 @@ $:.unshift(File.join(File.expand_path(File.dirname(base)), '..'))
 @job  = nil
 
 def usage
-	$stderr.puts "Usage: #{$0} [JID]"
-	exit(1)
+  $stderr.puts "Usage: #{$0} [JID]"
+  exit(1)
 end
 
 def stop
-	if @task
-		@task.stop() rescue nil
-	end
-	if @job
-		Job.where(id: @job_id).update_all({ status: 'stopped', completed_at: Time.now })
-	end
-	exit(0)
+  if @task
+    @task.stop() rescue nil
+  end
+  if @job
+    Job.where(id: @job_id).update_all({ status: 'stopped', completed_at: Time.now })
+  end
+  exit(0)
 end
 
 #
@@ -41,7 +41,7 @@ end
 
 jid = ARGV.shift() || usage()
 if (jid and jid =="-h") or (! jid)
-	usage()
+  usage()
 end
 
 require 'config/boot'
@@ -54,9 +54,9 @@ jid = jid.to_i
 @job = Job.where(id: jid).first
 
 unless @job
-	$stderr.puts "Error: Specified job not found"
-	WarVOX::Log.warn("Worker rejected invalid Job #{jid}")
-	exit(1)
+  $stderr.puts "Error: Specified job not found"
+  WarVOX::Log.warn("Worker rejected invalid Job #{jid}")
+  exit(1)
 end
 
 $0 = "warvox worker: #{jid} "
@@ -72,20 +72,20 @@ begin
 
 case @job.task
 when 'dialer'
-	@task = WarVOX::Jobs::Dialer.new(@job.id, args)
-	@task.start
+  @task = WarVOX::Jobs::Dialer.new(@job.id, args)
+  @task.start
 when 'analysis'
-	@task = WarVOX::Jobs::Analysis.new(@job.id, args)
-	@task.start
+  @task = WarVOX::Jobs::Analysis.new(@job.id, args)
+  @task.start
 else
-	Job.where(id: @job.id).update_all({ error: 'unsupported', status: 'error' })
+  Job.where(id: @job.id).update_all({ error: 'unsupported', status: 'error' })
 end
 
 @job.update_progress(100)
 
 rescue ::SignalException, ::SystemExit
-	raise $!
+  raise $!
 rescue ::Exception => e
-	WarVOX::Log.warn("Worker #{@job.id} #{@job.task} threw an exception: #{e.class} #{e} #{e.backtrace}")
-	Job.where(id: @job.id).update_all({ error: "Exception: #{e.class} #{e}", status: 'error', completed_at: Time.now.utc })
+  WarVOX::Log.warn("Worker #{@job.id} #{@job.task} threw an exception: #{e.class} #{e} #{e.backtrace}")
+  Job.where(id: @job.id).update_all({ error: "Exception: #{e.class} #{e}", status: 'error', completed_at: Time.now.utc })
 end

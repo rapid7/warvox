@@ -19,16 +19,16 @@
 #
 
 FactoryGirl.define do
-	factory :job do
-		project
-		task 'dialer'
-		args "\x04\b{\t:\nrangeI\"\x0F7632458942\x06:\x06ET:\nlinesi\x0F:\fsecondsi::\rcid_maskI\"\tSELF\x06;\x06T"
-		status 'submitted'
-		error nil
-		range { Faker::PhoneNumber.phone_number }
-		cid_mask { Faker::PhoneNumber.phone_number }
-		seconds { Faker::Number.between(1, 299) }
-		lines { Faker::Number.between(1, 10000) }
-	end
+  factory :job do
+    project
+    task 'dialer'
+    args "\x04\b{\t:\nrangeI\"\x0F7632458942\x06:\x06ET:\nlinesi\x0F:\fsecondsi::\rcid_maskI\"\tSELF\x06;\x06T"
+    status 'submitted'
+    error nil
+    range { Faker::PhoneNumber.phone_number }
+    cid_mask { Faker::PhoneNumber.phone_number }
+    seconds { Faker::Number.between(1, 299) }
+    lines { Faker::Number.between(1, 10000) }
+  end
 
 end

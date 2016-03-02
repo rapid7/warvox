@@ -4,9 +4,9 @@ class CallsController < ApplicationController
   # GET /calls.xml
   def index
     @jobs = @project.jobs.order('id DESC').where('task = ? AND completed_at IS NOT NULL', 'dialer').paginate(
-		:page => params[:page],
-		:per_page => 30
-	)
+    :page => params[:page],
+    :per_page => 30
+  )
 
     respond_to do |format|
       format.html # index.html.erb
@@ -18,21 +18,21 @@ class CallsController < ApplicationController
   # GET /calls/1/view.xml
   def view
     @calls = Call.order('id DESC').where(:job_id => params[:id]).paginate(
-		:page => params[:page],
-		:per_page => 30
-	)
+    :page => params[:page],
+    :per_page => 30
+  )
 
-	unless @calls and @calls.length > 0
-		redirect_to :action => :index
-		return
-	end
-	@call_results = {
-		:Timeout  => Call.count(:conditions =>['job_id = ? and answered = ?', params[:id], false]),
-		:Busy     => Call.count(:conditions =>['job_id = ? and busy = ?', params[:id], true]),
-		:Answered => Call.count(:conditions =>['job_id = ? and answered = ?', params[:id], true]),
-	}
+  unless @calls and @calls.length > 0
+    redirect_to :action => :index
+    return
+  end
+  @call_results = {
+    :Timeout  => Call.count(:conditions =>['job_id = ? and answered = ?', params[:id], false]),
+    :Busy     => Call.count(:conditions =>['job_id = ? and busy = ?', params[:id], true]),
+    :Answered => Call.count(:conditions =>['job_id = ? and answered = ?', params[:id], true]),
+  }
 
-	respond_to do |format|
+  respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @calls }
     end
@@ -43,10 +43,10 @@ class CallsController < ApplicationController
   def show
     @call = Call.find(params[:id])
 
-	unless @call
-		redirect_to :action => :index
-		return
-	end
+  unless @call
+    redirect_to :action => :index
+    return
+  end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -109,7 +109,7 @@ class CallsController < ApplicationController
   def destroy
 
     @job = Job.find(params[:id])
-	@job.destroy
+  @job.destroy
 
     respond_to do |format|
       format.html { redirect_to :action => 'index' }

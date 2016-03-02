@@ -6,15 +6,15 @@
 # 
 base = __FILE__
 while File.symlink?(base)
-	base = File.expand_path(File.readlink(base), File.dirname(base))
+  base = File.expand_path(File.readlink(base), File.dirname(base))
 end
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
 
 require 'warvox'
 
 def usage
-	$stderr.puts "Usage: #{$0} [offset] [length] <input.raw> <output.raw>"
-	exit
+  $stderr.puts "Usage: #{$0} [offset] [length] <input.raw> <output.raw>"
+  exit
 end
 
 #
@@ -27,26 +27,26 @@ inp = ARGV.shift
 out = ARGV.shift
 
 if (off and off == "-h") or not off
-	usage()
+  usage()
 end
 
 buf = ''
 ifd = nil
 
 if inp 
-	ifd = ::File.open(inp, "rb")
+  ifd = ::File.open(inp, "rb")
 else 
-	$stdin.binmode
-	ifd = $stdin
+  $stdin.binmode
+  ifd = $stdin
 end
 
 ofd = nil
 
 if out 
-	ofd = ::File.open(out, "wb")
+  ofd = ::File.open(out, "wb")
 else 
-	$stdout.binmode
-	ofd = $stdout
+  $stdout.binmode
+  ofd = $stdout
 end
 
 
