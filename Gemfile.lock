@@ -198,6 +198,7 @@ GEM
     ref (2.0.0)
     request_store (1.3.0)
     rex (2.0.9)
+    rkelly-remix (0.0.7)
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
       rspec-expectations (~> 3.4.0)
