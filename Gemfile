@@ -9,7 +9,7 @@ gem 'jquery-datatables-rails', git: 'https://github.com/rweng/jquery-datatables-
 #gem 'postgres_ext', :git => 'git://github.com/dockyard/postgres_ext.git'
 
 gem 'kissfft'
-gem 'rex', '~> 2.0.3'
+gem 'rex', '~> 2.0.10'
 
 gem 'bootstrap-sass', '>= 3.2.0'
 gem 'sass-rails',   '~> 4.0.2'
