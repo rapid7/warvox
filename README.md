@@ -51,7 +51,7 @@ Verify your installation:
 Configure the PostgreSQL account for WarVOX:
 
 	$ sudo su - postgres
-	$ createuser warvox
+	$ createuser -s warvox
 	$ createdb warvox -O warvox
 	$ psql
 	psql> alter user warvox with password 'randompass';
