@@ -2,26 +2,6 @@ module WarVOX
 module Config
   require 'yaml'
 
-  def self.authentication_creds
-    user = nil
-    pass = nil
-    info = YAML.load_file(WarVOX::Conf)
-    if( info and
-      info['authentication'] and
-      info['authentication']['user'] and
-      info['authentication']['pass']
-      )
-      user = info['authentication']['user']
-      pass = info['authentication']['pass']
-    end
-    [user,pass]
-  end
-
-  def self.authenticate(user,pass)
-    wuser,wpass = authentication_creds
-    (wuser == user and wpass == pass) ? true : false
-  end
-
   def self.tool_path(name)
     info = YAML.load_file(WarVOX::Conf)
     return nil if not info
