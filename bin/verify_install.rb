@@ -56,6 +56,14 @@ end
 puts "[*] The LAME binary appears to be available"
 
 
+if(not WarVOX::Config.tool_path('sox'))
+  puts "[*] ERROR: The 'sox binary could not be installed"
+  puts "[*] $ sudo apt-get install sox"
+  exit
+end
+puts "[*] The SOX binary appears to be available"
+
+
 puts " "
 puts "[*] Congratulations! You are almost ready to run WarVOX"
 puts " "

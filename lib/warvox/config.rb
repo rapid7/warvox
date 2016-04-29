@@ -49,6 +49,14 @@ module Config
 
   end
 
+  def self.gcloud_key
+    info = YAML.load_file(WarVOX::Conf)
+    return nil if not info
+    return nil if not info['apis']
+    return nil if not info['apis']['gcloud']
+    ::File.read(File.expand_path(info['apis']['gcloud'].gsub('%BASE%', WarVOX::Base)))
+  end
+
   def self.signatures_path
     info = YAML.load_file(WarVOX::Conf)
     return nil if not info

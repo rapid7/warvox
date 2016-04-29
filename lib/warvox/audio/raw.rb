@@ -1,3 +1,5 @@
+require 'open3'
+
 module WarVOX
 module Audio
 class Raw
@@ -70,6 +72,16 @@ class Raw
       "data" +
         [ raw.length ].pack("V") +
       raw
+  end
+
+  def to_flac
+    sox = WarVOX::Config.tool_path('sox')
+    if ! sox
+      raise RuntimeError, "The sox binary could not be find, make sure it is installed"
+    end
+
+    o, s = Open3.capture2("#{sox} -t raw -b 16 -e signed-integer -r 8000 - -t flac -r 16000 -", :binmode => true, :stdin_data => self.to_raw)
+    o
   end
 
   def to_flow(opts={})
