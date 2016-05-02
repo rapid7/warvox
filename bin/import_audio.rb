@@ -38,7 +38,7 @@ require 'config/environment'
 project_id  = ARGV.shift
 provider_id = ARGV.shift
 
-todo = Dir["#{dir}/**/*.raw"].to_a + Dir["#{dir}/**/*.wav"].to_a
+todo = Dir["#{dir}/**/*.{raw,wav}"].to_a
 
 if todo.empty?
   $stderr.puts "Error: No raw audio files found within #{dir}"
@@ -115,13 +115,6 @@ todo.each do |rfile|
 
   mr = dr.media
   ::File.open(rfile, "rb") do |fd|
-
-    # Dirty support for RIFF (little-endian) data, WAVE audio, Microsoft PCM, 16 bit, mono 8000 Hz
-    if rfile =~ /\.wav$/
-      # Toss the WAV header
-      head = fd.read(44)
-    end
-
     mr.audio = fd.read(fd.stat.size)
     mr.save
   end

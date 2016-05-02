@@ -52,6 +52,14 @@ class Raw
   attr_accessor :samples
 
   def initialize(data)
+
+    # Accept raw WAV files, but remove the header
+    if data[ 0,4].to_s == "RIFF" &&
+       data[ 8,4].to_s == "WAVE" &&
+       data[36,4].to_s == "data"
+       data[0, 44] = ''
+    end
+
     self.samples = data.unpack('v*').map do |s|
       (s > 0x7fff) ? (0x10000 - s) * -1 : s
     end
