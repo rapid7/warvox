@@ -7,7 +7,7 @@
 <b>WarVOX</b> is a product of <a href="http://www.rapid7.com/">Rapid7</a> and is provided as
 free software. WarVOX is intended for legal security assessment, asset inventory,
 and research purposes only. The latest version of WarVOX can be found in <i class="fa fa-github"></i> GitHub at the following url
-<a href="https://github.com/rapid7/warvox/"> https://github.com/rapid7/warvox/</a>. The primary developer of WarVOX is <a href="mailto:hdm@rapid7.com">HD Moore</a>.
+<a href="https://github.com/rapid7/warvox/"> https://github.com/rapid7/warvox/</a>. The primary developer of WarVOX is <a href="mailto:x@hdm.io">HD Moore</a>.
 
 </div>
 <div class="span3">
@@ -91,13 +91,6 @@ and research purposes only. The latest version of WarVOX can be found in <i clas
 
 <tr>
 	<td>
-		Admin User
-	</td>
-	<td><%= WarVOX::Config.authentication_creds[0] %></td>
-</tr>
-
-<tr>
-	<td>
 		GNUPlot
 	</td>
 	<td><%= WarVOX::Config.tool_path('gnuplot') || "MISSING" %></td>
@@ -115,6 +108,13 @@ and research purposes only. The latest version of WarVOX can be found in <i clas
 		IAXRECORD
 	</td>
 	<td><%= WarVOX::Config.tool_path('iaxrecord') || "MISSING" %></td>
+</tr>
+
+<tr>
+	<td>
+		SOX
+	</td>
+	<td><%= WarVOX::Config.tool_path('sox') || "MISSING" %></td>
 </tr>
 
 <tr>
