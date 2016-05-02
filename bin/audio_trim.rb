@@ -3,7 +3,7 @@
 
 #
 # Load the library path
-# 
+#
 base = __FILE__
 while File.symlink?(base)
   base = File.expand_path(File.readlink(base), File.dirname(base))
@@ -17,11 +17,13 @@ def usage
   exit
 end
 
+# TODO: Needs WAV header support
+
 #
 # Script
 #
 
-off = ARGV.shift 
+off = ARGV.shift
 len = ARGV.shift
 inp = ARGV.shift
 out = ARGV.shift
@@ -33,18 +35,18 @@ end
 buf = ''
 ifd = nil
 
-if inp 
+if inp
   ifd = ::File.open(inp, "rb")
-else 
+else
   $stdin.binmode
   ifd = $stdin
 end
 
 ofd = nil
 
-if out 
+if out
   ofd = ::File.open(out, "wb")
-else 
+else
   $stdout.binmode
   ofd = $stdout
 end
@@ -52,7 +54,7 @@ end
 
 buf = ifd.read
 off = off.to_i * 16000
-len = (len.to_i > 0) ? len.to_i : (buf.length / 16000).to_i 
+len = (len.to_i > 0) ? len.to_i : (buf.length / 16000).to_i
 
 ofd.write( buf[off, len * 16000] )
 exit(0)

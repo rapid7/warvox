@@ -58,8 +58,14 @@ begin
     m = r.media
     if m and m.audio
 
-      ::File.open(File.join(output, "#{r.number}.raw"), "wb") do |fd|
-        fd.write(m.audio)
+      ::File.open(File.join(output, "#{r.number}.wav"), "wb") do |fd|
+        if m.audio[0,4].to_s == "RIFF"
+          fd.write(m.audio)
+        else
+          # Add a WAV header to the sample
+          raw = WarVOX::Audio::Raw.new(m.audio)
+          fd.write(raw.to_wav)
+        end
       end
 
       ::File.open(File.join(output, "#{r.number}.yml"), "wb") do |fd|
