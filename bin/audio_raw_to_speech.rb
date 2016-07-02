@@ -32,6 +32,11 @@ if (inp and inp == "-h") or not inp
   usage()
 end
 
+if out && File.exists?(out)
+  $stderr.puts "Error: The output file already exists: #{out}"
+  exit(0)
+end
+
 raw = WarVOX::Audio::Raw.from_file(inp)
 res = nil
 flac = raw.to_flac
@@ -57,13 +62,18 @@ loop do
     }
   }.to_json
 
-
+begin
   http = Net::HTTP.new(uri.hostname, uri.port)
   http.use_ssl = true
   res = http.request(req)
 
   break if res.code.to_s == "200"
   $stderr.puts "Retrying due to #{res.code} #{res.message}..."
+rescue ::Interrupt
+  exit(0)
+rescue ::Exception
+  $stderr.puts "Exception: #{$!} #{$!.backtrace}"
+end
   sleep(1)
 end
 
