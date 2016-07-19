@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: yes
+  roles: 
+    - ansible-role-warvox
+  tasks:
+
+

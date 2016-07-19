@@ -1,0 +1,8 @@
+---
+
+rvm:
+  url: https://get.rvm.io
+  temp_installer_path: /tmp/rvm-installer.sh
+  default_ruby_version: ruby-2.2.3
+  root: "~/.rvm"
+  init_script: "~/.rvm/scripts/rvm"

@@ -1,0 +1,14 @@
+galaxy_info:
+  author: Jay Scott
+  description: Beardyjay
+  license: NONE
+  min_ansible_version: 1.3
+  galaxy_tags:
+    - warvox
+    - voip
+  platforms:
+  - name: Debian
+    versions:
+      - jessie
+dependencies: []
+
