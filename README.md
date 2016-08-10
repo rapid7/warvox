@@ -1,5 +1,5 @@
-WarVOX
-==
+# WarVOX
+
 WarVOX is released under a BSD-style license. See docs/LICENSE for more details.
 
 The latest version of this software is available from http://github.com/rapid7/warvox/
@@ -11,8 +11,8 @@ Questions and suggestions can be sent to:
  - [Installing](#installing)
  - [Development](#development)
 
-#installing
---
+##installing
+
 WarVOX requires a Linux operating system, preferably Ubuntu or Debian, but Kali should work as well.
 
 WarVOX requires PostgreSQL 9.1 or newer with the "contrib" package installed for integer array support.
@@ -80,9 +80,9 @@ Access the web interface at http://127.0.0.1:7777/
 
 At this point you can configure a new IAX2 provider, create a project, and start making calls.
 
-### Development
+## Development
 
-Using Docker
+Using the Dockerfile
 
 Run a postgres container
 
