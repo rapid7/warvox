@@ -11,6 +11,7 @@ RUN apt-get update && apt-get -y install \
   git-core \
   curl \
   libpq-dev \
+  sox \
   && rm -rf /var/lib/apt/lists/*
 
 ADD . /home/warvox
