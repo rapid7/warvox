@@ -28,3 +28,5 @@ config/secrets.yml
 # vagrant and ansible files
 .vagrant
 playbook.retry
+
+TODO.md
