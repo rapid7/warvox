@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'unicorn'
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.6'
 gem 'pg', '>=0.17'
 
 gem 'jquery-rails', '>= 3.1.2'
