@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20130113004653) do
   enable_extension "plpgsql"
   enable_extension "intarray"
 
-  create_table "call_media", force: true do |t|
+  create_table "call_media", force: :cascade do |t|
     t.integer "call_id",      null: false
     t.integer "project_id",   null: false
     t.binary  "audio"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20130113004653) do
   add_index "call_media", ["call_id"], name: "index_call_media_on_call_id", using: :btree
   add_index "call_media", ["project_id"], name: "index_call_media_on_project_id", using: :btree
 
-  create_table "calls", force: true do |t|
+  create_table "calls", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "number",                null: false
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 20130113004653) do
   add_index "calls", ["number"], name: "index_calls_on_number", using: :btree
   add_index "calls", ["provider_id"], name: "index_calls_on_provider_id", using: :btree
 
-  create_table "jobs", force: true do |t|
+  create_table "jobs", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "project_id",               null: false
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 20130113004653) do
 
   add_index "jobs", ["project_id"], name: "index_jobs_on_project_id", using: :btree
 
-  create_table "line_attributes", force: true do |t|
+  create_table "line_attributes", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "line_id",                       null: false
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 20130113004653) do
   add_index "line_attributes", ["line_id"], name: "index_line_attributes_on_line_id", using: :btree
   add_index "line_attributes", ["project_id"], name: "index_line_attributes_on_project_id", using: :btree
 
-  create_table "lines", force: true do |t|
+  create_table "lines", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "number",     null: false
@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(version: 20130113004653) do
   add_index "lines", ["number"], name: "index_lines_on_number", using: :btree
   add_index "lines", ["project_id"], name: "index_lines_on_project_id", using: :btree
 
-  create_table "projects", force: true do |t|
+  create_table "projects", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "name",        null: false
@@ -111,7 +111,7 @@ ActiveRecord::Schema.define(version: 20130113004653) do
     t.string   "created_by"
   end
 
-  create_table "providers", force: true do |t|
+  create_table "providers", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "name",                      null: false
@@ -123,7 +123,7 @@ ActiveRecord::Schema.define(version: 20130113004653) do
     t.boolean  "enabled",    default: true
   end
 
-  create_table "reportable_cache", force: true do |t|
+  create_table "reportable_cache", force: :cascade do |t|
     t.string   "model_name",       limit: 100,               null: false
     t.string   "report_name",      limit: 100,               null: false
     t.string   "grouping",         limit: 10,                null: false
@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(version: 20130113004653) do
   add_index "reportable_cache", ["model_name", "report_name", "grouping", "aggregation", "conditions", "reporting_period"], name: "name_model_grouping_aggregation_period", unique: true, using: :btree
   add_index "reportable_cache", ["model_name", "report_name", "grouping", "aggregation", "conditions"], name: "name_model_grouping_agregation", using: :btree
 
-  create_table "settings", force: true do |t|
+  create_table "settings", force: :cascade do |t|
     t.string   "var",                   null: false
     t.text     "value"
     t.integer  "thing_id"
@@ -149,14 +149,14 @@ ActiveRecord::Schema.define(version: 20130113004653) do
 
   add_index "settings", ["thing_type", "thing_id", "var"], name: "index_settings_on_thing_type_and_thing_id_and_var", unique: true, using: :btree
 
-  create_table "signature_fp", force: true do |t|
+  create_table "signature_fp", force: :cascade do |t|
     t.integer "signature_id", null: false
     t.integer "fprint",                    array: true
   end
 
   add_index "signature_fp", ["signature_id"], name: "index_signature_fp_on_signature_id", using: :btree
 
-  create_table "signatures", force: true do |t|
+  create_table "signatures", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "name",        null: false
@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(version: 20130113004653) do
     t.integer  "risk"
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "login",                              null: false
     t.string   "email"
     t.string   "crypted_password",                   null: false
