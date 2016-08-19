@@ -14,10 +14,10 @@ RUN apt-get update && apt-get -y install \
   sox \
   && rm -rf /var/lib/apt/lists/*
 
-ADD . /home/warvox
+ADD . /opt/warvox
 ADD setup.sh /
 
-WORKDIR /home/warvox
+WORKDIR /opt/warvox
 RUN ln -s /usr/bin/ruby2.1 /usr/bin/ruby \
     && bundle install \
     && make

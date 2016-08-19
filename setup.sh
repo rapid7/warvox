@@ -26,9 +26,9 @@ sh -c "echo 'production:
   host: $DB_PORT_5432_TCP_ADDR
   port: 5432
   pool: 75
-  timeout: 5' > /home/warvox/config/database.yml"
+  timeout: 5' > /opt/warvox/config/database.yml"
 
-cd /home/warvox 
+cd /opt/warvox 
 make database
 bin/adduser admin godsexlove
 bin/warvox.rb --address 0.0.0.0
