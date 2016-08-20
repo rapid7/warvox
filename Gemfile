@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
 gem 'unicorn'
-gem 'rails', '4.2.7'
-gem 'pg', '>=0.17'
+gem 'rails', '~> 4.2', '>= 4.2.7.1'
+gem 'pg', '~> 0.15'
 
-gem 'jquery-rails', '>= 3.1.2'
+gem 'jquery-rails'
 gem 'jquery-datatables-rails', git: 'https://github.com/rweng/jquery-datatables-rails.git'
 #gem 'postgres_ext', :git => 'git://github.com/dockyard/postgres_ext.git'
 
@@ -12,9 +12,9 @@ gem 'kissfft'
 gem 'rex', '~> 2.0.10'
 
 gem 'bootstrap-sass', '>= 3.2.0'
-gem 'sass-rails',   '~> 4.0.2'
-gem 'coffee-rails', '~> 4.0.1'
-gem 'uglifier',     '>= 1.0.3'
+gem 'sass-rails',   '~> 5.0'
+gem 'coffee-rails', '~> 4.1.0'
+gem 'uglifier',     '>= 1.3.0'
 gem 'protected_attributes', '~> 1.0.7'
 gem 'autoprefixer-rails'
 
@@ -49,6 +49,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'rspec-rails'
+  gem 'byebug'
 end
 group :test do
   gem 'capybara'
