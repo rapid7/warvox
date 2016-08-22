@@ -43,7 +43,7 @@ and research purposes only. The latest version of WarVOX can be found in <i clas
 	<td>
 		Active Jobs
 	</td>
-	<td><%= Job.count(:conditions => { :completed_at => nil }) %></td>
+	<td><%= Job.where(:completed_at => nil).count %></td>
 </tr>
 
 <tr>
