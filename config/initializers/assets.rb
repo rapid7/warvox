@@ -10,4 +10,7 @@ Rails.application.config.assets.version = '1.0'
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
 
- Rails.application.config.assets.precompile += %w( jquery.js )
+# Rails.application.config.assets.precompile += %w( jquery.js )
+
+Rails.application.config.assets.precompile += %w( html5.js )
+Rails.application.config.assets.precompile += %w(analyze/_index.coffee analyze/view.coffee jobs/view_results.coffee)

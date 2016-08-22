@@ -23,7 +23,9 @@
   </head>
   <body id="login">
   <div id="login-panel">
-  <div id="login-logo"><img src="/assets/logo_bigger.png" border=0 alt="WarVOX"></div>
+  <div id="login-logo">
+    <%= image_tag "logo_bigger.png", border: 0, alt: "WarVOX" %>
+  </div>
   <div id="box">
     <%= yield %>
   </div>

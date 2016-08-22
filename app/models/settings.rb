@@ -11,6 +11,6 @@
 #  updated_at :datetime
 #
 
-class Settings < RailsSettings::CachedSettings
+class Settings < RailsSettings::Base
   attr_accessible :var
 end
