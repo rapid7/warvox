@@ -12,5 +12,5 @@
 #
 
 class Settings < RailsSettings::Base
-  attr_accessible :var
+  # attr_accessible :var
 end

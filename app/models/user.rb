@@ -23,7 +23,7 @@
 #  admin               :boolean          default(TRUE)
 #
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include RailsSettings::Extend
   acts_as_authentic do |c|
     c.validate_email_field = false

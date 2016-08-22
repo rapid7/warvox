@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery
+  protect_from_forgery with: :exception
   helper :all
 
   helper_method :current_user_session, :current_user
-  before_filter :require_user, :load_project
+  before_action :require_user, :load_project
   add_breadcrumb :projects, :root_path
 
   include ActionView::Helpers::NumberHelper

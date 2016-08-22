@@ -18,7 +18,7 @@
 #  progress     :integer          default(0)
 #
 
-class Job < ActiveRecord::Base
+class Job < ApplicationRecord
 
   reportable :hourly, :aggregation => :count, :grouping => :hour, :date_column => :created_at, :cacheable => false
   reportable :daily, :aggregation => :count, :grouping => :day, :date_column => :created_at, :cacheable => false
@@ -75,12 +75,7 @@ class Job < ActiveRecord::Base
 
   belongs_to :project
 
-  attr_accessible :task, :status, :progress
-
   validates_presence_of :project_id
-
-  attr_accessible :project_id
-
 
   # Allow the base Job class to be used for Dial Jobs
   attr_accessor :range
@@ -89,15 +84,10 @@ class Job < ActiveRecord::Base
   attr_accessor :seconds
   attr_accessor :cid_mask
 
-  attr_accessible :range, :seconds, :lines, :cid_mask, :range_file
-
   attr_accessor :scope
   attr_accessor :force
   attr_accessor :target_id
   attr_accessor :target_ids
-
-  attr_accessible :scope, :force, :target_id, :target_ids
-
 
   validates_with JobValidator
 

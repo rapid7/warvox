@@ -24,7 +24,7 @@
 #  fprint                :integer          is an Array
 #
 
-class Call < ActiveRecord::Base
+class Call < ApplicationRecord
 
   reportable :hourly, :aggregation => :count, :grouping => :hour, :live_data => true, :cacheable => false, :limit => 24
   reportable :daily, :aggregation => :count, :grouping => :day, :live_data => true, :cacheable => false, :limit => 7

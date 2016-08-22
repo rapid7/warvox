@@ -11,7 +11,7 @@
 #  notes      :text
 #
 
-class Line < ActiveRecord::Base
+class Line < ApplicationRecord
   has_many :line_attributes, :dependent => :delete_all
   belongs_to :project
 
