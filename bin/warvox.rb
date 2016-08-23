@@ -15,7 +15,7 @@ end
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
 
 voxroot = File.expand_path(File.join(File.dirname(base), '..'))
-voxserv = File.expand_path(File.join(File.expand_path(voxroot), 'script', 'rails'))
+voxserv = File.expand_path(File.join(File.expand_path(voxroot), 'bin', 'rails'))
 manager = File.expand_path(File.join(File.dirname(base), 'worker_manager.rb'))
 
 require 'warvox'
