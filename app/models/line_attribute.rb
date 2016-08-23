@@ -12,7 +12,7 @@
 #  content_type :string(255)      default("text")
 #
 
-class LineAttribute < ActiveRecord::Base
+class LineAttribute < ApplicationRecord
   belongs_to :line
   belongs_to :project
 end

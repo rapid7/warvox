@@ -1,4 +1,4 @@
-class SignatureFp < ActiveRecord::Base
+class SignatureFp < ApplicationRecord
   belongs_to :signature
 
 end

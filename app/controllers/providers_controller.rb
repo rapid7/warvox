@@ -18,8 +18,8 @@ class ProvidersController < ApplicationController
 
   def new
     @provider = Provider.new
-  @provider.enabled = true
-  @provider.port = 4569
+    @provider.enabled = true
+    @provider.port = 4569
 
     respond_to do |format|
       format.html # new.html.erb
@@ -29,12 +29,12 @@ class ProvidersController < ApplicationController
 
   def edit
     @provider = Provider.find(params[:id])
-  @provider.pass = "********"
+    @provider.pass = "********"
   end
 
   def create
-    @provider = Provider.new(params[:provider])
-  @provider.enabled = true
+    @provider = Provider.new(provider_params)
+    @provider.enabled = true
 
     respond_to do |format|
       if @provider.save
@@ -52,13 +52,13 @@ class ProvidersController < ApplicationController
   def update
     @provider = Provider.find(params[:id])
 
-  # Dont set the password if its the placeholder
-  if params[:provider] and params[:provider][:pass] and params[:provider][:pass] == "********"
-    params[:provider].delete(:pass)
-  end
+    # Dont set the password if its the placeholder
+    if params[:provider] and params[:provider][:pass] and params[:provider][:pass] == "********"
+      params[:provider].delete(:pass)
+    end
 
     respond_to do |format|
-      if @provider.update_attributes(params[:provider])
+      if @provider.update_attributes(provider_params)
         flash[:notice] = 'Provider was successfully updated.'
         format.html { redirect_to providers_path }
         format.xml  { head :ok }
@@ -77,5 +77,11 @@ class ProvidersController < ApplicationController
       format.html { redirect_to providers_path }
       format.xml  { head :ok }
     end
+  end
+
+  private
+
+  def provider_params
+    params.require(:provider).permit(:name, :host, :port, :user, :pass, :lines)
   end
 end

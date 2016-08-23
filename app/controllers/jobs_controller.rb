@@ -156,7 +156,7 @@ class JobsController < ApplicationController
   end
 
   def dialer
-    @job = Job.new(params[:job])
+    @job = Job.new(job_params)
     @job.created_by = @current_user.login
     @job.task = 'dialer'
     @job.range.to_s.gsub!(/[^0-9X:,\n]/, '')
@@ -343,4 +343,9 @@ class JobsController < ApplicationController
     end
   end
 
+  private
+
+  def job_params
+    params.require(:job).permit(:project_id, :range, :range_file, :seconds, :lines, :cid_mask)
+  end
 end

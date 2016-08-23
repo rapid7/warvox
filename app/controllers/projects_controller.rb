@@ -96,7 +96,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @new_project = Project.new(params[:project])
+    @new_project = Project.new(project_params)
     @new_project.created_by = current_user.login
 
     respond_to do |format|
@@ -114,7 +114,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
 
     respond_to do |format|
-      if @project.update_attributes(params[:project])
+      if @project.update_attributes(project_params)
         format.html { redirect_to projects_path }
         format.xml  { head :ok }
       else
@@ -132,5 +132,11 @@ class ProjectsController < ApplicationController
       format.html { redirect_to(projects_url) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+
+  def project_params
+    params.require(:project).permit(:name, :description)
   end
 end
