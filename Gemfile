@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'unicorn'
-gem 'rails', '5.0.0'
+gem 'rails', '~> 5.0', '>= 5.0.0.1'
 gem 'pg', '~> 0.18'
 
 gem 'jquery-rails'
@@ -46,7 +46,7 @@ end
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.5'
   gem 'byebug', platform: :mri
 end
 group :test do

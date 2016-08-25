@@ -1,6 +1,5 @@
-class CreateReportableCache < ActiveRecord::Migration
-
-  def self.up
+class CreateReportableCache < ActiveRecord::Migration[5.0]
+  def up
     create_table :reportable_cache, :force => true do |t|
       t.string   :model_name,       :null => false, :limit => 100
       t.string   :report_name,      :null => false, :limit => 100
@@ -10,7 +9,7 @@ class CreateReportableCache < ActiveRecord::Migration
       t.float    :value,            :null => false,                :default => 0
       t.datetime :reporting_period, :null => false
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :reportable_cache, [

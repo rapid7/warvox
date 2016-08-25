@@ -1,6 +1,6 @@
-class InitialSchema < ActiveRecord::Migration
+# class InitialSchema < ActiveRecord::Migration
+class InitialSchema < ActiveRecord::Migration[5.0]
   def up
-
     # Require the intarray extension
     execute("CREATE EXTENSION IF NOT EXISTS intarray")
 
@@ -9,7 +9,7 @@ class InitialSchema < ActiveRecord::Migration
       t.text   :value, :null => true
       t.integer :thing_id, :null => true
       t.string :thing_type, :limit => 30, :null => true
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :settings, [ :thing_type, :thing_id, :var ], :unique => true
@@ -32,13 +32,13 @@ class InitialSchema < ActiveRecord::Migration
       t.string    :current_login_ip                                   # optional, see Authlogic::Session::MagicColumns
       t.string    :last_login_ip                                      # optional, see Authlogic::Session::MagicColumns
 
-      t.timestamps
+      t.timestamps null: false
       t.boolean   "enabled", :default => true
       t.boolean   "admin",   :default => true
     end
 
     create_table 'projects' do |t|
-      t.timestamps
+      t.timestamps null: false
       t.text      "name", :null => false
       t.text      "description"
       t.text    "included"
@@ -47,7 +47,7 @@ class InitialSchema < ActiveRecord::Migration
     end
 
     create_table "jobs" do |t|
-      t.timestamps
+      t.timestamps null: false
       t.integer  "project_id", :null => false
       t.string  "locked_by"
       t.timestamp  "locked_at"
@@ -62,7 +62,7 @@ class InitialSchema < ActiveRecord::Migration
     end
 
     create_table "lines" do |t|
-      t.timestamps
+      t.timestamps null: false
       t.text      "number", :null => false
       t.integer    "project_id", :null => false
       t.text      "line_type"
@@ -70,7 +70,7 @@ class InitialSchema < ActiveRecord::Migration
     end
 
     create_table "line_attributes" do |t|
-      t.timestamps
+      t.timestamps null: false
       t.integer    "line_id", :null => false
       t.integer    "project_id", :null => false
       t.text      "name", :null => false
@@ -80,7 +80,7 @@ class InitialSchema < ActiveRecord::Migration
 
     create_table "calls" do |t|
       # Created by the dialer job
-      t.timestamps
+      t.timestamps null: false
       t.text      "number", :null => false
       t.integer    "project_id", :null => false
       t.integer    "job_id", :null => false
@@ -115,7 +115,7 @@ class InitialSchema < ActiveRecord::Migration
     end
 
     create_table "signatures" do |t|
-      t.timestamps
+      t.timestamps null: false
       t.text      "name", :null => false
       t.string    "source"
       t.text      "description"
@@ -130,7 +130,7 @@ class InitialSchema < ActiveRecord::Migration
     end
 
     create_table "providers" do |t|
-      t.timestamps
+      t.timestamps null: false
       t.text      "name", :null => false
       t.text      "host", :null => false
       t.integer    "port", :null => false
@@ -151,7 +151,6 @@ class InitialSchema < ActiveRecord::Migration
     add_index :call_media, :call_id
     add_index :call_media, :project_id
     add_index :signature_fp, :signature_id
-
   end
 
   def down

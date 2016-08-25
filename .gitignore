@@ -30,3 +30,4 @@ config/secrets.yml
 playbook.retry
 
 TODO.md
+/public/assets
