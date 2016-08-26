@@ -7,13 +7,11 @@ The latest version of this software is available from http://github.com/rapid7/w
 Questions and suggestions can be sent to:
  x(at)hdm(dot)io
 
-#table of contents
  - [Installing](#installing)
- - [Development](#development)
 
 ##installing
 
-WarVOX requires a Linux operating system, preferably Ubuntu or Debian, but Kali should work as well.
+WarVOX requires a Linux operating system, preferably Ubuntu or Debian.
 
 WarVOX requires PostgreSQL 9.1 or newer with the "contrib" package installed for integer array support.
 
@@ -88,19 +86,3 @@ Access the web interface at http://127.0.0.1:7777/
 
 At this point you can configure a new IAX2 provider, create a project, and start making calls.
 
-##development
-
-Using the Dockerfile
-
-Run a postgres container
-
-	docker pull postgres
-	docker run -d --name=postgres postgres
-
-Build the image 
-
-	docker build -t warvox/test .
-
-Run the image 
-
-	docker run -p 7777:7777 -ti --link postgres:db warvox/test
