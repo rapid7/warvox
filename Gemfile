@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'unicorn'
-gem 'rails', '5.0.0'
+gem 'rails', '~> 5.0', '>= 5.0.0.1'
 gem 'pg', '~> 0.18'
 
 gem 'jquery-rails'
@@ -16,9 +16,9 @@ gem 'coffee-rails', '~> 4.2'
 gem 'uglifier',     '>= 1.3.0'
 gem 'autoprefixer-rails'
 
-gem 'authlogic', git: "https://github.com/binarylogic/authlogic.git"
+gem 'authlogic', git: 'https://github.com/binarylogic/authlogic.git'
 gem 'rails-settings-cached', '>= 0.4.1'
-gem "breadcrumbs_on_rails"
+gem 'breadcrumbs_on_rails'
 
 gem 'formtastic', '>= 3.0.0'
 gem 'formtastic-bootstrap', '>= 3.0.0'
@@ -26,7 +26,8 @@ gem 'therubyracer'
 
 gem 'font-awesome-rails'
 
-gem 'reportable', :git => 'https://github.com/hdm/reportable.git', :require => 'saulabs/reportable'
+gem 'reportable', git: 'https://github.com/hdm/reportable.git',
+                  require: 'saulabs/reportable'
 
 gem 'will_paginate', '~> 3.0'
 gem 'will_paginate-bootstrap'
@@ -46,7 +47,7 @@ end
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.5'
   gem 'byebug', platform: :mri
 end
 group :test do
