@@ -35,15 +35,9 @@ class JobsController < ApplicationController
     @job = Job.find(params[:id])
 
     @call_results = {
-<<<<<<< HEAD
-      Timeout: @job.calls.count(conditions: { answered: false }),
-      Busy: @job.calls.count(conditions: { busy: true }),
-      Answered: @job.calls.count(conditions: { answered: true })
-=======
       :Timeout  => @job.calls.where(:answered => false ).count,
       :Busy     => @job.calls.where(:busy     => true).count,
       :Answered => @job.calls.where(:answered => true).count,
->>>>>>> a2c220956e092cd5bad321f827e7d3663276c312
     }
 
 
@@ -150,18 +144,12 @@ class JobsController < ApplicationController
   end
 
   def purge_calls
-<<<<<<< HEAD
-    Call.delete_all(id: params[:result_ids])
-    CallMedium.delete_all(call_id: params[:result_ids])
-    flash[:notice] = "Purged #{params[:result_ids].length} calls"
-=======
     unless params[:result_ids].blank?
       Call.delete_all(:id => params[:result_ids])
       CallMedium.delete_all(:call_id => params[:result_ids])
       flash[:notice] = "Purged #{params[:result_ids].length} calls"
     end
 
->>>>>>> a2c220956e092cd5bad321f827e7d3663276c312
     if params[:id]
       @job = Job.find(params[:id])
       redirect_to view_results_path(@job.project_id, @job.id)
