@@ -351,6 +351,7 @@ DEPENDENCIES
   kissfft
   launchy
   pg (~> 0.18)
+  pry
   psych_shield
   rails (= 5.0.0)
   rails-settings-cached (>= 0.4.1)
