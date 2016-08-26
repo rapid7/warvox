@@ -40,16 +40,16 @@ class JobsController < ApplicationController
     @job = Job.find(params[:id])
 
     @call_results = {
-      :Timeout  => @job.calls.count(:conditions => { :answered => false }),
-      :Busy     => @job.calls.count(:conditions => { :busy     => true }),
-      :Answered => @job.calls.count(:conditions => { :answered => true }),
+      :Timeout  => @job.calls.where(:answered => false ).count,
+      :Busy     => @job.calls.where(:busy     => true).count,
+      :Answered => @job.calls.where(:answered => true).count,
     }
 
     sort_by   = params[:sort_by] || 'number'
     sort_dir = params[:sort_dir] || 'asc'
 
     @results = []
-    @results_total_count = @job.calls.count()
+    @results_total_count = @job.calls.count
 
     if request.format.json?
       if params[:iDisplayLength] == '-1'
@@ -144,9 +144,12 @@ class JobsController < ApplicationController
   end
 
   def purge_calls
-    Call.delete_all(:id => params[:result_ids])
-    CallMedium.delete_all(:call_id => params[:result_ids])
-    flash[:notice] = "Purged #{params[:result_ids].length} calls"
+    unless params[:result_ids].blank?
+      Call.delete_all(:id => params[:result_ids])
+      CallMedium.delete_all(:call_id => params[:result_ids])
+      flash[:notice] = "Purged #{params[:result_ids].length} calls"
+    end
+
     if params[:id]
       @job = Job.find(params[:id])
       redirect_to view_results_path(@job.project_id, @job.id)
