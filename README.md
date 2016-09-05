@@ -64,6 +64,10 @@ Copy the example secrets configuration to secrets.yml:
 
 	$ cp config/secrets.yml.example config/secrets.yml
 
+Create a new secrect token: 
+
+	$ rake secret > config/session.key
+
 Modify config/database.yml to include the password set previously
 
 Initialize the WarVOX database:
