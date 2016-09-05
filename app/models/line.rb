@@ -12,7 +12,7 @@
 #
 
 class Line < ApplicationRecord
-  has_many :line_attributes, :dependent => :delete_all
+  has_many :line_attributes, dependent: :delete_all
   belongs_to :project
 
   def set_attribute(name, value, ctype='text/plain')
@@ -24,6 +24,6 @@ class Line < ApplicationRecord
   end
 
   def get_attribute(name)
-    LineAttribute.where(:line_id => self[:id], :name => name).first
+    LineAttribute.where(line_id: self[:id], name: name).first
   end
 end

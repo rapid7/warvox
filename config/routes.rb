@@ -50,5 +50,5 @@ Rails.application.routes.draw do
   get '/help'                => 'home#help',  :as => :help
   get '/check'               => 'home#check', :as => :check
 
-  root :to => "projects#index"
+  root to: "projects#index"
 end

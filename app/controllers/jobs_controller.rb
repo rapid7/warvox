@@ -35,9 +35,9 @@ class JobsController < ApplicationController
     @job = Job.find(params[:id])
 
     @call_results = {
-      :Timeout  => @job.calls.where(:answered => false ).count,
-      :Busy     => @job.calls.where(:busy     => true).count,
-      :Answered => @job.calls.where(:answered => true).count,
+      Timeout: @job.calls.where(answered: false ).count,
+      Busy: @job.calls.where(busy: true).count,
+      Answered: @job.calls.where(answered: true).count,
     }
 
 
@@ -145,8 +145,8 @@ class JobsController < ApplicationController
 
   def purge_calls
     unless params[:result_ids].blank?
-      Call.delete_all(:id => params[:result_ids])
-      CallMedium.delete_all(:call_id => params[:result_ids])
+      Call.delete_all(id: params[:result_ids])
+      CallMedium.delete_all(call_id: params[:result_ids])
       flash[:notice] = "Purged #{params[:result_ids].length} calls"
     end
 

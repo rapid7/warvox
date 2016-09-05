@@ -1,6 +1,6 @@
 class UserSessionsController < ApplicationController
-  before_action :require_no_user, :only => [:new, :create]
-  before_action :require_user, :only => :destroy
+  before_action :require_no_user, only: [:new, :create]
+  before_action :require_user, only: :destroy
   layout 'login'
 
   def new
@@ -12,7 +12,7 @@ class UserSessionsController < ApplicationController
     if @user_session.save
       redirect_back_or_default projects_path
     else
-      render :action => :new
+      render action: :new
     end
   end
 

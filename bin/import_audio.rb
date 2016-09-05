@@ -49,7 +49,7 @@ project  = nil
 provider = nil
 
 if project_id
-  project = Project.where(:id => project_id).first
+  project = Project.where(id: project_id).first
   unless project
     $stderr.puts "Error: Specified Project ID not found"
     exit(1)
@@ -57,7 +57,7 @@ if project_id
 end
 
 if provider_id
-  provider = Provider.where(:id => provider_id).first
+  provider = Provider.where(id: provider_id).first
   unless provider
     $stderr.puts "Error: Specified Provider ID not found"
     exit(1)
@@ -66,21 +66,21 @@ end
 
 unless project
   project = Project.create(
-    :name       => "Import from #{dir} at #{Time.now.utc.to_s}",
-    :created_by => "importer"
+    name: "Import from #{dir} at #{Time.now.utc.to_s}",
+    created_by: "importer"
   )
 end
 
 provider = Provider.first
 unless provider
   provider = Provider.create(
-    :name    => 'Import Provider',
-    :host    => 'localhost',
-    :port    => 4369,
-    :user    => "null",
-    :pass    => "null",
-    :lines   => 1,
-    :enabled => false
+    name: 'Import Provider',
+    host: 'localhost',
+    port: 4369,
+    user: "null",
+    pass: "null",
+    lines: 1,
+    enabled: false
   )
 end
 
@@ -92,7 +92,7 @@ job.locked_at    = Time.now.utc
 job.started_at   = Time.now.utc
 job.created_by   = "importer"
 job.task         = "import"
-job.args         = Marshal.dump({ :directory => dir, :project_id => project.id, :provider_id => provider.id })
+job.args         = Marshal.dump({ directory: dir, project_id: project.id, provider_id: provider.id })
 job.status       = "running"
 job.save!
 

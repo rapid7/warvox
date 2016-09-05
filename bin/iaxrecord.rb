@@ -16,7 +16,7 @@ require "optparse"
 
 parser = OptionParser.new
 opts   = {
-  :recording_time => 52
+  recording_time: 52
 }
 
 parser.banner = "Usage: #{$0} [options]"

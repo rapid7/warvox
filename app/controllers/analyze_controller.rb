@@ -2,8 +2,8 @@ class AnalyzeController < ApplicationController
 
   def index
     @jobs = Job.order('id DESC').paginate(
-      :page => params[:page],
-      :per_page => 30
+      page: params[:page],
+      per_page: 30
     )
   end
 
@@ -13,12 +13,12 @@ class AnalyzeController < ApplicationController
     @shown    = params[:show]
 
     if request.format.html?
-      ltypes = Call.select('DISTINCT line_type').where(:job_id => @job_id).map{|r| r.line_type}
+      ltypes = Call.select('DISTINCT line_type').where(job_id: @job_id).map{|r| r.line_type}
       res_types = {}
 
       ltypes.each do |k|
         next if not k
-        res_types[k.capitalize.to_sym] = Call.where(:job_id => @job_id, :line_type => k).count
+        res_types[k.capitalize.to_sym] = Call.where(job_id: @job_id, line_type: k).count
       end
 
       @lines_by_type = res_types
@@ -51,7 +51,7 @@ class AnalyzeController < ApplicationController
     respond_to do |format|
       format.html
       format.json {
-        render :content_type => 'application/json', :json => render_to_string(:partial => 'view', :results => @results, :lines_by_type => @lines_by_type )
+        render content_type: 'application/json', json: render_to_string(partial: 'view', results: @results, lines_by_type: @lines_by_type )
       }
     end
 
@@ -60,9 +60,9 @@ class AnalyzeController < ApplicationController
   def view_matches
     @result = Call.find(params[:call_id])
     @match_scopes = [
-      { :scope => 'job', :label => 'This Job' },
-      { :scope => 'project', :label => 'This Project' },
-      { :scope => 'global', :label => 'All Projects' }
+      { scope: 'job', label: 'This Job' },
+      { scope: 'project', label: 'This Project' },
+      { scope: 'global', label: 'All Projects' }
     ]
 
     @job_id = params[:job_id]
@@ -111,7 +111,7 @@ class AnalyzeController < ApplicationController
     respond_to do |format|
       format.html
       format.json {
-        render :content_type => 'application/json', :json => render_to_string(:partial => 'index', :results => @results, :lines_by_type => @lines_by_type )
+        render content_type: 'application/json', json: render_to_string(partial: 'index', results: @results, lines_by_type: @lines_by_type )
       }
     end
 
@@ -122,7 +122,7 @@ class AnalyzeController < ApplicationController
     cpath = nil
     cdata = "File not found"
 
-    res = CallMedium.where(:call_id => params[:result_id].to_i).first
+    res = CallMedium.where(call_id: params[:result_id].to_i).first
 
     if res
       case params[:rtype]
@@ -153,7 +153,7 @@ class AnalyzeController < ApplicationController
       end
     end
 
-    send_data(cdata, :type => ctype, :disposition => 'inline')
+    send_data(cdata, type: ctype, disposition: 'inline')
   end
 
   #

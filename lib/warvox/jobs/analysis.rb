@@ -72,27 +72,27 @@ class Analysis < Base
     case @conf[:scope]
     when 'calls'
       if @conf[:force]
-        query = {:id => @conf[:target_ids], :answered => true, :busy => false}
+        query = {id: @conf[:target_ids], answered: true, busy: false}
       else
-        query = {:id => @conf[:target_ids], :answered => true, :busy => false, :analysis_started_at => nil}
+        query = {id: @conf[:target_ids], answered: true, busy: false, analysis_started_at: nil}
       end
     when 'job'
       if @conf[:force]
-        query = {:job_id => @conf[:target_id], :answered => true, :busy => false}
+        query = {job_id: @conf[:target_id], answered: true, busy: false}
       else
-        query = {:job_id => @conf[:target_id], :answered => true, :busy => false, :analysis_started_at => nil}
+        query = {job_id: @conf[:target_id], answered: true, busy: false, analysis_started_at: nil}
       end
     when 'project'
       if @conf[:force]
-        query = {:project_id => @conf[:target_id], :answered => true, :busy => false}
+        query = {project_id: @conf[:target_id], answered: true, busy: false}
       else
-        query = {:project_id => @conf[:target_id], :answered => true, :busy => false, :analysis_started_at => nil}
+        query = {project_id: @conf[:target_id], answered: true, busy: false, analysis_started_at: nil}
       end
     when 'global'
       if @conf[:force]
-        query = {:answered => true, :busy => false}
+        query = {answered: true, busy: false}
       else
-        query = {:answered => true, :busy => false, :analysis_started_at => nil}
+        query = {answered: true, busy: false, analysis_started_at: nil}
       end
     else
       # Bail if we don't have a valid scope
@@ -295,14 +295,14 @@ class Analysis < Base
     sproc = Classifier.new
     sproc.data =
     {
-      :raw  => raw,
-      :freq => freq,
-      :fcnt => fcnt,
-      :fft  => fft,
-      :pks  => pks,
-      :pkz  => pkz,
-      :maxf => maxf,
-      :maxp => maxp
+      raw: raw,
+      freq: freq,
+      fcnt: fcnt,
+      fft: fft,
+      pks: pks,
+      pkz: pkz,
+      maxf: maxf,
+      maxp: maxp
     }
 
     WarVOX::Config.classifiers_load.each do |sigfile|

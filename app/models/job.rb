@@ -20,10 +20,10 @@
 
 class Job < ApplicationRecord
 
-  reportable :hourly, :aggregation => :count, :grouping => :hour, :date_column => :created_at, :cacheable => false
-  reportable :daily, :aggregation => :count, :grouping => :day, :date_column => :created_at, :cacheable => false
-  reportable :weeky, :aggregation => :count, :grouping => :week, :date_column => :created_at, :cacheable => false
-  reportable :monthly, :aggregation => :count, :grouping => :month, :date_column => :created_at, :cacheable => false
+  reportable :hourly, aggregation: :count, grouping: :hour, date_column: :created_at, cacheable: false
+  reportable :daily, aggregation: :count, grouping: :day, date_column: :created_at, cacheable: false
+  reportable :weeky, aggregation: :count, grouping: :week, date_column: :created_at, cacheable: false
+  reportable :monthly, aggregation: :count, grouping: :month, date_column: :created_at, cacheable: false
 
   class JobValidator < ActiveModel::Validator
     def validate(record)
@@ -54,10 +54,10 @@ class Job < ApplicationRecord
         unless ['calls', 'job', 'project', 'global'].include?(record.scope)
           record.errors[:scope] << "Scope must be calls, job, project, or global"
         end
-        if record.scope == "job" and Job.where(:id => record.target_id.to_i, :task => ['import', 'dialer']).count == 0
+        if record.scope == "job" and Job.where(id: record.target_id.to_i, task: ['import', 'dialer']).count == 0
           record.errors[:job_id] << "The job_id is not valid"
         end
-        if record.scope == "project" and Project.where(:id => record.target_id.to_i).count == 0
+        if record.scope == "project" and Project.where(id: record.target_id.to_i).count == 0
           record.errors[:project_id] << "The project_id is not valid"
         end
         if record.scope == "calls" and (record.target_ids.nil? or record.target_ids.length == 0)
@@ -71,7 +71,7 @@ class Job < ApplicationRecord
   end
 
   # XXX: Purging a single job will be slow, but deleting the project is fast
-  has_many :calls, :dependent => :destroy
+  has_many :calls, dependent: :destroy
 
   belongs_to :project
 
@@ -97,9 +97,9 @@ class Job < ApplicationRecord
 
   def update_progress(pct)
     if pct >= 100
-      self.class.where(id: self.id).update_all(:progress => pct, :completed_at => Time.now, :status => 'completed')
+      self.class.where(id: self.id).update_all(progress: pct, completed_at: Time.now, status: 'completed')
     else
-      self.class.where(id: self.id).update_all(:progress => pct)
+      self.class.where(id: self.id).update_all(progress: pct)
     end
   end
 
@@ -112,10 +112,10 @@ class Job < ApplicationRecord
     when 'dialer'
       self.status = 'submitted'
       self.args   = Marshal.dump({
-        :range    => self.range,
-        :lines    => self.lines.to_i,
-        :seconds  => self.seconds.to_i,
-        :cid_mask => self.cid_mask
+        range: self.range,
+        lines: self.lines.to_i,
+        seconds: self.seconds.to_i,
+        cid_mask: self.cid_mask
       })
 
       return self.save
@@ -123,18 +123,18 @@ class Job < ApplicationRecord
     when 'analysis'
       self.status = 'submitted'
       d = {
-                                :scope      => self.scope,          # job / project/ global
-                                :force      => !!(self.force),      # true / false
-                                :target_id  => self.target_id.to_i, # job_id or project_id or nil
-                                :target_ids => (self.target_ids || []).map{|x| x.to_i }
+                                scope: self.scope,          # job / project/ global
+                                force: !!(self.force),      # true / false
+                                target_id: self.target_id.to_i, # job_id or project_id or nil
+                                target_ids: (self.target_ids || []).map{|x| x.to_i }
                         }
       $stderr.puts d.inspect
 
       self.args = Marshal.dump({
-        :scope      => self.scope,          # job / project/ global
-        :force      => !!(self.force),      # true / false
-        :target_id  => self.target_id.to_i, # job_id or project_id or nil
-        :target_ids => (self.target_ids || []).map{|x| x.to_i }
+        scope: self.scope,          # job / project/ global
+        force: !!(self.force),      # true / false
+        target_id: self.target_id.to_i, # job_id or project_id or nil
+        target_ids: (self.target_ids || []).map{|x| x.to_i }
       })
       return self.save
     else

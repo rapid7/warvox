@@ -32,7 +32,7 @@ def stop
   end
 
   # Update the database
-  Job.update_all({ :status => "stopped", :completed_at => Time.now.utc}, { :id => @jobs.map{|j| j[:id] } })
+  Job.update_all({ status: "stopped", completed_at: Time.now.utc}, { id: @jobs.map{|j| j[:id] } })
 
   # Signal running jobs to shut down
   @jobs.map{|j| Process.kill("TERM", j[:pid]) rescue nil }
@@ -55,8 +55,8 @@ end
 def schedule_job(j)
   WarVOX::Log.debug("Worker Manager is launching job #{j.id}")
   @jobs <<  {
-    :id  => j.id,
-    :pid => Process.fork { exec("#{@worker_path} #{j.id}") }
+    id: j.id,
+    pid: Process.fork { exec("#{@worker_path} #{j.id}") }
   }
 end
 
@@ -67,7 +67,7 @@ def stop_cancelled_jobs
   end
 
   return if jids.length == 0
-  Job.where(:status => 'cancelled', :id => jids).find_each do |j|
+  Job.where(status: 'cancelled', id: jids).find_each do |j|
     job = @jobs.select{ |o| o[:id] == j.id }.first
     next unless job and job[:pid]
     pid = job[:pid]
@@ -131,7 +131,7 @@ def clear_stale_jobs
   # Mark these jobs as abandoned
   if dead.length > 0
     WarVOX::Log.debug("Worker Manager is marking #{dead.length} jobs as abandoned")
-    Job.where(:id => dead).update_all({locked_by: nil, status: 'abandoned'})
+    Job.where(id: dead).update_all({locked_by: nil, status: 'abandoned'})
   end
 end
 

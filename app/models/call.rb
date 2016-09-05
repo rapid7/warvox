@@ -26,20 +26,20 @@
 
 class Call < ApplicationRecord
 
-  reportable :hourly, :aggregation => :count, :grouping => :hour, :live_data => true, :cacheable => false, :limit => 24
-  reportable :daily, :aggregation => :count, :grouping => :day, :live_data => true, :cacheable => false, :limit => 7
-  reportable :weekly, :aggregation => :count, :grouping => :week, :live_data => true, :cacheable => false, :limit => 52
-  reportable :monthly, :aggregation => :count, :grouping => :month, :live_data => true, :cacheable => false, :limit => 12
+  reportable :hourly, aggregation: :count, grouping: :hour, live_data: true, cacheable: false, limit: 24
+  reportable :daily, aggregation: :count, grouping: :day, live_data: true, cacheable: false, limit: 7
+  reportable :weekly, aggregation: :count, grouping: :week, live_data: true, cacheable: false, limit: 52
+  reportable :monthly, aggregation: :count, grouping: :month, live_data: true, cacheable: false, limit: 12
 
-  reportable :analyzed_hourly, :aggregation => :count, :grouping => :hour, :date_column => :analysis_completed_at, :live_data => true, :cacheable => false, :limit => 24
-  reportable :analyzed_daily, :aggregation => :count, :grouping => :day, :date_column => :analysis_completed_at, :live_data => true, :cacheable => false, :limit => 7
-  reportable :analyzed_weekly, :aggregation => :count, :grouping => :week, :date_column => :analysis_completed_at, :live_data => true, :cacheable => false, :limit => 52
-  reportable :analyzed_monthly, :aggregation => :count, :grouping => :month, :date_column => :analysis_completed_at, :live_data => true, :cacheable => false, :limit => 12
+  reportable :analyzed_hourly, aggregation: :count, grouping: :hour, date_column: :analysis_completed_at, live_data: true, cacheable: false, limit: 24
+  reportable :analyzed_daily, aggregation: :count, grouping: :day, date_column: :analysis_completed_at, live_data: true, cacheable: false, limit: 7
+  reportable :analyzed_weekly, aggregation: :count, grouping: :week, date_column: :analysis_completed_at, live_data: true, cacheable: false, limit: 52
+  reportable :analyzed_monthly, aggregation: :count, grouping: :month, date_column: :analysis_completed_at, live_data: true, cacheable: false, limit: 12
 
   belongs_to :project
   belongs_to :provider
   belongs_to :job
-  has_one :call_medium, :dependent => :delete
+  has_one :call_medium, dependent: :delete
 
   def matches
     #    "AND (( icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}\'::int[] & calls.fprint::int[]) / icount(\'{#{fprint.map{|x| x.to_s}.join(",")}}'::int[])::float ) * 100.0 ) > 10.0 " +
@@ -103,7 +103,7 @@ class Call < ApplicationRecord
     args << min_match.to_f
 
     query = [match_sql, *args]
-    Call.paginate_by_sql(query, :page => page, :per_page => per_page)
+    Call.paginate_by_sql(query, page: page, per_page: per_page)
   end
 
   def media

@@ -9,7 +9,7 @@ require 'bundler/setup'
 # rails/all must be required explicitly to get the railties that pro/ui/config/application.rb uses
 require 'rails/all'
 # require all the gems in the current environment
-Bundler.require(*Rails.groups(:assets => %w(development test cucumber)))
+Bundler.require(*Rails.groups(assets: %w(development test cucumber)))
 
 APP_PATH = File.expand_path('../../config/application',  __FILE__)
 require File.expand_path('../../config/boot',  __FILE__)

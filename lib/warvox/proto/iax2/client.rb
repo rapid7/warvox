@@ -22,10 +22,10 @@ class Client
 
   def initialize(uopts={})
     opts = {
-      :caller_number => '15555555555',
-      :caller_name   => '',
-      :server_port   => IAX2_DEFAULT_PORT,
-      :context       => { }
+      caller_number: '15555555555',
+      caller_name: '',
+      server_port: IAX2_DEFAULT_PORT,
+      context: { }
     }.merge(uopts)
 
     self.caller_name   = opts[:caller_name]

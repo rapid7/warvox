@@ -51,7 +51,7 @@ end
 fields = %W{ number line_type caller_id answered busy audio_length ring_length peak_freq }
 begin
   $stdout.puts fields.to_csv
-  cond = { :project_id => project_id.to_i }
+  cond = { project_id: project_id.to_i }
   if line_type
     cond[:line_type] = line_type.downcase
   end

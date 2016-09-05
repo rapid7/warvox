@@ -3,8 +3,8 @@ class ProvidersController < ApplicationController
   def index
 
      @providers = Provider.order('id DESC').paginate(
-    :page => params[:page],
-    :per_page => 10
+    page: params[:page],
+    per_page: 10
   )
 
   @new_provider = Provider.new
@@ -12,7 +12,7 @@ class ProvidersController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @providers }
+      format.xml  { render xml: @providers }
     end
   end
 
@@ -23,7 +23,7 @@ class ProvidersController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @provider }
+      format.xml  { render xml: @provider }
     end
   end
 
@@ -40,10 +40,10 @@ class ProvidersController < ApplicationController
       if @provider.save
         flash[:notice] = 'Provider was successfully created.'
         format.html { redirect_to providers_path }
-        format.xml  { render :xml => @provider, :status => :created, :location => providers_path }
+        format.xml  { render xml: @provider, status: :created, location: providers_path }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @provider.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.xml  { render xml: @provider.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -63,8 +63,8 @@ class ProvidersController < ApplicationController
         format.html { redirect_to providers_path }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @provider.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.xml  { render xml: @provider.errors, status: :unprocessable_entity }
       end
     end
   end
