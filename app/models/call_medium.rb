@@ -14,7 +14,7 @@
 #  png_sig_freq :binary
 #
 
-class CallMedium < ActiveRecord::Base
+class CallMedium < ApplicationRecord
   belongs_to :call
   belongs_to :project
 end

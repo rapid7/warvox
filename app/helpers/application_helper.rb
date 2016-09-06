@@ -2,7 +2,7 @@
 module ApplicationHelper
 
   def select_tag_for_filter(nvpairs, params)
-    _url = ( url_for :overwrite_params => { }).split('?')[0]
+    _url = ( url_for overwrite_params: { }).split('?')[0]
     _html = %{<span class="pull-left filter-label">Filter: </span> }
     _html << %{<select name="show" class="filter-select" }
     _html << %{onchange="window.location='#{_url}' + '?show=' + this.value"> }
@@ -19,7 +19,7 @@ module ApplicationHelper
   end
 
   def select_match_scope(nvpairs, params)
-    _url = ( url_for :overwrite_params => { }).split('?')[0]
+    _url = ( url_for overwrite_params: { }).split('?')[0]
     _html = %{<span class="pull-left filter-label">Matching Scope: </span> }
     _html << %{<select name="match_scope" class="filter-select" }
     _html << %{onchange="window.location='#{_url}' + '?match_scope=' + this.value"> }
@@ -45,8 +45,8 @@ module ApplicationHelper
 
       ttip = raw("<div class='task_args_formatted'>")
       info.each_pair do |k,v|
-        ttip << raw("<div class='task_args_var'>") + h(truncate(k.to_s, :length => 20)) + raw(": </div> ")
-        ttip << raw("<div class='task_args_val'>") + h(truncate((v.to_s), :length => 20)) + raw("&nbsp;</div>")
+        ttip << raw("<div class='task_args_var'>") + h(truncate(k.to_s, length: 20)) + raw(": </div> ")
+        ttip << raw("<div class='task_args_val'>") + h(truncate((v.to_s), length: 20)) + raw("&nbsp;</div>")
       end
       ttip << raw("</div>\n")
       outp = raw("<span class='xpopover' rel='popover' data-title=\"#{job.task.capitalize} Task ##{job.id}\" data-content=\"#{ttip}\">#{h job.task.capitalize}</span>")
@@ -120,9 +120,9 @@ module ApplicationHelper
   def submit_checkboxes_to(name, path, html={})
     if html[:confirm]
       confirm = html.delete(:confirm)
-      link_to(name, "#", html.merge({:onclick => "if(confirm('#{h confirm}')){ submit_checkboxes_to('#{path}','#{form_authenticity_token}')}else{return false;}" }))
+      link_to(name, "#", html.merge({onclick: "if(confirm('#{h confirm}')){ submit_checkboxes_to('#{path}','#{form_authenticity_token}')}else{return false;}" }))
     else
-      link_to(name, "#", html.merge({:onclick => "submit_checkboxes_to('#{path}','#{form_authenticity_token}')" }))
+      link_to(name, "#", html.merge({onclick: "submit_checkboxes_to('#{path}','#{form_authenticity_token}')" }))
     end
   end
 
@@ -143,7 +143,7 @@ module ApplicationHelper
   # Generate the markup for the call's row checkbox.
   # Returns the String markup html, escaped for json.
   def call_checkbox_tag(call)
-    check_box_tag("result_ids[]", call.id, false, :id => nil).to_json.html_safe
+    check_box_tag("result_ids[]", call.id, false, id: nil).to_json.html_safe
   end
 
   def call_number_html(call)

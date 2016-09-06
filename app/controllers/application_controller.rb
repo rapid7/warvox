@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery
+  protect_from_forgery with: :exception
   helper :all
 
   helper_method :current_user_session, :current_user
-  before_filter :require_user, :load_project
+  before_action :require_user, :load_project
   add_breadcrumb :projects, :root_path
 
   include ActionView::Helpers::NumberHelper
@@ -52,9 +52,9 @@ private
     return true unless current_user
 
     if params[:project_id]
-      @project = Project.where(:id => params[:project_id].to_i).first
+      @project = Project.where(id: params[:project_id].to_i).first
     elsif session[:project_id]
-      @project = Project.where(:id => session[:project_id].to_i).first
+      @project = Project.where(id: session[:project_id].to_i).first
     end
 
     if @project and @project.id and not (session[:project_id] and session[:project_id] == @project.id)

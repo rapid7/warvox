@@ -2,34 +2,34 @@ class ProjectsController < ApplicationController
 
   def index
      @projects = Project.order('id DESC').paginate(
-      :page => params[:page],
-      :per_page => 10
+      page: params[:page],
+      per_page: 10
     )
 
     @new_project = Project.new
 
     respond_to do |format|
       format.html
-      format.xml  { render :xml => @projects }
+      format.xml  { render xml: @projects }
     end
   end
 
   def show
     @project = Project.find(params[:id])
-    @active_jobs = @project.jobs.where(:status => 'running', :completed_at => nil)
+    @active_jobs = @project.jobs.where(status: 'running', completed_at: nil)
     @inactive_jobs  = @project.jobs.order('id DESC').where('status NOT IN (?)', ['submitted', 'scheduled', 'running']).paginate(
-      :page => params[:page],
-      :per_page => 30
+      page: params[:page],
+      per_page: 30
     )
 
     @boxes = {
-      :called    => { :cnt => @project.calls.count },
-      :answered  => { :cnt => @project.calls.where(:answered => true).count },
-      :analyzed  => { :cnt => @project.calls.where('analysis_completed_at IS NOT NULL').count },
-      :voice     => { :cnt => @project.lines.where(:line_type => 'voice').count },
-      :voicemail => { :cnt => @project.lines.where(:line_type => 'voicemail').count },
-      :fax       => { :cnt => @project.lines.where(:line_type => 'fax').count },
-      :modem     => { :cnt => @project.lines.where(:line_type => 'modem').count }
+      called: { cnt: @project.calls.count },
+      answered: { cnt: @project.calls.where(answered: true).count },
+      analyzed: { cnt: @project.calls.where('analysis_completed_at IS NOT NULL').count },
+      voice: { cnt: @project.lines.where(line_type: 'voice').count },
+      voicemail: { cnt: @project.lines.where(line_type: 'voicemail').count },
+      fax: { cnt: @project.lines.where(line_type: 'fax').count },
+      modem: { cnt: @project.lines.where(line_type: 'modem').count }
     }
 
     if @boxes[:called][:cnt] == 0
@@ -78,7 +78,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.xml  { render :xml => @project }
+      format.xml  { render xml: @project }
     end
   end
 
@@ -86,7 +86,7 @@ class ProjectsController < ApplicationController
     @new_project = Project.new
     respond_to do |format|
       format.html
-      format.xml  { render :xml => @new_project }
+      format.xml  { render xml: @new_project }
     end
   end
 
@@ -96,16 +96,16 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @new_project = Project.new(params[:project])
+    @new_project = Project.new(project_params)
     @new_project.created_by = current_user.login
 
     respond_to do |format|
       if @new_project.save
         format.html { redirect_to(project_path(@new_project)) }
-        format.xml  { render :xml => @project, :status => :created, :location => @new_project }
+        format.xml  { render xml: @project, status: :created, location: @new_project }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @new_project.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.xml  { render xml: @new_project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -114,12 +114,12 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
 
     respond_to do |format|
-      if @project.update_attributes(params[:project])
+      if @project.update_attributes(project_params)
         format.html { redirect_to projects_path }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @project.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.xml  { render xml: @project.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -132,5 +132,11 @@ class ProjectsController < ApplicationController
       format.html { redirect_to(projects_url) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+
+  def project_params
+    params.require(:project).permit(:name, :description)
   end
 end

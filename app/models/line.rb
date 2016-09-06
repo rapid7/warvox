@@ -11,8 +11,8 @@
 #  notes      :text
 #
 
-class Line < ActiveRecord::Base
-  has_many :line_attributes, :dependent => :delete_all
+class Line < ApplicationRecord
+  has_many :line_attributes, dependent: :delete_all
   belongs_to :project
 
   def set_attribute(name, value, ctype='text/plain')
@@ -24,6 +24,6 @@ class Line < ActiveRecord::Base
   end
 
   def get_attribute(name)
-    LineAttribute.where(:line_id => self[:id], :name => name).first
+    LineAttribute.where(line_id: self[:id], name: name).first
   end
 end

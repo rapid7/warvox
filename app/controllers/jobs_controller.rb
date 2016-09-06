@@ -1,24 +1,19 @@
 class JobsController < ApplicationController
-
   require 'shellwords'
 
   def index
-    @reload_interval = 20000
+    @reload_interval = 20_000
 
-    @submitted_jobs = Job.where(:status => ['submitted', 'scheduled'], :completed_at => nil)
-    @active_jobs    = Job.where(:status => 'running', :completed_at => nil)
-    @inactive_jobs  = Job.order('id DESC').where('status NOT IN (?)', ['submitted', 'scheduled', 'running']).paginate(
-      :page => params[:page],
-      :per_page => 30
+    @submitted_jobs = Job.where(status: %w(submitted scheduled), completed_at: nil)
+    @active_jobs    = Job.where(status: 'running', completed_at: nil)
+    @inactive_jobs  = Job.order('id DESC').where('status NOT IN (?)', %w(submitted scheduled running)).paginate(
+      page: params[:page],
+      per_page: 30
     )
 
-    if @active_jobs.length > 0
-      @reload_interval = 5000
-    end
+    @reload_interval = 5000 unless @active_jobs.empty?
 
-    if @submitted_jobs.length > 0
-      @reload_interval = 3000
-    end
+    @reload_interval = 3000 unless @submitted_jobs.empty?
 
     respond_to do |format|
       format.html
@@ -27,8 +22,8 @@ class JobsController < ApplicationController
 
   def results
     @jobs = @project.jobs.order('id DESC').where('(task = ? OR task = ?) AND completed_at IS NOT NULL', 'dialer', 'import').paginate(
-      :page => params[:page],
-      :per_page => 30
+      page: params[:page],
+      per_page: 30
     )
 
     respond_to do |format|
@@ -40,16 +35,17 @@ class JobsController < ApplicationController
     @job = Job.find(params[:id])
 
     @call_results = {
-      :Timeout  => @job.calls.count(:conditions => { :answered => false }),
-      :Busy     => @job.calls.count(:conditions => { :busy     => true }),
-      :Answered => @job.calls.count(:conditions => { :answered => true }),
+      Timeout: @job.calls.where(answered: false ).count,
+      Busy: @job.calls.where(busy: true).count,
+      Answered: @job.calls.where(answered: true).count,
     }
 
-    sort_by   = params[:sort_by] || 'number'
+
+    sort_by = params[:sort_by] || 'number'
     sort_dir = params[:sort_dir] || 'asc'
 
     @results = []
-    @results_total_count = @job.calls.count()
+    @results_total_count = @job.calls.count
 
     if request.format.json?
       if params[:iDisplayLength] == '-1'
@@ -61,14 +57,14 @@ class JobsController < ApplicationController
 
       calls_search
       @results = @job.calls.includes(:provider).where(@search_conditions).limit(@results_per_page).offset(@results_offset).order(calls_sort_option)
-      @results_total_display_count = @job.calls.includes(:provider).where(@search_conditions).count()
+      @results_total_display_count = @job.calls.includes(:provider).where(@search_conditions).count
     end
 
     respond_to do |format|
       format.html
-      format.json {
-        render :content_type => 'application/json', :json => render_to_string(:partial => 'view_results', :results => @results, :call_results => @call_results )
-      }
+      format.json do
+        render content_type: 'application/json', json: render_to_string(partial: 'view_results', results: @results, call_results: @call_results)
+      end
     end
   end
 
@@ -77,20 +73,20 @@ class JobsController < ApplicationController
   # Returns the SQL String.
   def calls_sort_option
     column = case params[:iSortCol_0].to_s
-      when '1'
-        'number'
-      when '2'
-        'caller_id'
-      when '3'
-        'providers.name'
-      when '4'
-        'answered'
-      when '5'
-        'busy'
-      when '6'
-        'audio_length'
-      when '7'
-        'ring_length'
+             when '1'
+               'number'
+             when '2'
+               'caller_id'
+             when '3'
+               'providers.name'
+             when '4'
+               'answered'
+             when '5'
+               'busy'
+             when '6'
+               'audio_length'
+             when '7'
+               'ring_length'
     end
     column + ' ' + (params[:sSortDir_0] =~ /^A/i ? 'asc' : 'desc') if column
   end
@@ -98,41 +94,45 @@ class JobsController < ApplicationController
   def calls_search
     @search_conditions = []
     terms = params[:sSearch].to_s
-    terms = Shellword.shellwords(terms) rescue terms.split(/\s+/)
-    where = ""
+    terms = begin
+              Shellword.shellwords(terms)
+            rescue
+              terms.split(/\s+/)
+            end
+    where = ''
     param = []
-    glue  = ""
+    glue  = ''
     terms.each do |w|
-      next if w.downcase == 'undefined'
+      next if w.casecmp('undefined').zero?
       where << glue
       case w
-        when 'answered'
-          where << "answered = ? "
-          param << true
-        when 'busy'
-          where << "busy = ? "
-          param << true
-        else
-          where << "( number ILIKE ? OR caller_id ILIKE ? ) "
-          param << "%#{w}%"
-          param << "%#{w}%"
+      when 'answered'
+        where << 'answered = ? '
+        param << true
+      when 'busy'
+        where << 'busy = ? '
+        param << true
+      else
+        where << '( number ILIKE ? OR caller_id ILIKE ? ) '
+        param << "%#{w}%"
+        param << "%#{w}%"
       end
-      glue = "AND " if glue.empty?
-      @search_conditions = [ where, *param ]
+      glue = 'AND ' if glue.empty?
+      @search_conditions = [where, *param]
     end
   end
 
   def new_dialer
     @job = Job.new
-    if @project
-      @job.project = @project
-    else
-      @job.project = Project.last
-    end
+    @job.project = if @project
+                     @project
+                   else
+                     Project.last
+                   end
 
     if params[:result_ids]
-      nums = ""
-      Call.find_each(:conditions => { :id => params[:result_ids] }) do |call|
+      nums = ''
+      Call.find_each(conditions: { id: params[:result_ids] }) do |call|
         nums << call.number + "\n"
       end
       @job.range = nums
@@ -140,13 +140,16 @@ class JobsController < ApplicationController
 
     respond_to do |format|
       format.html
-     end
+    end
   end
 
   def purge_calls
-    Call.delete_all(:id => params[:result_ids])
-    CallMedium.delete_all(:call_id => params[:result_ids])
-    flash[:notice] = "Purged #{params[:result_ids].length} calls"
+    unless params[:result_ids].blank?
+      Call.delete_all(id: params[:result_ids])
+      CallMedium.delete_all(call_id: params[:result_ids])
+      flash[:notice] = "Purged #{params[:result_ids].length} calls"
+    end
+
     if params[:id]
       @job = Job.find(params[:id])
       redirect_to view_results_path(@job.project_id, @job.id)
@@ -156,37 +159,37 @@ class JobsController < ApplicationController
   end
 
   def dialer
-    @job = Job.new(params[:job])
+    @job = Job.new(job_params)
     @job.created_by = @current_user.login
     @job.task = 'dialer'
     @job.range.to_s.gsub!(/[^0-9X:,\n]/, '')
-    @job.cid_mask.to_s.gsub!(/[^0-9X]/, '') if @job.cid_mask != "SELF"
+    @job.cid_mask.to_s.gsub!(/[^0-9X]/, '') if @job.cid_mask != 'SELF'
 
-    if @job.range_file.to_s != ""
+    if @job.range_file.to_s != ''
       @job.range = @job.range_file.read.gsub(/[^0-9X:,\n]/, '')
     end
 
     respond_to do |format|
       if @job.schedule
         flash[:notice] = 'Job was successfully created.'
-        format.html { redirect_to :action => :index }
+        format.html { redirect_to action: :index }
       else
-        format.html { render :action => "new_dialer" }
+        format.html { render action: 'new_dialer' }
       end
     end
   end
 
   def new_analyze
     @job = Job.new
-    if @project
-      @job.project = @project
-    else
-      @job.project = Project.last
-    end
+    @job.project = if @project
+                     @project
+                   else
+                     Project.last
+                   end
 
     if params[:result_ids]
-      nums = ""
-      Call.find_each(:conditions => { :id => params[:result_ids] }) do |call|
+      nums = ''
+      Call.find_each(conditions: { id: params[:result_ids] }) do |call|
         nums << call.number + "\n"
       end
       @job.range = nums
@@ -194,20 +197,20 @@ class JobsController < ApplicationController
 
     respond_to do |format|
       format.html
-     end
+    end
   end
 
   def new_identify
     @job = Job.new
-    if @project
-      @job.project = @project
-    else
-      @job.project = Project.last
-    end
+    @job.project = if @project
+                     @project
+                   else
+                     Project.last
+                   end
 
     if params[:result_ids]
-      nums = ""
-      Call.find_each(:conditions => { :id => params[:result_ids] }) do |call|
+      nums = ''
+      Call.find_each(conditions: { id: params[:result_ids] }) do |call|
         nums << call.number + "\n"
       end
       @job.range = nums
@@ -215,15 +218,13 @@ class JobsController < ApplicationController
 
     respond_to do |format|
       format.html
-     end
+    end
   end
 
   def reanalyze_job
     @job = Job.find(params[:id])
-    @new = Job.new({
-      :task => 'analysis', :scope => 'job', :target_id => @job.id, :force => true,
-      :project_id => @project.id, :status => 'submitted'
-    })
+    @new = Job.new(task: 'analysis', scope: 'job', target_id: @job.id, force: true,
+                   project_id: @project.id, status: 'submitted')
     @new.created_by = @current_user.login
     respond_to do |format|
       if @new.schedule
@@ -241,16 +242,12 @@ class JobsController < ApplicationController
 
     # Handle analysis of specific call IDs via checkbox submission
     if params[:result_ids]
-      @new = Job.new({
-        :task => 'analysis', :scope => 'calls', :target_ids => params[:result_ids],
-        :project_id => @project.id, :status => 'submitted'
-      })
+      @new = Job.new(task: 'analysis', scope: 'calls', target_ids: params[:result_ids],
+                     project_id: @project.id, status: 'submitted')
     else
-    # Otherwise analyze the entire Job
-      @new = Job.new({
-        :task => 'analysis', :scope => 'job', :target_id => @job.id,
-        :project_id => @project.id, :status => 'submitted'
-      })
+      # Otherwise analyze the entire Job
+      @new = Job.new(task: 'analysis', scope: 'job', target_id: @job.id,
+                     project_id: @project.id, status: 'submitted')
     end
 
     @new.created_by = @current_user.login
@@ -266,21 +263,15 @@ class JobsController < ApplicationController
     end
   end
 
-
   def analyze_project
-
     # Handle analysis of specific call IDs via checkbox submission
     if params[:result_ids]
-      @new = Job.new({
-        :task => 'analysis', :scope => 'calls', :target_ids => params[:result_ids],
-        :project_id => @project.id, :status => 'submitted'
-      })
+      @new = Job.new(task: 'analysis', scope: 'calls', target_ids: params[:result_ids],
+                     project_id: @project.id, status: 'submitted')
     else
-    # Otherwise analyze the entire Project
-      @new = Job.new({
-        :task => 'analysis', :scope => 'project', :target_id => @project.id,
-        :project_id => @project.id, :status => 'submitted'
-      })
+      # Otherwise analyze the entire Project
+      @new = Job.new(task: 'analysis', scope: 'project', target_id: @project.id,
+                     project_id: @project.id, status: 'submitted')
     end
 
     @new.created_by = @current_user.login
@@ -301,16 +292,12 @@ class JobsController < ApplicationController
 
     # Handle identification of specific lines via checkbox submission
     if params[:result_ids]
-      @new = Job.new({
-        :task => 'identify', :scope => 'calls', :target_ids => params[:result_ids],
-        :project_id => @project.id, :status => 'submitted'
-      })
+      @new = Job.new(task: 'identify', scope: 'calls', target_ids: params[:result_ids],
+                     project_id: @project.id, status: 'submitted')
     else
-    # Otherwise analyze the entire Job
-      @new = Job.new({
-        :task => 'identify', :scope => 'job', :target_id => @job.id,
-        :project_id => @project.id, :status => 'submitted'
-      })
+      # Otherwise analyze the entire Job
+      @new = Job.new(task: 'identify', scope: 'job', target_id: @job.id,
+                     project_id: @project.id, status: 'submitted')
     end
 
     @new.created_by = @current_user.login
@@ -329,8 +316,8 @@ class JobsController < ApplicationController
   def stop
     @job = Job.find(params[:id])
     @job.stop
-    flash[:notice] = "Job has been cancelled"
-    redirect_to :action => 'index'
+    flash[:notice] = 'Job has been cancelled'
+    redirect_to action: 'index'
   end
 
   def destroy
@@ -343,4 +330,9 @@ class JobsController < ApplicationController
     end
   end
 
+  private
+
+  def job_params
+    params.require(:job).permit(:project_id, :range, :range_file, :seconds, :lines, :cid_mask)
+  end
 end

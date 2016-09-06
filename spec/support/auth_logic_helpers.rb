@@ -2,7 +2,7 @@ module Authlogic
   module TestHelper
     def create_user_session(user)
       visit login_path
-      within "#new_user_session" do
+      within "form#new_user_session" do
         expect(page).to have_content "Username"
         expect(page).to have_content "Password"
         fill_in "user_session_login", with: user.login

@@ -12,7 +12,7 @@
 #
 
 FactoryGirl.define do
-  factory :setting, :class => 'Settings' do
+  factory :setting, class: 'Settings' do
     var "CachedStuff"
   end
 

@@ -1,45 +1,45 @@
-class InitialSchema < ActiveRecord::Migration
+# class InitialSchema < ActiveRecord::Migration
+class InitialSchema < ActiveRecord::Migration[5.0]
   def up
-
     # Require the intarray extension
     execute("CREATE EXTENSION IF NOT EXISTS intarray")
 
     create_table :settings do |t|
-      t.string :var, :null => false
-      t.text   :value, :null => true
-      t.integer :thing_id, :null => true
-      t.string :thing_type, :limit => 30, :null => true
-      t.timestamps
+      t.string :var, null: false
+      t.text   :value, null: true
+      t.integer :thing_id, null: true
+      t.string :thing_type, limit: 30, null: true
+      t.timestamps null: false
     end
 
-    add_index :settings, [ :thing_type, :thing_id, :var ], :unique => true
+    add_index :settings, [ :thing_type, :thing_id, :var ], unique: true
 
     create_table 'users' do |t|
-      t.string    :login,               :null => false                # optional, you can use email instead, or both
-      t.string    :email,               :null => true                 # optional, you can use login instead, or both
-      t.string    :crypted_password,    :null => false                # optional, see below
-      t.string    :password_salt,       :null => false                # optional, but highly recommended
-      t.string    :persistence_token,   :null => false                # required
-      t.string    :single_access_token, :null => false                # optional, see Authlogic::Session::Params
-      t.string    :perishable_token,    :null => false                # optional, see Authlogic::Session::Perishability
+      t.string    :login,               null: false                # optional, you can use email instead, or both
+      t.string    :email,               null: true                 # optional, you can use login instead, or both
+      t.string    :crypted_password,    null: false                # optional, see below
+      t.string    :password_salt,       null: false                # optional, but highly recommended
+      t.string    :persistence_token,   null: false                # required
+      t.string    :single_access_token, null: false                # optional, see Authlogic::Session::Params
+      t.string    :perishable_token,    null: false                # optional, see Authlogic::Session::Perishability
 
       # Magic columns, just like ActiveRecord's created_at and updated_at. These are automatically maintained by Authlogic if they are present.
-      t.integer   :login_count,         :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
-      t.integer   :failed_login_count,  :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
+      t.integer   :login_count,         null: false, default: 0 # optional, see Authlogic::Session::MagicColumns
+      t.integer   :failed_login_count,  null: false, default: 0 # optional, see Authlogic::Session::MagicColumns
       t.datetime  :last_request_at                                    # optional, see Authlogic::Session::MagicColumns
       t.datetime  :current_login_at                                   # optional, see Authlogic::Session::MagicColumns
       t.datetime  :last_login_at                                      # optional, see Authlogic::Session::MagicColumns
       t.string    :current_login_ip                                   # optional, see Authlogic::Session::MagicColumns
       t.string    :last_login_ip                                      # optional, see Authlogic::Session::MagicColumns
 
-      t.timestamps
-      t.boolean   "enabled", :default => true
-      t.boolean   "admin",   :default => true
+      t.timestamps null: false
+      t.boolean   "enabled", default: true
+      t.boolean   "admin",   default: true
     end
 
     create_table 'projects' do |t|
-      t.timestamps
-      t.text      "name", :null => false
+      t.timestamps null: false
+      t.text      "name", null: false
       t.text      "description"
       t.text    "included"
       t.text    "excluded"
@@ -47,44 +47,44 @@ class InitialSchema < ActiveRecord::Migration
     end
 
     create_table "jobs" do |t|
-      t.timestamps
-      t.integer  "project_id", :null => false
+      t.timestamps null: false
+      t.integer  "project_id", null: false
       t.string  "locked_by"
       t.timestamp  "locked_at"
       t.timestamp  "started_at"
       t.timestamp  "completed_at"
       t.string  "created_by"
-      t.string  "task", :null => false
+      t.string  "task", null: false
       t.binary  "args"
       t.string  "status"
       t.text    "error"
-      t.integer  "progress", :default => 0
+      t.integer  "progress", default: 0
     end
 
     create_table "lines" do |t|
-      t.timestamps
-      t.text      "number", :null => false
-      t.integer    "project_id", :null => false
+      t.timestamps null: false
+      t.text      "number", null: false
+      t.integer    "project_id", null: false
       t.text      "line_type"
       t.text      "notes"
     end
 
     create_table "line_attributes" do |t|
-      t.timestamps
-      t.integer    "line_id", :null => false
-      t.integer    "project_id", :null => false
-      t.text      "name", :null => false
-      t.binary    "value", :null => false
-      t.string    "content_type", :default => "text"
+      t.timestamps null: false
+      t.integer    "line_id", null: false
+      t.integer    "project_id", null: false
+      t.text      "name", null: false
+      t.binary    "value", null: false
+      t.string    "content_type", default: "text"
     end
 
     create_table "calls" do |t|
       # Created by the dialer job
-      t.timestamps
-      t.text      "number", :null => false
-      t.integer    "project_id", :null => false
-      t.integer    "job_id", :null => false
-      t.integer    "provider_id", :null => false
+      t.timestamps null: false
+      t.text      "number", null: false
+      t.integer    "project_id", null: false
+      t.integer    "job_id", null: false
+      t.integer    "provider_id", null: false
       t.boolean    "answered"
       t.boolean    "busy"
       t.text      "error"
@@ -99,12 +99,12 @@ class InitialSchema < ActiveRecord::Migration
       t.float      "peak_freq"
       t.text      "peak_freq_data"
       t.text      "line_type"
-      t.integer    "fprint", :array => true
+      t.integer    "fprint", array: true
     end
 
     create_table "call_media" do |t|
-      t.integer    "call_id", :null => false
-      t.integer    "project_id", :null => false
+      t.integer    "call_id", null: false
+      t.integer    "project_id", null: false
       t.binary    "audio"
       t.binary    "mp3"
       t.binary    "png_big"
@@ -115,8 +115,8 @@ class InitialSchema < ActiveRecord::Migration
     end
 
     create_table "signatures" do |t|
-      t.timestamps
-      t.text      "name", :null => false
+      t.timestamps null: false
+      t.text      "name", null: false
       t.string    "source"
       t.text      "description"
       t.string    "category"
@@ -125,19 +125,19 @@ class InitialSchema < ActiveRecord::Migration
     end
 
     create_table "signature_fp" do |t|
-      t.integer    "signature_id", :null => false
-      t.integer    "fprint", :array => true
+      t.integer    "signature_id", null: false
+      t.integer    "fprint", array: true
     end
 
     create_table "providers" do |t|
-      t.timestamps
-      t.text      "name", :null => false
-      t.text      "host", :null => false
-      t.integer    "port", :null => false
+      t.timestamps null: false
+      t.text      "name", null: false
+      t.text      "host", null: false
+      t.integer    "port", null: false
       t.text      "user"
       t.text      "pass"
-      t.integer    "lines", :null => false, :default => 1
-      t.boolean    "enabled", :default => true
+      t.integer    "lines", null: false, default: 1
+      t.boolean    "enabled", default: true
     end
 
     add_index :jobs, :project_id
@@ -151,7 +151,6 @@ class InitialSchema < ActiveRecord::Migration
     add_index :call_media, :call_id
     add_index :call_media, :project_id
     add_index :signature_fp, :signature_id
-
   end
 
   def down

@@ -13,7 +13,7 @@
 #  risk        :integer
 #
 
-class Signature < ActiveRecord::Base
+class Signature < ApplicationRecord
   has_many :signature_fps
 
 end

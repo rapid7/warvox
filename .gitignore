@@ -24,3 +24,10 @@ config/secrets.yml
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
+
+# vagrant and ansible files
+.vagrant
+playbook.retry
+
+TODO.md
+/public/assets

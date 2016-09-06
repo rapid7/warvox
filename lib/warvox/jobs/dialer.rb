@@ -48,15 +48,15 @@ class Dialer < Base
     res = []
 
     ::ActiveRecord::Base.connection_pool.with_connection {
-      ::Provider.where(:enabled => true).all.each do |prov|
+      ::Provider.where(enabled: true).all.each do |prov|
         info = {
-          :name  => prov.name,
-          :id    => prov.id,
-          :port  => prov.port,
-          :host  => prov.host,
-          :user  => prov.user,
-          :pass  => prov.pass,
-          :lines => prov.lines
+          name: prov.name,
+          id: prov.id,
+          port: prov.port,
+          host: prov.host,
+          user: prov.user,
+          pass: prov.pass,
+          lines: prov.lines
         }
         1.upto(prov.lines) {|i| res.push(info) }
       end

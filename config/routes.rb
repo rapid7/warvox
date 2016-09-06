@@ -1,5 +1,4 @@
-Web::Application.routes.draw do
-
+Rails.application.routes.draw do
   get "login" => "user_sessions#new", :as => "login"
   get "logout" => "user_sessions#destroy", :as => "logout"
 
@@ -51,5 +50,5 @@ Web::Application.routes.draw do
   get '/help'                => 'home#help',  :as => :help
   get '/check'               => 'home#check', :as => :check
 
-  root :to => "projects#index"
+  root to: "projects#index"
 end

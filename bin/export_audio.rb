@@ -49,7 +49,7 @@ end
 FileUtils.mkdir_p(output)
 
 begin
-  cond = { :project_id => project_id.to_i, :answered => true, :busy => false }
+  cond = { project_id: project_id.to_i, answered: true, busy: false }
   if line_type
     cond[:line_type] = line_type.downcase
   end
