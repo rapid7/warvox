@@ -19,12 +19,8 @@
 			<div class="span2"><a href="<%= new_dialer_project_job_path(@project) %>" class="btn" rel="tooltip" title="Gather data by dialing a range of numbers"><i class="fa fa-phone"></i> <strong>Wardial</strong></a></div>
 			<% if @boxes[:answered][:cnt] > 0 %>
 			<div class="span2"><a href="<%= new_analyze_project_job_path(@project) %>" class="btn" rel="tooltip" title="Analyze call data to determine line types and frequencies"><i class="fa fa-cogs"></i> <strong>Analyze</strong></a></div>
-			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Look up meta-information about specific lines"><i class="fa fa-user"></i> <strong>Identify</strong></a></div>
-			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Signal analysis and other research tools"><i class="fa fa-star"></i> <strong>Research</strong></a></div>
 			<% else %>
 			<div class="span2"><a href="#" class="btn disabled" rel="tooltip" title="No call data is available to analyze"><i class="fa fa-cogs"></i> <strong>Analyze</strong></a></div>
-			<div class="span2"><a href="#" class="btn" rel="tooltip" title="Look up meta-information about specific lines"><i class="fa fa-user"></i> <strong>Identify</strong></a></div>
-			<div class="span2"><a href="#" class="btn disabled" rel="tooltip" title="No call data is available to research"><i class="fa fa-star"></i> <strong>Research</strong></a></div>
 			<% end %>
 			<div class="span2">&nbsp;</div>
 		</div>
