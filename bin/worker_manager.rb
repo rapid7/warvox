@@ -161,8 +161,8 @@ end
 # Main
 #
 
-trap("SIGINT")  { stop() }
-trap("SIGTERM") { stop() }
+trap("SIGINT")  { Thread.new{ stop } }
+trap("SIGTERM") { Thread.new{ stop } }
 
 @cookie   = Socket.gethostname + "^" + $$.to_s + "^" + sprintf("%.8x", rand(0x100000000))
 @max_jobs = 3

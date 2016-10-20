@@ -31,3 +31,4 @@ playbook.retry
 
 TODO.md
 /public/assets
+.env

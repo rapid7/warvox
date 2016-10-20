@@ -15,7 +15,6 @@ end
 $:.unshift(File.join(File.expand_path(File.dirname(base)), '..', 'lib'))
 
 voxroot = File.expand_path(File.join(File.dirname(base), '..'))
-voxserv = File.expand_path(File.join(File.expand_path(voxroot), 'bin', 'rails'))
 manager = File.expand_path(File.join(File.dirname(base), 'worker_manager.rb'))
 
 require 'warvox'
@@ -73,15 +72,13 @@ if opts['Background']
 end
 
 
-trap("SIGINT") { stop() }
+trap("SIGINT") { Thread.new{ stop } }
 
 $browser_url   = "http://#{opts['ServerHost']}:#{opts['ServerPort']}/"
 
-$stderr.puts ""
-$stderr.puts "[*] Starting WarVOX on #{$browser_url}"
-$stderr.puts ""
-
-
+WarVOX::Log.info("")
+WarVOX::Log.info("[*] Starting WarVOX on #{$browser_url}")
+WarVOX::Log.info("")
 WarVOX::Log.info("WarVOX is starting up...")
 
 @manager_pid = Process.fork()
@@ -96,9 +93,10 @@ WarVOX::Log.info("Worker Manager has PID #{@manager_pid}")
 
 @webserver_pid = $$
 
-WarVOX::Log.info("Web Server has PID #{@manager_pid}")
+WarVOX::Log.info("Web Server has PID #{@webserver_pid}")
 
 while(ARGV.length > 0); ARGV.shift; end
 args.each {|arg| ARGV.push(arg) }
 
-load(voxserv)
+# need to pass config opts above into the system command below
+system "bin/rails", *args
