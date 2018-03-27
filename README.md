@@ -5,7 +5,7 @@ WarVOX is released under a BSD-style license. See docs/LICENSE for more details.
 The latest version of this software is available from http://github.com/rapid7/warvox/
 
 Questions and suggestions can be sent to:
- x(at)hdm(dot)io
+  research[at]rapid7.com
 
  - [Installing](#installing)
 
